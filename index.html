@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity 2D Game</title>
+    <meta name="description" content="Unity 2Dゲームの紹介ページ">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="web-page/favicon.ico" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="web-page/styles.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Loading...</h2>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>More Hit 2</h1>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">ゲームについて</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#features" class="nav-link">特徴</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#screenshots" class="nav-link">スクリーンショット</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#download" class="nav-link">ダウンロード</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="stars"></div>
+            <div class="twinkling"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-main">ゲームタイトル</span>
+                    <span class="title-sub">サブタイトル</span>
+                </h1>
+                <p class="hero-description">
+                    ゲームの説明文をここに記載
+                </p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        プレイ
+                    </a>
+                    <a href="#about" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        詳細
+                    </a>
+                </div>
+            </div>
+            <div class="hero-game-preview">
+                <div class="game-preview-container">
+                    <div class="game-frame">
+                        <div class="game-placeholder">
+                            <i class="fas fa-gamepad"></i>
+                            <p>ゲームプレビュー</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">ゲームについて</h2>
+                <p class="section-subtitle">ゲームの説明</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>ゲームタイトル</h3>
+                    <p>
+                        ゲームの詳細説明をここに記載します。
+                    </p>
+                    <p>
+                        追加の説明をここに記載します。
+                    </p>
+                    <div class="game-stats">
+                        <div class="stat">
+                            <div class="stat-number">-</div>
+                            <div class="stat-label">統計1</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">-</div>
+                            <div class="stat-label">統計2</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">-</div>
+                            <div class="stat-label">統計3</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>ゲーム画像</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">ゲームの特徴</h2>
+                <p class="section-subtitle">特徴の説明</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>特徴1</h3>
+                    <p>特徴の説明をここに記載します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>特徴2</h3>
+                    <p>特徴の説明をここに記載します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>特徴3</h3>
+                    <p>特徴の説明をここに記載します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">スクリーンショット</h2>
+                <p class="section-subtitle">ゲームの美しい世界をご覧ください</p>
+            </div>
+            <div class="screenshot-gallery">
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>メニュー画面</p>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>ゲームプレイ</p>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>ボス戦</p>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>スコア画面</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <div class="download-content">
+                <div class="download-text">
+                    <h2>ダウンロード</h2>
+                    <p>ゲームのダウンロード説明をここに記載します。</p>
+                    <div class="download-buttons">
+                        <a href="#" class="btn btn-primary btn-large">
+                            <i class="fas fa-download"></i>
+                            ダウンロード
+                        </a>
+                    </div>
+                    <div class="system-requirements">
+                        <h4>動作環境</h4>
+                        <ul>
+                            <li>必要な動作環境をここに記載</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="download-image">
+                    <div class="download-preview">
+                        <div class="preview-placeholder">
+                            <i class="fas fa-download"></i>
+                            <p>ダウンロードプレビュー</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ゲームタイトル</h3>
+                    <p>ゲームの簡単な説明</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>リンク</h4>
+                    <ul>
+                        <li><a href="#home">ホーム</a></li>
+                        <li><a href="#about">ゲームについて</a></li>
+                        <li><a href="#features">特徴</a></li>
+                        <li><a href="#download">ダウンロード</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 More Hit 2. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> using Unity</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="web-page/script.js"></script>
+</body>
+</html>
