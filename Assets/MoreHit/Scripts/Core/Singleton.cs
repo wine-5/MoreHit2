@@ -45,15 +45,18 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         // IsPersistentプロパティをチェックしてからDontDestroyOnLoadを適用
                         T singletonComponent = instance as T;
                         if (singletonComponent != null && (singletonComponent as Singleton<T>).UseDontDestroyOnLoad)
-                        {
                             DontDestroyOnLoad(singletonObject);
-                        }
                     }
                 }
                 return instance;
             }
         }
     }
+
+    /// <summary>
+    /// Singletonインスタンスにアクセスするための短縮プロパティ（Instanceと同じ）
+    /// </summary>
+    public static T I => Instance;
 
     protected virtual void Awake()
     {
@@ -73,9 +76,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void OnDestroy()
     {
         if (instance == this)
-        {
             isDestroying = true;
-        }
     }
 
     /// <summary>
