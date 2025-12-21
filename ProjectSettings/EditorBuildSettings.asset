@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MoreHit/Scenes/InGame.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/MoreHit/Scenes/Title.unity
+    guid: 352b838fa7a8ad14f8a538c16b902e1d
+  - enabled: 1
+    path: Assets/MoreHit/Scenes/Result.unity
+    guid: 62e8e40809945a0458bae5386109b792
+  - enabled: 1
+    path: Assets/MoreHit/Scenes/InGame.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
