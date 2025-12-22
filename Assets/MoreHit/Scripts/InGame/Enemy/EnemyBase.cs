@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 namespace MoreHit.Enemy
 {
@@ -7,6 +8,8 @@ namespace MoreHit.Enemy
     /// </summary>
     public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
+        [Header("UI設定")]
+        [SerializeField] protected TextMeshProUGUI stockText;
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
@@ -31,6 +34,7 @@ namespace MoreHit.Enemy
 
             LoadEnemyData();
             InitializeEnemy();
+            UpdateStockText();
         }
 
         /// <summary>
@@ -54,6 +58,13 @@ namespace MoreHit.Enemy
             // 子クラスで独自の初期化処理をオーバーライド
         }
 
+        protected void UpdateStockText()
+        {
+            if (stockText != null)
+            {
+                stockText.text = currentStockCount.ToString();
+            }
+        }
         /// <summary>
         /// IDamageable実装：ダメージを受ける処理
         /// </summary>
@@ -69,6 +80,7 @@ namespace MoreHit.Enemy
             if (currentHP <= 0)
             {
                 currentStockCount--;
+                UpdateStockText();
 
                 if (currentStockCount > 0)
                 {

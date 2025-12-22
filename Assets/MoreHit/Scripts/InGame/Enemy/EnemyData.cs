@@ -14,13 +14,18 @@ namespace MoreHit.Enemy
         [SerializeField] private float moveSpeed = 3f;
         
         [Header("ストックシステム")]
-        [SerializeField] private int stockCount = 1;
+        [SerializeField] private int stockCount = 0;//現在のストック数をカウント
+        [SerializeField] private int needstock = 1; //必要ストック数
+        [SerializeField] private bool isSmash = false;               //現在ぶっ飛ばされた状態か
 
         public EnemyType EnemyType => enemyType;
         public float MaxHP => maxHP;
         public float AttackPower => attackPower;
         public float MoveSpeed => moveSpeed;
         public int StockCount => stockCount;
+
+        public int Needstock => needstock;
+        public bool IsSmash => isSmash;
     }
 
     [CreateAssetMenu(fileName = "EnemyData", menuName = "MoreHit/Enemy/EnemyData")]
