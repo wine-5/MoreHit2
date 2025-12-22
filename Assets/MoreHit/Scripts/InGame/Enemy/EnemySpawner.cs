@@ -38,17 +38,13 @@ namespace MoreHit.Enemy
             }
             
             if (spawnPoints == null || spawnPoints.Length == 0)
-            {
                 spawnPoints = new Transform[] { transform };
-            }
         }
 
         private void Update()
         {
             if (autoSpawn && CanSpawn())
-            {
                 SpawnRandomEnemy();
-            }
         }
 
         private bool CanSpawn()
@@ -76,9 +72,7 @@ namespace MoreHit.Enemy
         private Vector3 GetRandomSpawnPosition()
         {
             if (use2DRandomSpawn)
-            {
                 return Get2DRandomSpawnPosition();
-            }
             else
             {
                 if (spawnPoints.Length > 0)
@@ -94,15 +88,11 @@ namespace MoreHit.Enemy
         {
             // スポーンポイントが設定されていない場合のフォールバック
             if (spawnPoints.Length == 0)
-            {
                 return transform.position;
-            }
 
             // 最低2つのスポーンポイントが必要（範囲を定義するため）
             if (spawnPoints.Length < 2)
-            {
                 return spawnPoints[0].position;
-            }
 
             // 全てのスポーンポイントからX座標とY座標の最小値と最大値を取得
             float minX = float.MaxValue;
@@ -165,9 +155,7 @@ namespace MoreHit.Enemy
             for (int i = spawnedEnemies.Count - 1; i >= 0; i--)
             {
                 if (spawnedEnemies[i] != null)
-                {
                     spawnedEnemies[i].Die();
-                }
             }
             spawnedEnemies.Clear();
         }
