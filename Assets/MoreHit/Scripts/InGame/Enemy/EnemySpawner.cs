@@ -5,11 +5,12 @@ using System.Collections.Generic;
 namespace MoreHit.Enemy
 {
     /// <summary>
-    /// 敵生成システム
+    /// 敵スポーン制御システム（EnemyFactoryのラッパー）
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
-        [Header("スポーン設定")]
+        [Header("ファクトリー設定")]
+        [SerializeField] private EnemyFactory enemyFactory;
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private GameObject[] enemyPrefabs;
         [SerializeField] private float spawnInterval = 2f;
