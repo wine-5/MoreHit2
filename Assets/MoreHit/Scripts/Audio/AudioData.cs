@@ -14,7 +14,7 @@ namespace MoreHit.Audio
         public float VolumeMultiplier => volumeMultiplier;
     }
 
-    [CreateAssetMenu(fileName = "AudioData", menuName = "Fibonacci/AudioData")]
+    [CreateAssetMenu(fileName = "AudioData", menuName = "MoreHit/AudioData")]
     public class AudioDataSO : ScriptableObject
     {
         [Header("Audio List")]
