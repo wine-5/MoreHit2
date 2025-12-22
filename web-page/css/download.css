@@ -1,4 +1,4 @@
-/* ===== Download Section ===== */
+/* ===== UnityRoomセクション ===== */
 .download {
     padding: 80px 0;
     background: linear-gradient(180deg, var(--pixel-darker) 0%, var(--pixel-dark) 100%);
@@ -97,7 +97,7 @@
     letter-spacing: 2px;
 }
 
-/* ===== Responsive Download ===== */
+/* ===== レスポンシブ UnityRoom ===== */
 @media (max-width: 768px) {
     .download-content {
         flex-direction: column;

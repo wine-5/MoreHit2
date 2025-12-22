@@ -1,4 +1,4 @@
-/* ===== General Animations ===== */
+/* ===== 全般的なアニメーション ===== */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -21,7 +21,7 @@
     }
 }
 
-/* ===== Scroll Animations ===== */
+/* ===== スクロールアニメーション ===== */
 .fade-in {
     opacity: 0;
     transform: translateY(50px);
@@ -33,7 +33,7 @@
     transform: translateY(0);
 }
 
-/* ===== Custom Scrollbar ===== */
+/* ===== カスタムスクロールバー ===== */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -51,7 +51,7 @@
     background: linear-gradient(45deg, var(--pixel-accent2), #45b7d1);
 }
 
-/* ===== General Responsive ===== */
+/* ===== 全般的なレスポンシブ ===== */
 @media (max-width: 480px) {
     html {
         font-size: 12px;

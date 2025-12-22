@@ -1,4 +1,4 @@
-/* ===== About Section ===== */
+/* ===== アバウトセクション ===== */
 .about {
     padding: 80px 0;
     background: var(--pixel-dark);
@@ -88,7 +88,7 @@
     letter-spacing: 2px;
 }
 
-/* ===== Responsive About ===== */
+/* ===== レスポンシブ アバウト ===== */
 @media (max-width: 768px) {
     .about-content {
         flex-direction: column;

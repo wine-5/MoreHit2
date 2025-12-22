@@ -1,4 +1,4 @@
-/* ===== Back to Top Button ===== */
+/* ===== トップへ戻るボタン ===== */
 .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -33,7 +33,7 @@
     display: flex;
 }
 
-/* ===== Responsive Back to Top ===== */
+/* ===== レスポンシブ トップへ戻る ===== */
 @media (max-width: 480px) {
     .back-to-top {
         width: 40px;

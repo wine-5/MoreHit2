@@ -1,4 +1,4 @@
-/* ===== Features Section ===== */
+/* ===== 特徴セクション ===== */
 .features {
     padding: 80px 0;
     background: var(--pixel-darker);
@@ -53,7 +53,7 @@
     line-height: 1.8;
 }
 
-/* ===== Responsive Features ===== */
+/* ===== レスポンシブ 特徴 ===== */
 @media (max-width: 768px) {
     .features-grid {
         grid-template-columns: 1fr;

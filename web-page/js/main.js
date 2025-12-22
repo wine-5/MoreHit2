@@ -1,9 +1,9 @@
-// ===== DOM Content Loaded Event =====
+// ===== DOMコンテンツ読み込み完了イベント =====
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
-// ===== Initialize Application =====
+// ===== アプリケーション初期化 =====
 function initializeApp() {
     handleLoading();
     setupNavigation();

@@ -1,4 +1,4 @@
-/* ===== Screenshots Section ===== */
+/* ===== スクリーンショットセクション ===== */
 .screenshots {
     padding: 80px 0;
     background: var(--pixel-dark);
@@ -47,7 +47,7 @@
     font-size: 0.9rem;
 }
 
-/* ===== Responsive Screenshots ===== */
+/* ===== レスポンシブ スクリーンショット ===== */
 @media (max-width: 768px) {
     .screenshot-gallery {
         grid-template-columns: 1fr;

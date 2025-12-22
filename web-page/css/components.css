@@ -1,4 +1,4 @@
-/* ===== Common Button Styles ===== */
+/* ===== 共通ボタンスタイル ===== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -42,7 +42,7 @@
     font-size: 1.2rem;
 }
 
-/* ===== Section Header ===== */
+/* ===== セクションヘッダー ===== */
 .section-header {
     text-align: center;
     margin-bottom: 50px;

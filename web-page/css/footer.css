@@ -1,4 +1,4 @@
-/* ===== Footer ===== */
+/* ===== フッター ===== */
 .footer {
     background: var(--pixel-darker);
     color: var(--pixel-light);
@@ -89,7 +89,7 @@
     color: var(--pixel-accent1);
 }
 
-/* ===== Responsive Footer ===== */
+/* ===== レスポンシブ フッター ===== */
 @media (max-width: 768px) {
     .footer-content {
         grid-template-columns: 1fr;
