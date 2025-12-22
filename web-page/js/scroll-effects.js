@@ -1,7 +1,10 @@
 // ===== Scroll Effects Setup =====
+// スクロールイベントのスロットル時間（ミリ秒）
+const SCROLL_THROTTLE_DELAY = 100;
+
 function setupScrollEffects() {
     // スクロール時のアニメーション設定
-    window.addEventListener('scroll', throttle(handleScrollAnimations, 100));
+    window.addEventListener('scroll', throttle(handleScrollAnimations, SCROLL_THROTTLE_DELAY));
 }
 
 // ===== Handle Scroll Animations =====

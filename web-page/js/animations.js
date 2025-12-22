@@ -1,8 +1,10 @@
 // ===== Animations Setup =====
+// アニメーション遅延の間隔（秒）
+const ANIMATION_DELAY_INTERVAL = 0.1;
+
 function setupAnimations() {
     // ページロード時のアニメーション設定
     setupFadeInAnimations();
-    setupScrollAnimations();
 }
 
 // ===== Setup Fade In Animations =====
@@ -14,6 +16,6 @@ function setupFadeInAnimations() {
     
     elements.forEach((element, index) => {
         element.classList.add('fade-in');
-        element.style.animationDelay = `${index * 0.1}s`;
+        element.style.animationDelay = `${index * ANIMATION_DELAY_INTERVAL}s`;
     });
 }

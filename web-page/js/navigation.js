@@ -1,11 +1,17 @@
 // ===== Navigation Setup =====
+// ナビゲーションバーのスクロール効果を適用する閾値（ピクセル）
+const NAV_SCROLL_THRESHOLD = 100;
+
 function setupNavigation() {
     const navbar = document.getElementById('navbar');
     const navLinks = document.querySelectorAll('.nav-link');
     
+    // Navbarの高さを動的に計算してオフセットを決定
+    const getNavbarHeight = () => navbar.offsetHeight;
+    
     // ナビゲーションバーのスクロール効果
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
+        if (window.scrollY > NAV_SCROLL_THRESHOLD) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
@@ -19,7 +25,9 @@ function setupNavigation() {
             const target = document.querySelector(this.getAttribute('href'));
             
             if (target) {
-                const offsetTop = target.offsetTop - 70;
+                // Navbarの高さを動的に取得してオフセットを計算
+                const navbarHeight = getNavbarHeight();
+                const offsetTop = target.offsetTop - navbarHeight;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -47,7 +55,7 @@ function setupNavigation() {
 function updateActiveNavLink() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    const scrollPos = window.scrollY + 100;
+    const scrollPos = window.scrollY + NAV_SCROLL_THRESHOLD;
     
     sections.forEach(section => {
         const top = section.offsetTop;
