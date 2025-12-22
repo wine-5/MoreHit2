@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MoreHit.Audio
 {
@@ -41,7 +40,7 @@ namespace MoreHit.Audio
         private void Start()
         {
             // ゲーム開始時にBGMを再生
-            PlayBGM("GameBGM");
+            // PlayBGM("GameBGM");
         }
 
         /// <summary>
