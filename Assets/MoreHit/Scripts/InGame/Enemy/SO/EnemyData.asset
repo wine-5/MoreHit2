@@ -12,14 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: EnemyData
   m_EditorClassIdentifier: Assembly-CSharp:MoreHit.Enemy:EnemyDataSO
-  enemyDataList:
-  - enemyName: Zako
-    maxHP: 0
-    attackPower: 0
-    moveSpeed: 0
-    stockCount: 0
-  - enemyName: Boss
-    maxHP: 0
-    attackPower: 0
-    moveSpeed: 0
-    stockCount: 0
+  enemyDataList: []
