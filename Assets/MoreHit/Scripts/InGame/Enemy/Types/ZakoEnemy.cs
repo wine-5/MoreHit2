@@ -1,19 +1,44 @@
-using UnityEngine;
-
-namespace MoreHit
+namespace MoreHit.Enemy
 {
-    public class ZakoEnemy : MonoBehaviour
+    /// <summary>
+    /// 雑魚敵の実装クラス
+    /// </summary>
+    public class ZakoEnemy : EnemyBase
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        /// <summary>
+        /// 雑魚敵の移動処理
+        /// </summary>
+        protected override void Move()
         {
-        
+            // TODO: 雑魚敵の移動ロジックを実装
+            // 例: プレイヤーに向かって移動、パトロールなど
         }
 
-        // Update is called once per frame
-        void Update()
+        /// <summary>
+        /// 雑魚敵の攻撃処理
+        /// </summary>
+        protected override void Attack()
         {
-        
+            // TODO: 雑魚敵の攻撃ロジックを実装
+            // 例: 接触ダメージ、弾の発射など
+        }
+
+        /// <summary>
+        /// 雑魚敵固有の初期化処理
+        /// </summary>
+        protected override void InitializeEnemy()
+        {
+            base.InitializeEnemy();
+            // TODO: 雑魚敵固有の初期化処理を実装
+        }
+
+        /// <summary>
+        /// ダメージを受けた時の雑魚敵固有の処理
+        /// </summary>
+        protected override void OnDamageReceived(float damage)
+        {
+            base.OnDamageReceived(damage);
+            // TODO: ダメージ時のエフェクト、アニメーション、ノックバックなどを実装
         }
     }
 }
