@@ -9,27 +9,26 @@ namespace MoreHit.Enemy
     {
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
-        [SerializeField] protected int enemyDataIndex = 0; // EnemyDataSO内のインデックス
-        
+        [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
+
         protected EnemyData enemyData;
         protected float currentHP;
         protected int currentStockCount;
-        
+
         // コンポーネント
         protected Rigidbody2D rb;
         protected Animator animator;
         protected SpriteRenderer spriteRenderer;
-        
+
         // イベント
         public System.Action<EnemyBase> OnEnemyDeath;
 
         protected virtual void Awake()
         {
-            // 必要なコンポーネントを取得
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            
+
             LoadEnemyData();
             InitializeEnemy();
         }
@@ -39,22 +38,17 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            // ScriptableObjectから直接データを取得
-            if (enemyDataSO != null && enemyDataSO.EnemyDataList.Length > enemyDataIndex)
+            int enemyIndex = (int)enemyType;
+
+            if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
+                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
             {
-                enemyData = enemyDataSO.EnemyDataList[enemyDataIndex];
+                enemyData = enemyDataSO.EnemyDataList[enemyIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
             }
-            else
-            {
-                Debug.LogError($"EnemyDataSOが設定されていないか、インデックスが範囲外です: {gameObject.name}");
-            }
         }
 
-        /// <summary>
-        /// 敵の初期化処理（子クラスでオーバーライド可能）
-        /// </summary>
         protected virtual void InitializeEnemy()
         {
             // 子クラスで独自の初期化処理をオーバーライド
@@ -65,18 +59,37 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void TakeDamage(float damage)
         {
-            if (currentStockCount <= 0) return; // 既に死亡している場合は処理しない
+            if (IsDead) return;
 
-            currentStockCount--;
-            
-            // ダメージを受けた時の処理
+            currentHP -= damage;
+
             OnDamageReceived(damage);
-            
-            // ストック判定
-            if (currentStockCount <= 0)
+
+            // HP が 0 以下になったらストック減少
+            if (currentHP <= 0)
             {
-                Die();
+                currentStockCount--;
+
+                if (currentStockCount > 0)
+                {
+                    // ストックが残っている場合はHP回復
+                    currentHP = enemyData.MaxHP;
+                    OnStockLost();
+                }
+                else
+                {
+                    // ストックがなくなったら死亡
+                    Die();
+                }
             }
+        }
+
+        /// <summary>
+        /// ストックを失った時の処理（復活演出など）
+        /// </summary>
+        protected virtual void OnStockLost()
+        {
+            // 子クラスでオーバーライド
         }
 
         /// <summary>
@@ -84,44 +97,38 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void Die()
         {
-            // 死亡エフェクト・サウンドは後で実装
-            
-            // イベント発火
             OnEnemyDeath?.Invoke(this);
-            
-            // オブジェクト破棄
             Destroy(gameObject);
         }
 
         /// <summary>
-        /// ダメージを受けた時の処理（子クラスでオーバーライド）
+        /// ダメージを受けた時の処理
         /// </summary>
         protected virtual void OnDamageReceived(float damage)
         {
             // 子クラスでオーバーライド
-            // アニメーション、一時的な無敵時間、ノックバックなど
         }
 
         /// <summary>
-        /// 移動処理（子クラスで必ず実装）
+        /// 移動処理
         /// </summary>
         protected abstract void Move();
 
         /// <summary>
-        /// 攻撃処理（子クラスで必ず実装）
+        /// 攻撃処理
         /// </summary>
         protected abstract void Attack();
 
         protected virtual void Update()
         {
-            if (currentStockCount <= 0) return; // 死亡している場合は処理しない
-            
+            if (IsDead) return;
             Move();
         }
 
-        // デバッグ用プロパティ
+        // プロパティ
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
         public bool IsDead => currentStockCount <= 0;
+        public EnemyData EnemyData => enemyData;
     }
 }

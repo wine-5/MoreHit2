@@ -6,7 +6,7 @@ namespace MoreHit.Enemy
     public class EnemyData
     {
         [Header("基本情報")]
-        [SerializeField] private string enemyName;
+        [SerializeField] private EnemyType enemyType = EnemyType.Zako;
         
         [Header("ステータス")]
         [SerializeField] private float maxHP = 100f;
@@ -14,10 +14,9 @@ namespace MoreHit.Enemy
         [SerializeField] private float moveSpeed = 3f;
         
         [Header("ストックシステム")]
-        [SerializeField] private int stockCount = 1; // 何ストックで倒せるか
+        [SerializeField] private int stockCount = 1;
 
-        // プロパティ
-        public string EnemyName => enemyName;
+        public EnemyType EnemyType => enemyType;
         public float MaxHP => maxHP;
         public float AttackPower => attackPower;
         public float MoveSpeed => moveSpeed;
