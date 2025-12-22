@@ -14,7 +14,7 @@ namespace MoreHit.Enemy
         {
             if (enemyPrefabs == null || enemyPrefabs.Length == 0)
             {
-                Debug.LogWarning("Enemy prefabs not set in EnemyFactory!");
+                Debug.LogError("[EnemyFactory] Enemy prefabs not configured!");
                 return null;
             }
             
@@ -26,7 +26,7 @@ namespace MoreHit.Enemy
         {
             if (enemyPrefab == null)
             {
-                Debug.LogError("Enemy prefab is null!");
+                Debug.LogError("[EnemyFactory] Enemy prefab is null!");
                 return null;
             }
             
@@ -35,7 +35,7 @@ namespace MoreHit.Enemy
             
             if (enemy == null)
             {
-                Debug.LogError($"Prefab {enemyPrefab.name} doesn't have EnemyBase component!");
+                Debug.LogError($"[EnemyFactory] Prefab {enemyPrefab.name} missing EnemyBase component!");
                 Destroy(enemyObject);
                 return null;
             }
@@ -47,7 +47,7 @@ namespace MoreHit.Enemy
         {
             if (enemyPrefabs == null || index < 0 || index >= enemyPrefabs.Length)
             {
-                Debug.LogError($"Enemy index {index} is out of range! Available: 0-{enemyPrefabs?.Length - 1 ?? -1}");
+                Debug.LogError($"[EnemyFactory] Invalid enemy index: {index}");
                 return null;
             }
             

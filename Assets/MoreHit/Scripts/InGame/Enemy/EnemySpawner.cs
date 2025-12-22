@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace MoreHit.Enemy
@@ -20,17 +19,7 @@ namespace MoreHit.Enemy
         
         [Header("2Dスポーン設定")]
         [SerializeField] private bool use2DRandomSpawn = true;
-        [SerializeField] private float spawnOffsetFromEdge = 1f; // 画面端からのオフセット
-        
-        // 2Dスポーン用の位置定義
-        private enum SpawnCorner
-        {
-            TopLeft,     // 左上
-            BottomRight  // 右下
-        }
-
-        [Header("テスト用")]
-        [SerializeField] private bool enableTestMode = true;
+        [SerializeField] private float spawnOffsetFromEdge = 1f;
 
         private List<EnemyBase> spawnedEnemies = new List<EnemyBase>();
         private float lastSpawnTime;
@@ -42,7 +31,7 @@ namespace MoreHit.Enemy
                 enemyFactory = GetComponent<EnemyFactory>();
                 if (enemyFactory == null)
                 {
-                    Debug.LogError("EnemyFactory not found! Attach EnemyFactory component.");
+                    Debug.LogError("[EnemySpawner] EnemyFactory component not found!");
                     enabled = false;
                     return;
                 }
@@ -60,11 +49,6 @@ namespace MoreHit.Enemy
             {
                 SpawnRandomEnemy();
             }
-
-            if (enableTestMode && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                SpawnRandomEnemy();
-            }
         }
 
         private bool CanSpawn()
@@ -74,16 +58,9 @@ namespace MoreHit.Enemy
                    Time.time - lastSpawnTime >= spawnInterval;
         }
 
-        /// <summary>
-        /// ランダムな敵を生成（Factoryを使用）
-        /// </summary>
         public EnemyBase SpawnRandomEnemy()
         {
-            if (enemyFactory == null)
-            {
-                Debug.LogWarning("EnemyFactory is not set!");
-                return null;
-            }
+            if (enemyFactory == null) return null;
 
             Vector3 spawnPosition = GetRandomSpawnPosition();
             EnemyBase enemy = enemyFactory.CreateRandomEnemy(spawnPosition);
@@ -96,9 +73,6 @@ namespace MoreHit.Enemy
             return enemy;
         }
 
-        /// <summary>
-        /// ランダムなスポーン位置を取得（2D対応）
-        /// </summary>
         private Vector3 GetRandomSpawnPosition()
         {
             if (use2DRandomSpawn)
@@ -107,7 +81,6 @@ namespace MoreHit.Enemy
             }
             else
             {
-                // 従来のスポーンポイント方式
                 if (spawnPoints.Length > 0)
                 {
                     Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -117,48 +90,47 @@ namespace MoreHit.Enemy
             }
         }
 
-        /// <summary>
-        /// 2Dゲーム用のランダムスポーン位置計算
-        /// </summary>
         private Vector3 Get2DRandomSpawnPosition()
         {
-            // カメラの画面境界を取得
-            Camera mainCamera = Camera.main;
-            if (mainCamera == null)
+            // スポーンポイントが設定されていない場合のフォールバック
+            if (spawnPoints.Length == 0)
             {
-                Debug.LogWarning("Main Camera not found! Using default position.");
                 return transform.position;
             }
 
-            // 画面の境界を世界座標で取得
-            Vector3 bottomLeft = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
-            Vector3 topRight = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, mainCamera.nearClipPlane));
-
-            // スポーンコーナーをランダムに選択
-            SpawnCorner corner = (SpawnCorner)Random.Range(0, 2);
-
-            Vector3 spawnPosition = corner switch
+            // 最低2つのスポーンポイントが必要（範囲を定義するため）
+            if (spawnPoints.Length < 2)
             {
-                SpawnCorner.TopLeft => new Vector3(
-                    bottomLeft.x - spawnOffsetFromEdge,     // 左端の外側
-                    topRight.y + spawnOffsetFromEdge,       // 上端の外側
-                    0f
-                ),
-                SpawnCorner.BottomRight => new Vector3(
-                    topRight.x + spawnOffsetFromEdge,       // 右端の外側
-                    bottomLeft.y - spawnOffsetFromEdge,     // 下端の外側
-                    0f
-                ),
-                _ => Vector3.zero
-            };
+                return spawnPoints[0].position;
+            }
 
-            Debug.Log($"[EnemySpawner] Spawning at {corner} corner: {spawnPosition}");
-            return spawnPosition;
+            // 全てのスポーンポイントからX座標とY座標の最小値と最大値を取得
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+
+            foreach (Transform spawnPoint in spawnPoints)
+            {
+                if (spawnPoint == null) continue;
+
+                Vector3 pos = spawnPoint.position;
+                minX = Mathf.Min(minX, pos.x);
+                maxX = Mathf.Max(maxX, pos.x);
+                minY = Mathf.Min(minY, pos.y);
+                maxY = Mathf.Max(maxY, pos.y);
+            }
+
+            // 完全ランダムな座標を生成
+            Vector3 randomPosition = new Vector3(
+                Random.Range(minX, maxX),    // X座標: 最小X〜最大Xの範囲でランダム
+                Random.Range(minY, maxY),    // Y座標: 最小Y〜最大Yの範囲でランダム
+                0f                           // Z座標: 2Dなので0
+            );
+
+            return randomPosition;
         }
 
-        /// <summary>
-        /// 指定インデックスの敵を生成
-        /// </summary>
         public EnemyBase SpawnEnemyByIndex(int index, Vector3 position)
         {
             if (enemyFactory == null) return null;
@@ -172,16 +144,11 @@ namespace MoreHit.Enemy
             return enemy;
         }
 
-        /// <summary>
-        /// 敵を登録してイベントを設定
-        /// </summary>
         private void RegisterEnemy(EnemyBase enemy)
         {
             spawnedEnemies.Add(enemy);
             enemy.OnEnemyDeath += OnEnemyDeath;
             lastSpawnTime = Time.time;
-
-            Debug.Log($"Spawned {enemy.GetType().Name} - Total: {spawnedEnemies.Count}");
         }
 
         private void OnEnemyDeath(EnemyBase enemy)
@@ -190,7 +157,6 @@ namespace MoreHit.Enemy
             {
                 spawnedEnemies.Remove(enemy);
                 enemy.OnEnemyDeath -= OnEnemyDeath;
-                Debug.Log($"Enemy died - Remaining: {spawnedEnemies.Count}");
             }
         }
 
