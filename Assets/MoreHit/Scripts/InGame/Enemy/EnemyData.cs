@@ -1,19 +1,35 @@
 using UnityEngine;
 
-namespace MoreHit
+namespace MoreHit.Enemy
 {
-    public class EnemyData : MonoBehaviour
+    [System.Serializable]
+    public class EnemyData
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        [Header("基本情報")]
+        [SerializeField] private string enemyName;
         
-        }
+        [Header("ステータス")]
+        [SerializeField] private float maxHP = 100f;
+        [SerializeField] private float attackPower = 10f;
+        [SerializeField] private float moveSpeed = 3f;
+        
+        [Header("ストックシステム")]
+        [SerializeField] private int stockCount = 1; // 何ストックで倒せるか
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        // プロパティ
+        public string EnemyName => enemyName;
+        public float MaxHP => maxHP;
+        public float AttackPower => attackPower;
+        public float MoveSpeed => moveSpeed;
+        public int StockCount => stockCount;
+    }
+
+    [CreateAssetMenu(fileName = "EnemyData", menuName = "MoreHit/Enemy/EnemyData")]
+    public class EnemyDataSO : ScriptableObject
+    {
+        [Header("敵リスト")]
+        [SerializeField] private EnemyData[] enemyDataList;
+
+        public EnemyData[] EnemyDataList => enemyDataList;
     }
 }
