@@ -8,7 +8,8 @@ namespace MoreHit.Enemy
     public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
         [Header("敵設定")]
-        [SerializeField] protected string enemyDataName;
+        [SerializeField] protected EnemyDataSO enemyDataSO;
+        [SerializeField] protected int enemyDataIndex = 0; // EnemyDataSO内のインデックス
         
         protected EnemyData enemyData;
         protected float currentHP;
@@ -38,13 +39,16 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            // TODO: EnemyManagerから敵データを取得（後で実装）
-            // enemyData = EnemyManager.Instance.GetEnemyData(enemyDataName);
-            
-            if (enemyData != null)
+            // ScriptableObjectから直接データを取得
+            if (enemyDataSO != null && enemyDataSO.EnemyDataList.Length > enemyDataIndex)
             {
+                enemyData = enemyDataSO.EnemyDataList[enemyDataIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
+            }
+            else
+            {
+                Debug.LogError($"EnemyDataSOが設定されていないか、インデックスが範囲外です: {gameObject.name}");
             }
         }
 
