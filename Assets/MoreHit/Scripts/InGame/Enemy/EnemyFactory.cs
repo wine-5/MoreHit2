@@ -3,11 +3,11 @@ using UnityEngine;
 namespace MoreHit.Enemy
 {
     /// <summary>
-    /// 敵生成専門クラス
+    /// 敵を生成するクラス
     /// </summary>
     public class EnemyFactory : MonoBehaviour
     {
-        [Header("敵Prefab設定")]
+        [Header("生成する敵Prefab設定")]
         [SerializeField] private GameObject[] enemyPrefabs;
         
         public EnemyBase CreateRandomEnemy(Vector3 position)

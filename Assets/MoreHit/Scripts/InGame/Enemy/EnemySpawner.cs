@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace MoreHit.Enemy
@@ -16,10 +17,6 @@ namespace MoreHit.Enemy
         [SerializeField] private float spawnInterval = 2f;
         [SerializeField] private int maxEnemyCount = 10;
         [SerializeField] private bool autoSpawn = true;
-        
-        [Header("2Dスポーン設定")]
-        [SerializeField] private bool use2DRandomSpawn = true;
-        [SerializeField] private float spawnOffsetFromEdge = 1f;
 
         private List<EnemyBase> spawnedEnemies = new List<EnemyBase>();
         private float lastSpawnTime;
@@ -44,6 +41,10 @@ namespace MoreHit.Enemy
         private void Update()
         {
             if (autoSpawn && CanSpawn())
+                SpawnRandomEnemy();
+
+            // デバッグ用：スペースキーで手動生成
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
                 SpawnRandomEnemy();
         }
 
@@ -71,21 +72,6 @@ namespace MoreHit.Enemy
 
         private Vector3 GetRandomSpawnPosition()
         {
-            if (use2DRandomSpawn)
-                return Get2DRandomSpawnPosition();
-            else
-            {
-                if (spawnPoints.Length > 0)
-                {
-                    Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                    return spawnPoint.position;
-                }
-                return transform.position;
-            }
-        }
-
-        private Vector3 Get2DRandomSpawnPosition()
-        {
             // スポーンポイントが設定されていない場合のフォールバック
             if (spawnPoints.Length == 0)
                 return transform.position;
@@ -112,13 +98,11 @@ namespace MoreHit.Enemy
             }
 
             // 完全ランダムな座標を生成
-            Vector3 randomPosition = new Vector3(
+            return new Vector3(
                 Random.Range(minX, maxX),    // X座標: 最小X〜最大Xの範囲でランダム
                 Random.Range(minY, maxY),    // Y座標: 最小Y〜最大Yの範囲でランダム
                 0f                           // Z座標: 2Dなので0
             );
-
-            return randomPosition;
         }
 
         public EnemyBase SpawnEnemyByIndex(int index, Vector3 position)
