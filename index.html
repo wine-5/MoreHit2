@@ -10,7 +10,7 @@
     <link rel="icon" href="web-page/favicon.ico" type="image/x-icon">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="web-page/styles.css">
+    <link rel="stylesheet" href="web-page/css/main.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,30 +144,51 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">ゲームの特徴</h2>
-                <p class="section-subtitle">特徴の説明</p>
+                <h2 class="section-title">攻撃システム</h2>
+                <p class="section-subtitle">ストック制による戦闘スタイル</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-fist-raised"></i>
                     </div>
-                    <h3>特徴1</h3>
-                    <p>特徴の説明をここに記載します。</p>
+                    <h3>通常攻撃<br><small style="font-size: 0.7rem;">近接攻撃</small></h3>
+                    <p>発生が早く使いやすい三段攻撃。メイン攻撃として敵にストックをためる。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <h3>サブ攻撃<br><small style="font-size: 0.7rem;">射撃</small></h3>
+                    <p>距離を取られたときなどにストックをキープするための射撃攻撃。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>突進攻撃<br><small style="font-size: 0.7rem;">接近技</small></h3>
+                    <p>前方に移動しながらの攻撃。距離を詰めるための重要な技。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>バックステップ<br><small style="font-size: 0.7rem;">回避行動</small></h3>
+                    <p>少し後ろに移動する回避行動。無敵時間あり、クールタイム短め。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-star"></i>
                     </div>
-                    <h3>特徴2</h3>
-                    <p>特徴の説明をここに記載します。</p>
+                    <h3>溜め突進<br><small style="font-size: 0.7rem;">特殊技</small></h3>
+                    <p>一気に近づいてストックを全部消費させてぶっ飛ばす強力な攻撃。吹っ飛ばし効果強め。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-rocket"></i>
                     </div>
-                    <h3>特徴3</h3>
-                    <p>特徴の説明をここに記載します。</p>
+                    <h3>溜め射撃<br><small style="font-size: 0.7rem;">遠距離技</small></h3>
+                    <p>遠距離からできる吹っ飛ばし攻撃。突進より吹っ飛ばし効果は弱め。</p>
                 </div>
             </div>
         </div>
@@ -276,7 +297,16 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- JavaScript -->
-    <script src="web-page/script.js"></script>
+    <!-- JavaScript Files -->
+    <!-- メイン処理 -->
+    <script src="web-page/js/main.js"></script>
+    <!-- 各機能モジュール -->
+    <script src="web-page/js/loading.js"></script>
+    <script src="web-page/js/navigation.js"></script>
+    <script src="web-page/js/hamburger.js"></script>
+    <script src="web-page/js/smooth-scroll.js"></script>
+    <script src="web-page/js/scroll-effects.js"></script>
+    <script src="web-page/js/animations.js"></script>
+    <script src="web-page/js/back-to-top.js"></script>
 </body>
 </html>

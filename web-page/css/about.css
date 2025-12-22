@@ -1,0 +1,100 @@
+/* ===== About Section ===== */
+.about {
+    padding: 80px 0;
+    background: var(--pixel-dark);
+    border-bottom: 4px solid var(--pixel-accent4);
+}
+
+.about-content {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text h3 {
+    font-size: 1.8rem;
+    color: var(--pixel-accent4);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.about-text p {
+    font-size: 1rem;
+    color: var(--pixel-light);
+    margin-bottom: 20px;
+    line-height: 1.8;
+    border-left: 4px solid var(--pixel-accent4);
+    padding-left: 15px;
+}
+
+.game-stats {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.stat {
+    flex: 1;
+    background: var(--pixel-darker);
+    padding: 20px;
+    border: 2px solid var(--pixel-accent4);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--pixel-accent4);
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--pixel-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.about-image {
+    flex: 1;
+}
+
+.image-placeholder {
+    aspect-ratio: 1;
+    background: var(--pixel-darker);
+    border: 6px solid var(--pixel-accent4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--pixel-light);
+    box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.4);
+}
+
+.image-placeholder i {
+    font-size: 3rem;
+    color: var(--pixel-accent4);
+    margin-bottom: 15px;
+}
+
+.image-placeholder p {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ===== Responsive About ===== */
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+    }
+
+    .game-stats {
+        flex-direction: column;
+    }
+}

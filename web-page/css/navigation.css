@@ -1,0 +1,103 @@
+/* ===== Navigation ===== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: var(--pixel-darker);
+    border-bottom: 4px solid var(--pixel-accent1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.nav-brand h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--pixel-accent1);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: var(--pixel-light);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--pixel-dark);
+    background-color: var(--pixel-accent2);
+    border: 2px solid var(--pixel-accent2);
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: var(--pixel-light);
+    margin: 5px 0;
+    transition: 0.3s;
+}
+
+/* ===== Responsive Navigation ===== */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: absolute;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: var(--pixel-darker);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        gap: 0;
+        border-bottom: 4px solid var(--pixel-accent1);
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-link {
+        padding: 15px;
+        border-bottom: 2px solid var(--pixel-border);
+        font-size: 0.8rem;
+    }
+}
