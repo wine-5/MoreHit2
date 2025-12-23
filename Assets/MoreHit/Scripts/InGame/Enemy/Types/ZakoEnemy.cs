@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace MoreHit.Enemy
@@ -5,7 +6,7 @@ namespace MoreHit.Enemy
     /// <summary>
     /// 雑魚敵の実装クラス
     /// </summary>
-    public class ZakoEnemy : EnemyBase
+    public class ZakoEnemy : EnemyBase  //EnemyBase(親)をZakoEnemy(子)が継承
     {
         /// <summary>
         /// 雑魚敵の移動処理
@@ -41,6 +42,13 @@ namespace MoreHit.Enemy
             {
                 AddStock(1);
             }
+
+            // 仕様：左Ctrlで溜め攻撃を受けた判定
+            if (Keyboard.current.leftCtrlKey.wasPressedThisFrame)
+            {
+                TryLaunch();
+            }
+
         }
 
         protected override void Move()
@@ -50,23 +58,17 @@ namespace MoreHit.Enemy
 
             // 親クラスのUpdateから呼ばれる移動ロジック
             // ここに「canMove」のチェックを入れるとより確実です
-            if (!canMove)//canMaveがfalseの時、計算処理をスキップ（動かなくなる）
-            {
-                rb.linearVelocity = Vector2.zero;
-                return;
-            }
-            //巡回範囲の判定
             float currentX = transform.position.x;
+
             if (direction > 0 && currentX >= rightLimit) direction = -1;
             else if (direction < 0 && currentX <= leftLimit) direction = 1;
 
-            //決まった方向と設定された速度を掛け合わせて与える
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
-            spriteRenderer.flipX = (direction < 0); //スプライトを反転
-        
+            spriteRenderer.flipX = (direction < 0);
 
-        // 例: プレイヤーに向かって移動、パトロールなど
-    }
+
+            // 例: プレイヤーに向かって移動、パトロールなど
+        }
 
        
 
@@ -102,14 +104,17 @@ namespace MoreHit.Enemy
         {
             base.OnDamageReceived(damage);
             //ストックを増やす処理
-            base.Update(); // 親クラスのUpdate（Moveなど）を呼ぶ
-
-            // 仮実装：左Shiftキーが押された瞬間にストックを1増やす
-            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
-            {
-                AddStock(1);
-            }
+           
+            StartCoroutine(FlashRoutine());
             // TODO: ダメージ時のエフェクト、アニメーション、ノックバックなどを実装
         }
+
+        private IEnumerator FlashRoutine()
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.white;
+        }
+
     }
 }

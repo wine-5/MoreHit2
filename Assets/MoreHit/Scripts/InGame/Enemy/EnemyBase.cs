@@ -4,19 +4,29 @@ using TMPro;
 
 namespace MoreHit.Enemy
 {
+
+    public enum EnemyState { Idle, Move, HitStun, Launch }//状態の定義
     /// <summary>
     /// 敵の基底クラス
     /// </summary>
     public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
+        protected EnemyState currentState = EnemyState.Move; // 現在の状態
+
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
+        [Header("吹っ飛ばし設定")]
+        [SerializeField] protected Vector2 launchVector = new Vector2(1, 1); // インスペクターで設定可能
+        [SerializeField] protected float launchPower = 10f;
+
+
 
         protected EnemyData enemyData;
         protected float currentHP;
+        protected float currentLaunchTimer = 0f;
         protected int currentStockCount;
 
         // コンポーネント
@@ -92,6 +102,29 @@ namespace MoreHit.Enemy
                 stockText.text = currentStockCount.ToString();
             }
         }
+
+        // 吹っ飛ばし開始処理
+        public void TryLaunch()
+        {
+            // 仕様：ストックが needstock を超えているかチェック
+            if (currentStockCount < enemyData.Needstock) return;
+
+            // 仕様：吹っ飛ばし時間の計算
+            int extraStocks = currentStockCount - enemyData.Needstock;
+            currentLaunchTimer = 5f + Mathf.Floor(extraStocks / 5f);
+
+            // 状態を吹っ飛ばしに切り替え
+            currentState = EnemyState.Launch;
+            canMove = false;
+
+            // 初速を与える
+            rb.linearVelocity = launchVector.normalized * launchPower;
+            OnStateChanged(currentState);
+        }
+
+
+
+
         /// <summary>
         /// IDamageable実装：ダメージを受ける処理
         /// </summary>
@@ -158,11 +191,67 @@ namespace MoreHit.Enemy
         /// </summary>
         protected abstract void Attack();
 
+        
+
         protected virtual void Update()
         {
             if (IsDead) return;
-            Move();
+
+            // 状態に応じた振る舞いの分岐（ステートマシン）
+            switch (currentState)
+            {
+                case EnemyState.Move:
+                    if (canMove) Move();
+                    break;
+                case EnemyState.HitStun:
+                    // 停止中は何もしない
+                    break;
+                case EnemyState.Launch:
+                    ProcessLaunch(); // 吹っ飛ばし中の着地判定（追加すべき機能）
+                    break;
+            }
+
+            
         }
+
+        // カメラ端での跳ね返り処理
+        private void ProcessLaunch()
+        {
+            // タイマー減少
+            currentLaunchTimer -= Time.deltaTime;
+            if (currentLaunchTimer <= 0)
+            {
+                // 仕様変更：時間切れで復帰せず、そのまま撃破（消滅）させる
+                Die();
+                return;
+            }
+
+            // カメラの範囲を取得 (Viewport 0.0〜1.0 をワールド座標に変換)
+            Camera cam = Camera.main;
+            Vector3 pos = transform.position;
+            Vector3 viewportPos = cam.WorldToViewportPoint(pos);
+
+            // 左右の壁で跳ね返り
+            if (viewportPos.x < 0 || viewportPos.x > 1)
+            {
+                rb.linearVelocity = new Vector2(-rb.linearVelocity.x, rb.linearVelocity.y);
+                // 画面内に押し戻す補正
+                viewportPos.x = Mathf.Clamp(viewportPos.x, 0.01f, 0.99f);
+                transform.position = cam.ViewportToWorldPoint(viewportPos);
+            }
+
+            // 上下の壁（天井・地面）で跳ね返り
+            if (viewportPos.y < 0 || viewportPos.y > 1)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -rb.linearVelocity.y);
+                // 画面内に押し戻す補正
+                viewportPos.y = Mathf.Clamp(viewportPos.y, 0.01f, 0.99f);
+                transform.position = cam.ViewportToWorldPoint(viewportPos);
+            }
+        }
+
+        // フックメソッド：子クラスで「特定の瞬間」に処理を挟めるようにする
+        protected virtual void OnStateChanged(EnemyState newState) { }
 
         // プロパティ
         public int CurrentStockCount => currentStockCount;
