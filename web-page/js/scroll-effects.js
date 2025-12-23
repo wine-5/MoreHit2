@@ -20,6 +20,27 @@ function handleScrollAnimations() {
             element.classList.add('appear');
         }
     });
+
+    // ===== フッターアニメーション =====
+    const footerSections = document.querySelectorAll('.footer-section');
+    const footerBottom = document.querySelector('.footer-bottom');
+    
+    footerSections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        
+        // フッター要素がビューポート内に入ったらアニメーション開始
+        if (sectionTop < window.innerHeight * 0.9) {
+            section.classList.add('animate-in');
+        }
+    });
+    
+    // フッター下部のアニメーション
+    if (footerBottom) {
+        const bottomTop = footerBottom.getBoundingClientRect().top;
+        if (bottomTop < window.innerHeight * 0.9) {
+            footerBottom.classList.add('animate-in');
+        }
+    }
 }
 
 // ===== Throttle Function =====
