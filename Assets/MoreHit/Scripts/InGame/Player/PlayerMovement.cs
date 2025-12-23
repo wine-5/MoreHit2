@@ -5,24 +5,10 @@ namespace MoreHit.Player
     /// <summary>
     /// プレイヤーの移動処理を管理するクラス
     /// </summary>
-    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("移動設定")]
-        [SerializeField] private float moveSpeed = 8f;
-        [SerializeField] private float acceleration = 10f;
-        [SerializeField] private float deceleration = 10f;
-        
-        [Header("ジャンプ設定")]
-        [SerializeField] private float jumpForce = 15f;
-        [SerializeField] private float jumpCutMultiplier = 0.5f;
-        [SerializeField] private float fallGravityMultiplier = 2.5f;
-        [SerializeField] private int maxJumpCount = 2; // 2段ジャンプ
-        
-        [Header("バックステップ設定")]
-        [SerializeField] private float backstepDistance = 3f;
-        [SerializeField] private float backstepDuration = 0.2f;
-        [SerializeField] private float backstepCooldown = 0.5f;
+        [Header("プレイヤーデータ")]
+        [SerializeField] private PlayerData playerData;
         
         [Header("地面判定")]
         [SerializeField] private Transform groundCheck;
@@ -31,6 +17,18 @@ namespace MoreHit.Player
         
         // Components
         private Rigidbody2D rb;
+        
+        // キャッシュされたパラメータ
+        private float moveSpeed;
+        private float acceleration;
+        private float deceleration;
+        private float jumpForce;
+        private float jumpCutMultiplier;
+        private float fallGravityMultiplier;
+        private int maxJumpCount;
+        private float backstepDistance;
+        private float backstepDuration;
+        private float backstepCooldown;
         
         // Movement State
         private Vector2 moveInput;
@@ -52,6 +50,23 @@ namespace MoreHit.Player
         {
             rb = GetComponent<Rigidbody2D>();
             defaultGravityScale = rb.gravityScale;
+            
+            // PlayerDataからパラメータをキャッシュ
+            if (playerData != null)
+            {
+                moveSpeed = playerData.MoveSpeed;
+                acceleration = playerData.Acceleration;
+                deceleration = playerData.Deceleration;
+                jumpForce = playerData.JumpForce;
+                jumpCutMultiplier = playerData.JumpCutMultiplier;
+                fallGravityMultiplier = playerData.FallGravityMultiplier;
+                maxJumpCount = playerData.MaxJumpCount;
+                backstepDistance = playerData.BackstepDistance;
+                backstepDuration = playerData.BackstepDuration;
+                backstepCooldown = playerData.BackstepCooldown;
+            }
+            else
+                Debug.LogError("PlayerDataが設定されていません！");
         }
         
         private void Update()

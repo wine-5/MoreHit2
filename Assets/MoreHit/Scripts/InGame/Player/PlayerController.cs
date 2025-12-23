@@ -7,9 +7,15 @@ namespace MoreHit.Player
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
+        [Header("プレイヤーデータ")]
+        [SerializeField] private PlayerData playerData;
+        
+        [Header("参照")]
         private PlayerInputManager inputManager;
         private PlayerMovement movement;
-        private bool isAlive = true;
+        
+        [Header("プレイヤー状態")]
+        [SerializeField] private bool isAlive = true;
 
         private void Awake()
         {
@@ -46,7 +52,7 @@ namespace MoreHit.Player
             inputManager.onChargeRangedAttack.RemoveListener(OnChargeRangedAttack);
         }
 
-        #region Input Handlers
+        #region 入力ハンドラー
 
         private void OnMoveInput(Vector2 moveInput)
         {

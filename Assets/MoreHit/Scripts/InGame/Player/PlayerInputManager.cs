@@ -9,8 +9,8 @@ namespace MoreHit.Player
     /// </summary>
     public class PlayerInputManager : MonoBehaviour
     {
-        [Header("溜め攻撃設定")]
-        [SerializeField] private float chargeAttackThreshold = 1.0f; // 溜め攻撃の閖値（秒）
+        [Header("プレイヤーデータ")]
+        [SerializeField] private PlayerData playerData;
         
         [Header("イベント")]
         public UnityEvent<Vector2> onMove;
@@ -36,10 +36,17 @@ namespace MoreHit.Player
         private float backstepHoldTime = 0f;
         private bool isChargingAttack = false;
         private bool isChargingBackstep = false;
+        private float chargeAttackThreshold; // PlayerDataからキャッシュ
         
         private void Awake()
         {
             playerInput = GetComponent<PlayerInput>();
+            
+            // PlayerDataからパラメータをキャッシュ
+            if (playerData != null)
+                chargeAttackThreshold = playerData.ChargeAttackThreshold;
+            else
+                Debug.LogError("PlayerDataが設定されていません！");
             
             // アクションの取得
             moveAction = playerInput.actions["Move"];
