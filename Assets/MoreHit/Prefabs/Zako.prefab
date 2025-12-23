@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 407370999357606760}
   - component: {fileID: 6370705370894734867}
   - component: {fileID: 5934706272814844944}
+  - component: {fileID: 1749134535363678353}
   m_Layer: 0
   m_Name: Zako
   m_TagString: Enemy
@@ -213,6 +214,7 @@ MonoBehaviour:
   enemyType: 0
   launchVector: {x: 1, y: 1}
   launchPower: 10
+  stockResetDuration: 5
 --- !u!50 &5934706272814844944
 Rigidbody2D:
   serializedVersion: 5
@@ -240,6 +242,43 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!70 &1749134535363678353
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6310792540888457486}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.16, y: 0.16}
+  m_Direction: 0
 --- !u!1 &8770848819621907761
 GameObject:
   m_ObjectHideFlags: 0

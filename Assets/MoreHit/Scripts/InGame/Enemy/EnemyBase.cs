@@ -132,7 +132,49 @@ namespace MoreHit.Enemy
             OnStateChanged(currentState);
         }
 
+        /// <summary>
+        /// 他の敵からの衝突などによって、強制的に吹っ飛ばし状態にする
+        /// </summary>
+        public void ForceLaunch(Vector2 initialVelocity)
+        {
+            if (isDead) return;
+            currentLaunchTimer = 5f;
+            currentState = EnemyState.Launch;
+            canMove = false;
 
+            rb.gravityScale = 0; // ★追加：重力をゼロにして下に落ちないようにする
+            rb.linearVelocity = initialVelocity;
+            OnStateChanged(currentState);
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            // 自分が吹っ飛び中（Launch）でなければ何もしない
+            if (currentState != EnemyState.Launch) return;
+
+            EnemyBase otherEnemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (otherEnemy == null || otherEnemy.isDead) return;
+
+            // 吹っ飛んでいない敵に当たった場合のみ連鎖させる
+            if (otherEnemy.currentState != EnemyState.Launch)
+            {
+                // --- 1. 自分自身の跳ね返り処理 ---
+                // ぶつかる直前のスピードを維持する
+                float mySpeed = Mathf.Max(rb.linearVelocity.magnitude, launchPower);
+                // 衝突した面の「向き」を取得
+                Vector2 normal = collision.contacts[0].normal;
+                // ベクトルを鏡のように反射させる（ビリヤードの動き）
+                rb.linearVelocity = Vector2.Reflect(rb.linearVelocity.normalized, normal) * mySpeed;
+
+                // --- 2. 相手を弾き飛ばす処理 ---
+                // 自分から相手への方向を計算
+                Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
+                // 相手には「設定された威力」で初速を与える
+                otherEnemy.ForceLaunch(impactDir * launchPower);
+
+                Debug.Log($"{gameObject.name} が反射し、{otherEnemy.name} を弾き飛ばしました");
+            }
+        }
 
 
         /// <summary>
