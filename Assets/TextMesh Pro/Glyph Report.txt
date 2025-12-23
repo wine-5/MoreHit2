@@ -1,0 +1,13 @@
+Font: JF Dot M+ 12  Style: Bold
+Point Size: 561   Padding: 9   SP/PD Ratio: 1.6%
+
+Characters included: 5/6
+Missing characters: 1
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 9	Hex: 9	Char [	]
+
+Characters excluded from packing:
+----------------------------------------
