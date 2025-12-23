@@ -2,49 +2,35 @@
 
 ## クラス設計概要
 
-### 基本システム
-1. **PlayerController** - メイン制御、入力処理、ステート管理
-2. **InputManager** - 入力の統合管理、キーバインド設定
-3. **PlayerMovement** - 基本移動（WASD）、ジャンプ、バックステップ
-4. **PlayerCollider** - プレイヤーの当たり判定処理
-5. **PlayerHealth** - HP管理、ダメージ処理、ゲームオーバー判定
+### 攻撃システム（未実装）
+1. **IAttack** - 攻撃の共通インターフェース
+2. **AttackManager** - 攻撃システムの統括管理
+3. **各攻撃クラス** - 具体的な攻撃実装
 
-### 攻撃システム
-5. **IAttack** - 攻撃の共通インターフェース
-6. **AttackManager** - 攻撃システムの統括管理
-7. **各攻撃クラス** - 具体的な攻撃実装
-
-### 演出システム
-8. **PlayerAnimator** - アニメーション制御、表情システム
-9. **CameraController** - プレイヤー追従、ボス戦演出
+### 演出システム（未実装）
+1. **PlayerAnimator** - アニメーション制御、表情システム
+2. **CameraController** - プレイヤー追従、ボス戦演出
 
 ## 実装順序
 
-### Phase 1: 基本システム構築 (最優先)
-1. **InputManager** - 入力システムの基盤
-2. **PlayerController** - メイン制御クラス
-3. **PlayerMovement** - 基本移動とジャンプ
-4. **PlayerCollider** - プレイヤーの当たり判定システム
-5. **PlayerHealth** - HP管理システム
-
-### Phase 2: 攻撃システム構築
-5. **IAttack インターフェース** - 攻撃の基本仕様定義
-6. **AttackManager** - 攻撃管理システム
-7. **NormalAttack** - 通常攻撃（3段攻撃）
-8. **RangedAttack** - サブ攻撃（射撃）
-9. **RushAttack** - 突進攻撃
-10. **BackstepAttack** - バックステップ（回避行動）
+### Phase 2: 攻撃システム構築（次のステップ）
+1. **AttackData (ScriptableObject)** - 各攻撃のパラメータ定義
+2. **IAttack インターフェース** - 攻撃の基本仕様定義
+3. **AttackManager** - 攻撃管理システム
+4. **NormalAttack** - 通常攻撃（3段攻撃）
+5. **RangedAttack** - サブ攻撃（射撃）
+6. **RushAttack** - 突進攻撃
 
 ### Phase 3: 特殊攻撃システム
-11. **ChargeRushAttack** - 溜め突進攻撃
-12. **ChargeRangedAttack** - 溜め射撃攻撃
-13. **攻撃のターゲット選択システム** - ストック優先システム
+1. **ChargeRushAttack** - 溜め突進攻撃
+2. **ChargeRangedAttack** - 溜め射撃攻撃
+3. **攻撃のターゲット選択システム** - ストック優先システム
 
 ### Phase 4: 演出システム
-14. **PlayerAnimator** - アニメーション制御
-15. **体力連動表情システム** - 体力に応じた表情変化
-16. **CameraController** - カメラ追従システム
-17. **撃墜演出システム** - ズーム・ヒットストップ演出
+1. **PlayerAnimator** - アニメーション制御
+2. **体力連動表情システム** - 体力に応じた表情変化
+3. **CameraController** - カメラ追従システム
+4. **撃墜演出システム** - ズーム・ヒットストップ演出
 
 ## 各攻撃の詳細仕様
 
@@ -63,6 +49,7 @@
 ### バックステップ
 - **役割**: 回避行動、位置調整
 - **仕様**: 後方移動、無敵時間あり、短いクールタイム
+- **実装状況**: ✅ PlayerMovementで実装済み（無敵時間は未実装）
 
 ### 溜め突進
 - **役割**: 接近吹っ飛ばし
