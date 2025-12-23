@@ -11,5 +11,4 @@ function initializeApp() {
     setupAnimations();
     setupBackToTop();
     setupHamburgerMenu();
-    setupSmoothScrolling();
 }

@@ -1,4 +1,4 @@
-// ===== Navigation Setup =====
+// ===== ナビゲーション設定 =====
 // ナビゲーションバーのスクロール効果を適用する閾値（ピクセル）
 const NAV_SCROLL_THRESHOLD = 100;
 
@@ -6,7 +6,7 @@ function setupNavigation() {
     const navbar = document.getElementById('navbar');
     const navLinks = document.querySelectorAll('.nav-link');
     
-    // Navbarの高さを動的に計算してオフセットを決定
+    // Navbarの高さを動的に計算
     const getNavbarHeight = () => navbar.offsetHeight;
     
     // ナビゲーションバーのスクロール効果
@@ -20,38 +20,44 @@ function setupNavigation() {
     
     // ナビゲーションリンククリック処理
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            
-            if (target) {
-                // Navbarの高さを動的に取得してオフセットを計算
-                const navbarHeight = getNavbarHeight();
-                const offsetTop = target.offsetTop - navbarHeight;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-            
-            // アクティブリンク更新
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            
-            // モバイルメニューが開いていれば閉じる
-            const navMenu = document.getElementById('nav-menu');
-            if (navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                updateHamburgerIcon(false);
-            }
-        });
+        link.addEventListener('click', handleNavLinkClick);
     });
     
     // スクロール時のアクティブナビゲーション更新
     window.addEventListener('scroll', updateActiveNavLink);
+    
+    // ページ内リンク（#から始まるリンク）のスムーススクロール
+    setupSmoothScrolling();
 }
 
-// ===== Update Active Navigation Link =====
+// ===== ナビゲーションリンククリック処理 =====
+function handleNavLinkClick(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    
+    if (target) {
+        const navbar = document.getElementById('navbar');
+        const navbarHeight = navbar.offsetHeight;
+        const offsetTop = target.offsetTop - navbarHeight;
+        window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+        });
+    }
+    
+    // アクティブリンク更新
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+    
+    // モバイルメニューが開いていれば閉じる
+    const navMenu = document.getElementById('nav-menu');
+    if (navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+    }
+}
+
+// ===== アクティブナビゲーションリンク更新 =====
 function updateActiveNavLink() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
@@ -70,5 +76,33 @@ function updateActiveNavLink() {
                 }
             });
         }
+    });
+}
+
+// ===== スムーススクロール設定 =====
+function setupSmoothScrolling() {
+    const navbar = document.getElementById('navbar');
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            
+            // #のみの場合はスキップ
+            if (href === '#') return;
+            
+            const target = document.querySelector(href);
+            
+            if (target) {
+                e.preventDefault();
+                
+                // Navbarの高さを動的に取得してオフセットを計算
+                const navbarHeight = navbar.offsetHeight;
+                const offsetTop = target.offsetTop - navbarHeight;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 }

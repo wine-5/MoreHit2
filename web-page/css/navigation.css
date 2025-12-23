@@ -62,6 +62,11 @@
     display: none;
     flex-direction: column;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.hamburger.active {
+    transform: rotate(90deg);
 }
 
 .bar {
