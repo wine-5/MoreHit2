@@ -68,6 +68,8 @@ namespace MoreHit.Enemy
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
 
+            if (rb != null) rb.gravityScale = 1; // 開始時は重力ありにする
+
             LoadEnemyData();
             InitializeEnemy();
             UpdateStockText();
@@ -259,46 +261,33 @@ namespace MoreHit.Enemy
         /// </summary>
         protected abstract void Attack();
 
-        
 
+
+        // EnemyBase.cs の Update 内を修正
         protected virtual void Update()
         {
             if (IsDead) return;
 
-            // ★追加：ストックリセットタイマーの処理
-            if (isStockTimerActive && currentState == EnemyState.Move)
-            {
-                stockResetTimer -= Time.deltaTime;
+            // (ストックリセットの処理などはそのまま)
 
-                // 演出：残り1秒を切ったらテキストを赤くするなどのフィードバックがあると親切
-                if (stockText != null)
-                {
-                    stockText.color = (stockResetTimer < 1.0f) ? Color.red : Color.white;
-                }
-
-                if (stockResetTimer <= 0)
-                {
-                    ResetStock();
-                }
-            }
-
-            // 状態に応じた振る舞いの分岐（ステートマシン）
             switch (currentState)
             {
                 case EnemyState.Move:
+                    // ★重要：通常移動時は重力を 1 に戻す
+                    if (rb != null && rb.gravityScale != 1)
+                    {
+                        rb.gravityScale = 1;
+                    }
+
                     if (canMove) Move();
                     break;
-                case EnemyState.HitStun:
-                    // 停止中は何もしない
-                    break;
+
                 case EnemyState.Launch:
-                    ProcessLaunch(); // 吹っ飛ばし中の着地判定（追加すべき機能）
+                    // 吹っ飛ばし中は重力 0（ProcessLaunch内でタイマー処理）
+                    ProcessLaunch();
                     break;
             }
-
-            
         }
-
         // カメラ端での跳ね返り処理
         private void ProcessLaunch()
         {

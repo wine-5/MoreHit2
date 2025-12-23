@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2925005470815890939}
   - component: {fileID: 6822142014998240576}
   - component: {fileID: 7041541506216119544}
-  - component: {fileID: -7914357452232857113}
+  - component: {fileID: -7493313424748788123}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Enemy
@@ -113,6 +113,8 @@ MonoBehaviour:
   launchVector: {x: 1, y: 1}
   launchPower: 10
   stockResetDuration: 5
+  jumpForce: 5
+  jumpInterval: 3
 --- !u!50 &7041541506216119544
 Rigidbody2D:
   serializedVersion: 5
@@ -140,8 +142,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &-7914357452232857113
-CircleCollider2D:
+--- !u!61 &-7493313424748788123
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -175,7 +177,17 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.08
+  m_SpriteTilingProperty:
+    border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.16, y: 0.16}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.16, y: 0.16}
+  m_EdgeRadius: 0
 --- !u!1 &4442717356278819873
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,12 @@ namespace MoreHit.Enemy
         /// 雑魚敵の移動処理
         /// </summary>
         /// 
-        
+
+        [Header("ジャンプ設定")]
+        [SerializeField] private float jumpForce = 8f;     // ジャンプの強さ
+        [SerializeField] private float jumpInterval = 3f;  // ジャンプの間隔（秒）
+        private float jumpTimer;                          // 経過時間を測るタイマー
+
         private float leftRange = 3f;  // 左側に動ける距離
         private float rightRange = 3f; // 右側に動ける距離
 
@@ -49,6 +54,31 @@ namespace MoreHit.Enemy
                 TryLaunch();
             }
 
+            if (currentState == EnemyState.Move && canMove)
+            {
+                HandleJumpTimer();
+            }
+        }
+       
+
+        private void HandleJumpTimer()
+        {
+            jumpTimer -= Time.deltaTime;
+
+            if (jumpTimer <= 0)
+            {
+                Jump();
+                jumpTimer = jumpInterval; // タイマーをリセット
+            }
+        }
+
+        private void Jump()
+        {
+            // Y軸方向だけに力を加える。X軸の移動（巡回速度）は維持する
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            // ジャンプアニメーションがあればここでトリガーを引く
+            // animator.SetTrigger("Jump");
         }
 
         protected override void Move()
@@ -86,16 +116,17 @@ namespace MoreHit.Enemy
         /// </summary>
         protected override void InitializeEnemy()
         {
+            // 親クラス（EnemyBase）の共通初期化を呼ぶ
             base.InitializeEnemy();
 
-            // 生成された時のX座標を記録
-            spawnX = transform.position.x;
+            // --- ジャンプの初期化 ---
+            jumpTimer = jumpInterval;
 
-            // 限界座標を計算
+            // --- 移動範囲の初期化 ---
+            spawnX = transform.position.x;
             leftLimit = spawnX - leftRange;
             rightLimit = spawnX + rightRange;
         }
-
 
         /// <summary>
         /// ダメージを受けた時の雑魚敵固有の処理
