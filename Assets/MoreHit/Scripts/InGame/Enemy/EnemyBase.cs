@@ -114,22 +114,68 @@ namespace MoreHit.Enemy
         }
 
         // 吹っ飛ばし開始処理
+        // 1. TryLaunch に重力カットを追加
         public void TryLaunch()
         {
-            // 仕様：ストックが needstock を超えているかチェック
             if (currentStockCount < enemyData.Needstock) return;
 
-            // 仕様：吹っ飛ばし時間の計算
             int extraStocks = currentStockCount - enemyData.Needstock;
             currentLaunchTimer = 5f + Mathf.Floor(extraStocks / 5f);
 
-            // 状態を吹っ飛ばしに切り替え
             currentState = EnemyState.Launch;
             canMove = false;
 
-            // 初速を与える
-            rb.linearVelocity = launchVector.normalized * launchPower;
+            // ★重要：重力を切ることで放物線にならず、勢いを維持する
+            rb.gravityScale = 0;
+
+            float speedMultiplier = 1f + (currentStockCount * 0.2f);
+            float finalLaunchSpeed = launchPower * speedMultiplier;
+
+            rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
             OnStateChanged(currentState);
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (currentState != EnemyState.Launch) return;
+
+            EnemyBase otherEnemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (otherEnemy == null || otherEnemy.isDead) return;
+
+            // --- 吹っ飛び状態の敵同士が当たった場合の処理 ---
+            if (otherEnemy.currentState == EnemyState.Launch)
+            {
+                // 1. お互いの中心点からの方向を計算（ビリヤードの球が離れる方向）
+                Vector2 awayDirection = (transform.position - otherEnemy.transform.position).normalized;
+
+                // 2. めり込み防止：お互いを少しだけ外側に強制移動させる
+                // これがないと次のフレームでも「衝突中」と判定されてグルグル回る
+                transform.position += (Vector3)awayDirection * 0.1f;
+
+                // 3. 速度の再計算（自分のストックに応じた勢いで弾き飛ぶ）
+                float speedMultiplier = 1f + (currentStockCount * 0.2f);
+                float billiardSpeed = launchPower * speedMultiplier;
+
+                // 進行方向を完全に「相手から離れる方向」に上書き
+                rb.linearVelocity = awayDirection * billiardSpeed;
+
+                Debug.Log($"{gameObject.name} が吹っ飛び同士で弾け飛びました");
+                return; // 吹っ飛び同士の場合はここで終了
+            }
+
+            // --- 以下は吹っ飛んでいない敵（巡回中など）に当たった時の既存処理 ---
+            if (otherEnemy.currentState != EnemyState.Launch)
+            {
+                float mySpeed = Mathf.Max(rb.linearVelocity.magnitude, launchPower);
+                Vector2 normal = collision.contacts[0].normal;
+                rb.linearVelocity = Vector2.Reflect(rb.linearVelocity.normalized, normal) * mySpeed;
+
+                Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
+                float otherSpeedMultiplier = 1f + (otherEnemy.currentStockCount * 0.2f);
+                float otherLaunchSpeed = launchPower * otherSpeedMultiplier;
+
+                otherEnemy.ForceLaunch(impactDir * otherLaunchSpeed);
+            }
         }
 
         /// <summary>
@@ -147,34 +193,7 @@ namespace MoreHit.Enemy
             OnStateChanged(currentState);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            // 自分が吹っ飛び中（Launch）でなければ何もしない
-            if (currentState != EnemyState.Launch) return;
-
-            EnemyBase otherEnemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (otherEnemy == null || otherEnemy.isDead) return;
-
-            // 吹っ飛んでいない敵に当たった場合のみ連鎖させる
-            if (otherEnemy.currentState != EnemyState.Launch)
-            {
-                // --- 1. 自分自身の跳ね返り処理 ---
-                // ぶつかる直前のスピードを維持する
-                float mySpeed = Mathf.Max(rb.linearVelocity.magnitude, launchPower);
-                // 衝突した面の「向き」を取得
-                Vector2 normal = collision.contacts[0].normal;
-                // ベクトルを鏡のように反射させる（ビリヤードの動き）
-                rb.linearVelocity = Vector2.Reflect(rb.linearVelocity.normalized, normal) * mySpeed;
-
-                // --- 2. 相手を弾き飛ばす処理 ---
-                // 自分から相手への方向を計算
-                Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
-                // 相手には「設定された威力」で初速を与える
-                otherEnemy.ForceLaunch(impactDir * launchPower);
-
-                Debug.Log($"{gameObject.name} が反射し、{otherEnemy.name} を弾き飛ばしました");
-            }
-        }
+        
 
 
         /// <summary>

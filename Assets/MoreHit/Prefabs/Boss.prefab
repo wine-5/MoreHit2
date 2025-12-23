@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2925005470815890939}
   - component: {fileID: 6822142014998240576}
   - component: {fileID: 7041541506216119544}
-  - component: {fileID: -2251112577905648612}
+  - component: {fileID: -7914357452232857113}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Enemy
@@ -140,8 +140,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &-2251112577905648612
-CapsuleCollider2D:
+--- !u!58 &-7914357452232857113
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -175,8 +175,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.16, y: 0.16}
-  m_Direction: 0
+  m_Radius: 0.08
 --- !u!1 &4442717356278819873
 GameObject:
   m_ObjectHideFlags: 0

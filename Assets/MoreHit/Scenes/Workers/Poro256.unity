@@ -791,6 +791,9 @@ MonoBehaviour:
   stockText: {fileID: 0}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
+  launchVector: {x: 1, y: 1}
+  launchPower: 10
+  stockResetDuration: 5
 --- !u!212 &1432403304
 SpriteRenderer:
   serializedVersion: 2
@@ -862,8 +865,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2025798a825694b8cf407330ab55f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.EnemySpawnSettings
-  leftRange: 30
-  rightRange: 30
+  leftRange: 3
+  rightRange: 3
 --- !u!1 &1800073607
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,6 +949,9 @@ MonoBehaviour:
   stockText: {fileID: 0}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
+  launchVector: {x: 1, y: 1}
+  launchPower: 10
+  stockResetDuration: 5
 --- !u!212 &2017645232
 SpriteRenderer:
   serializedVersion: 2

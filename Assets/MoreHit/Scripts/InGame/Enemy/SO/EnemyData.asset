@@ -17,9 +17,11 @@ MonoBehaviour:
     maxHP: 10
     attackPower: 0
     moveSpeed: 10
-    stockCount: 1
+    stockCount: 0
+    needstock: 5
   - enemyType: 1
     maxHP: 10
     attackPower: 0
     moveSpeed: 10
-    stockCount: 1
+    stockCount: 0
+    needstock: 10
