@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -26,6 +27,25 @@ namespace MoreHit.Enemy
         // イベント
         public System.Action<EnemyBase> OnEnemyDeath;
 
+        protected bool canMove = true; // 移動可能フラグ
+        protected bool isSmash = false;// 吹っ飛ばされているか
+
+        public void StopMovement(float duration)
+        {
+            StartCoroutine(StopRoutine(duration));
+        }
+
+        private IEnumerator StopRoutine(float duration)
+        {
+            canMove = false;
+            // 物理速度を完全にゼロにする（これがないと滑る）
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+
+            yield return new WaitForSeconds(duration); // 指定秒数待機
+
+            canMove = true;
+        }
+
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -35,6 +55,13 @@ namespace MoreHit.Enemy
             LoadEnemyData();
             InitializeEnemy();
             UpdateStockText();
+        }
+
+        public void AddStock(int amount)
+        {
+            currentStockCount += amount;
+            UpdateStockText();
+            StopMovement(1.0f); // ストックが増えた衝撃で1秒止まる、などの演出
         }
 
         /// <summary>

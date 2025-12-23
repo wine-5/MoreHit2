@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace MoreHit.Enemy
 {
     /// <summary>
@@ -76,6 +77,17 @@ namespace MoreHit.Enemy
             // 限界座標を計算
             leftLimit = spawnX - leftRange;
             rightLimit = spawnX + rightRange;
+        }
+
+        protected override void Update()
+        {
+            base.Update(); // 親クラスのUpdate（Moveなど）を呼ぶ
+
+            // 仮実装：左Shiftキーが押された瞬間にストックを1増やす
+            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
+            {
+                AddStock(1);
+            }
         }
 
         /// <summary>
