@@ -11,10 +11,11 @@
 html {
     scroll-behavior: smooth;
     font-size: 14px;
+    font-family: 'Pixelify Sans', 'Courier New', monospace;
 }
 
 body {
-    font-family: 'Courier New', monospace;
+    font-family: 'Pixelify Sans', 'Courier New', monospace;
     line-height: 1.8;
     color: #e0e0e0;
     background-color: #0d1b2a;
@@ -29,6 +30,10 @@ body {
         );
 }
 
+p, span, div, li, a {
+    font-family: 'Pixelify Sans', 'Courier New', monospace;
+}
+
 /* ===== カラーパレット定義 ===== */
 :root {
     --pixel-dark: #0d1b2a;
@@ -39,6 +44,11 @@ body {
     --pixel-accent3: #ffd93d;      /* 黄（特殊技） */
     --pixel-accent4: #a8e6cf;      /* 緑（防御） */
     --pixel-border: #4a5a6a;
+}
+
+/* ===== フォント定義 ===== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Press Start 2P', 'Pixelify Sans', monospace;
 }
 
 .container {
