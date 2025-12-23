@@ -30,28 +30,43 @@ namespace MoreHit.Enemy
             InitializeEnemy();
         }
 
+        protected override void Update()
+        {
+            // 1. 親クラスのUpdateを呼び、移動制限（canMove）や死亡判定を適用する
+            base.Update();
+
+            // 2. 【仮実装】左Shiftキーを常に監視する
+            // Updateの中に書くことで、いつでも反応するようになります
+            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
+            {
+                AddStock(1);
+            }
+        }
+
         protected override void Move()
         {
             // TODO: 雑魚敵の移動ロジックを実装
+
+
+            // 親クラスのUpdateから呼ばれる移動ロジック
+            // ここに「canMove」のチェックを入れるとより確実です
+            if (!canMove)//canMaveがfalseの時、計算処理をスキップ（動かなくなる）
+            {
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+            //巡回範囲の判定
             float currentX = transform.position.x;
+            if (direction > 0 && currentX >= rightLimit) direction = -1;
+            else if (direction < 0 && currentX <= leftLimit) direction = 1;
 
-            // 限界を超えたら反転
-            if (direction > 0 && currentX >= rightLimit)
-            {
-                direction = -1;
-            }
-            else if (direction < 0 && currentX <= leftLimit)
-            {
-                direction = 1;
-            }
-
-            // 移動処理（Rigidbody2Dを使用）
+            //決まった方向と設定された速度を掛け合わせて与える
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
+            spriteRenderer.flipX = (direction < 0); //スプライトを反転
+        
 
-            // 向きに合わせてスプライトを反転
-            spriteRenderer.flipX = (direction < 0);
-            // 例: プレイヤーに向かって移動、パトロールなど
-        }
+        // 例: プレイヤーに向かって移動、パトロールなど
+    }
 
        
 
@@ -79,16 +94,6 @@ namespace MoreHit.Enemy
             rightLimit = spawnX + rightRange;
         }
 
-        protected override void Update()
-        {
-            base.Update(); // 親クラスのUpdate（Moveなど）を呼ぶ
-
-            // 仮実装：左Shiftキーが押された瞬間にストックを1増やす
-            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
-            {
-                AddStock(1);
-            }
-        }
 
         /// <summary>
         /// ダメージを受けた時の雑魚敵固有の処理
@@ -96,6 +101,14 @@ namespace MoreHit.Enemy
         protected override void OnDamageReceived(float damage)
         {
             base.OnDamageReceived(damage);
+            //ストックを増やす処理
+            base.Update(); // 親クラスのUpdate（Moveなど）を呼ぶ
+
+            // 仮実装：左Shiftキーが押された瞬間にストックを1増やす
+            if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
+            {
+                AddStock(1);
+            }
             // TODO: ダメージ時のエフェクト、アニメーション、ノックバックなどを実装
         }
     }

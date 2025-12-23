@@ -30,7 +30,7 @@ namespace MoreHit.Enemy
         protected bool canMove = true; // 移動可能フラグ
         protected bool isSmash = false;// 吹っ飛ばされているか
 
-        public void StopMovement(float duration)
+        public void StopMovement(float duration)//敵を止める処理
         {
             StartCoroutine(StopRoutine(duration));
         }
