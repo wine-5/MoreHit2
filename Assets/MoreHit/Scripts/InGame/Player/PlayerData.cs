@@ -46,44 +46,6 @@ namespace MoreHit.Player
         [Tooltip("ダメージを受けた後の無敵時間（秒）")]
         [SerializeField] private float invincibleTimeAfterDamage = 1.0f;
 
-        [Header("通常攻撃設定")]
-        [Tooltip("通常攻撃のダメージ量")]
-        [SerializeField] private float normalAttackDamage = 10f;
-        [Tooltip("通常攻撃の攻撃範囲")]
-        [SerializeField] private float normalAttackRange = 1.5f;
-        [Tooltip("通常攻撃のクールタイム（秒）")]
-        [SerializeField] private float normalAttackCooldown = 0.3f;
-        [Tooltip("通常攻撃の最大コンボ数")]
-        [SerializeField] private int normalAttackComboMax = 3;
-
-        [Header("射撃攻撃設定")]
-        [Tooltip("射撃攻撃のダメージ量")]
-        [SerializeField] private float rangedAttackDamage = 8f;
-        [Tooltip("射撃の弾速")]
-        [SerializeField] private float rangedAttackSpeed = 15f;
-        [Tooltip("射撃攻撃のクールタイム（秒）")]
-        [SerializeField] private float rangedAttackCooldown = 0.5f;
-
-        [Header("突進攻撃設定")]
-        [Tooltip("突進攻撃のダメージ量")]
-        [SerializeField] private float rushAttackDamage = 12f;
-        [Tooltip("突進攻撃の移動距離")]
-        [SerializeField] private float rushAttackDistance = 5f;
-        [Tooltip("突進攻撃の移動時間（秒）")]
-        [SerializeField] private float rushAttackDuration = 0.3f;
-        [Tooltip("突進攻撃のクールタイム（秒）")]
-        [SerializeField] private float rushAttackCooldown = 1.0f;
-
-        [Header("溜め攻撃設定")]
-        [Tooltip("溜め攻撃が発動するまでの時間（秒）")]
-        [SerializeField] private float chargeAttackThreshold = 1.0f;
-        [Tooltip("溜め突進攻撃のダメージ量")]
-        [SerializeField] private float chargeRushAttackDamage = 30f;
-        [Tooltip("溜め射撃攻撃のダメージ量")]
-        [SerializeField] private float chargeRangedAttackDamage = 25f;
-        [Tooltip("溜め攻撃のノックバック力（吹っ飛ばし）")]
-        [SerializeField] private float chargeAttackKnockbackForce = 20f;
-
         // 移動設定のプロパティ
         public float MoveSpeed => moveSpeed;
         public float Acceleration => acceleration;
@@ -104,28 +66,5 @@ namespace MoreHit.Player
         // HP設定のプロパティ
         public int MaxHealth => maxHealth;
         public float InvincibleTimeAfterDamage => invincibleTimeAfterDamage;
-
-        // 通常攻撃設定のプロパティ
-        public float NormalAttackDamage => normalAttackDamage;
-        public float NormalAttackRange => normalAttackRange;
-        public float NormalAttackCooldown => normalAttackCooldown;
-        public int NormalAttackComboMax => normalAttackComboMax;
-
-        // 射撃攻撃設定のプロパティ
-        public float RangedAttackDamage => rangedAttackDamage;
-        public float RangedAttackSpeed => rangedAttackSpeed;
-        public float RangedAttackCooldown => rangedAttackCooldown;
-
-        // 突進攻撃設定のプロパティ
-        public float RushAttackDamage => rushAttackDamage;
-        public float RushAttackDistance => rushAttackDistance;
-        public float RushAttackDuration => rushAttackDuration;
-        public float RushAttackCooldown => rushAttackCooldown;
-
-        // 溜め攻撃設定のプロパティ
-        public float ChargeAttackThreshold => chargeAttackThreshold;
-        public float ChargeRushAttackDamage => chargeRushAttackDamage;
-        public float ChargeRangedAttackDamage => chargeRangedAttackDamage;
-        public float ChargeAttackKnockbackForce => chargeAttackKnockbackForce;
     }
 }

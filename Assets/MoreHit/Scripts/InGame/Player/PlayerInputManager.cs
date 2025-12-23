@@ -36,16 +36,14 @@ namespace MoreHit.Player
         private float backstepHoldTime = 0f;
         private bool isChargingAttack = false;
         private bool isChargingBackstep = false;
-        private float chargeAttackThreshold; // PlayerDataからキャッシュ
+        private const float chargeAttackThreshold = 1.0f; // 溜め攻撃の閾値
         
         private void Awake()
         {
             playerInput = GetComponent<PlayerInput>();
             
-            // PlayerDataからパラメータをキャッシュ
-            if (playerData != null)
-                chargeAttackThreshold = playerData.ChargeAttackThreshold;
-            else
+            // PlayerDataの確認
+            if (playerData == null)
                 Debug.LogError("PlayerDataが設定されていません！");
             
             // アクションの取得
