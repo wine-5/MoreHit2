@@ -35,6 +35,10 @@ namespace MoreHit.Player
         private float currentSpeed;
         private bool isFacingRight = true;
         
+        // 読み取り専用プロパティ（推奨: PlayerDataProvider経由でアクセス）
+        public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
+        public bool IsFacingRight => isFacingRight;
+        
         // Jump State
         private int jumpCount = 0;
         private bool isGrounded;
@@ -236,14 +240,14 @@ namespace MoreHit.Player
         }
         
         /// <summary>
-        /// 地面にいるかどうか
+        /// 地面にいるかどうか（推奨: PlayerDataProvider経由でアクセス）
         /// </summary>
-        public bool IsGrounded() => isGrounded;
+        public bool IsGrounded => isGrounded;
         
         /// <summary>
-        /// バックステップ中かどうか
+        /// バックステップ中かどうか（推奨: PlayerDataProvider経由でアクセス）
         /// </summary>
-        public bool IsBackstepping() => isBackstepping;
+        public bool IsBackstepping => isBackstepping;
         
         // デバッグ用：地面判定の可視化
         private void OnDrawGizmosSelected()
