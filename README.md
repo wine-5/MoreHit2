@@ -3,11 +3,33 @@
 ## お題
 「もうひとつ」
 
-## 概要
+## ゲーム概要
 未定
 
 ## チーム名
 - 未定
+
+---
+
+## ゲームを遊ぶ
+
+### UnityRoom での公開
+ゲームは UnityRoom で無料でプレイできます：
+
+**[More Hit 2 - UnityRoom で遊ぶ](https://unityroom.com/games/kochiratomukou)**
+
+> **ブラウザ対応**  
+> Chrome、Firefox、Safari などのモダンブラウザで動作します。  
+> インターネット接続が必要です。
+
+
+## ウェブサイト
+
+### ゲーム紹介サイト
+ゲーム「More Hit 2」の公式紹介サイトはこちら：
+
+**[More Hit 2 - ゲーム紹介サイト](index.html)**
+
 
 ## 技術スタック
 ![Unity](https://img.shields.io/badge/Unity-2025.12-black?style=for-the-badge&logo=unity)
@@ -15,6 +37,9 @@
 ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=visual-studio)
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34C26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
 
 ## 参加メンバー
@@ -48,3 +73,5 @@
     </td>
   </tr>
 </table>
+
+---
