@@ -42,10 +42,6 @@ namespace MoreHit.Player
         {
             playerInput = GetComponent<PlayerInput>();
             
-            // PlayerDataの確認
-            if (playerData == null)
-                Debug.LogError("PlayerDataが設定されていません！");
-            
             // アクションの取得
             moveAction = playerInput.actions["Move"];
             jumpAction = playerInput.actions["Jump"];
@@ -144,9 +140,7 @@ namespace MoreHit.Player
         private void OnMainAttack(InputAction.CallbackContext context)
         {
             if (!isChargingAttack)
-            {
                 onNormalAttack?.Invoke();
-            }
         }
         
         private void OnMainAttackCanceled(InputAction.CallbackContext context)
@@ -168,9 +162,7 @@ namespace MoreHit.Player
         private void OnBackStep(InputAction.CallbackContext context)
         {
             if (!isChargingBackstep)
-            {
                 onBackStep?.Invoke();
-            }
         }
         
         private void OnBackStepCanceled(InputAction.CallbackContext context)

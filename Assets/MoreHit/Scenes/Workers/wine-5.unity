@@ -569,6 +569,8 @@ GameObject:
   - component: {fileID: 646675863}
   - component: {fileID: 646675862}
   - component: {fileID: 646675861}
+  - component: {fileID: 646675868}
+  - component: {fileID: 646675867}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -850,6 +852,31 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &646675867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646675856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a5dcf93290ad04c888c7cf557ef93e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerHealth
+  playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
+--- !u!114 &646675868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646675856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abca0607114ce0441af1109bf4dc6cc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerCollider
 --- !u!1 &651621705
 GameObject:
   m_ObjectHideFlags: 0

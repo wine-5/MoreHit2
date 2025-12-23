@@ -46,19 +46,15 @@ namespace MoreHit.Player
 
         private void Awake()
         {
-            // PlayerDataからパラメータを取得
-            if (playerData != null)
-            {
-                maxHealth = playerData.MaxHealth;
-                invincibleDuration = playerData.InvincibleTimeAfterDamage;
-                currentHealth = maxHealth;
-            }
-            else
+            if (playerData == null)
             {
                 Debug.LogError("PlayerDataが設定されていません！");
-                maxHealth = 100;
-                currentHealth = maxHealth;
+                return;
             }
+            
+            maxHealth = playerData.MaxHealth;
+            invincibleDuration = playerData.InvincibleTimeAfterDamage;
+            currentHealth = maxHealth;
         }
 
         private void Update()
@@ -83,11 +79,8 @@ namespace MoreHit.Player
             // 無敵時間を開始
             StartInvincible();
 
-            // HP0で死亡処理
             if (currentHealth <= 0)
                 Die();
-
-            Debug.Log($"プレイヤーがダメージを受けた: {damage} (残りHP: {currentHealth}/{maxHealth})");
         }
 
         /// <summary>
@@ -104,14 +97,14 @@ namespace MoreHit.Player
         /// </summary>
         private void UpdateInvincibleState()
         {
-            if (isInvincible)
+            if (!isInvincible)
+                return;
+            
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer <= 0f)
             {
-                invincibleTimer -= Time.deltaTime;
-                if (invincibleTimer <= 0f)
-                {
-                    isInvincible = false;
-                    invincibleTimer = 0f;
-                }
+                isInvincible = false;
+                invincibleTimer = 0f;
             }
         }
 
@@ -124,9 +117,6 @@ namespace MoreHit.Player
                 
 
             isAlive = false;
-            Debug.Log("プレイヤーが死亡しました");
-
-            // GameEventsを通じて死亡イベント発火
             GameEvents.TriggerPlayerDeath();
         }
     }

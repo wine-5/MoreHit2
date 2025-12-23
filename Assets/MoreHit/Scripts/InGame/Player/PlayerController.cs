@@ -75,21 +75,18 @@ namespace MoreHit.Player
         private void OnNormalAttack()
         {
             if (!isAlive) return;
-            Debug.Log("通常攻撃");
             // TODO: 攻撃システム実装後に追加
         }
 
         private void OnRangedAttack()
         {
             if (!isAlive) return;
-            Debug.Log("射撃攻撃");
             // TODO: 攻撃システム実装後に追加
         }
 
         private void OnRushAttack()
         {
             if (!isAlive) return;
-            Debug.Log("突進攻撃");
             // TODO: 攻撃システム実装後に追加
         }
 
@@ -102,33 +99,17 @@ namespace MoreHit.Player
         private void OnChargeRushAttack()
         {
             if (!isAlive) return;
-            Debug.Log("溜め突進攻撃");
             // TODO: 攻撃システム実装後に追加
         }
 
         private void OnChargeRangedAttack()
         {
             if (!isAlive) return;
-            Debug.Log("溜め射撃攻撃");
             // TODO: 攻撃システム実装後に追加
         }
 
         #endregion
 
-        /// <summary>
-        /// プレイヤーを死亡状態にする
-        /// </summary>
-        public void Die()
-        {
-            isAlive = false;
-            movement.Stop();
-            Debug.Log("プレイヤー死亡");
-            // TODO: 死亡演出
-        }
 
-        /// <summary>
-        /// プレイヤーの生存状態を取得
-        /// </summary>
-        public bool IsAlive() => isAlive;
     }
 }

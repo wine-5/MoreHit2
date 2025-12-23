@@ -12,10 +12,10 @@ namespace MoreHit.Player
         /// </summary>
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.collider.CompareTag("Enemy"))
-            {
-                Debug.Log($"敵との接触: {collision.collider.name}");
-            }
+            // if (collision.collider.CompareTag("Enemy"))
+            // {
+            //     Debug.Log($"敵との接触: {collision.collider.name}");
+            // }
         }
     }
 }

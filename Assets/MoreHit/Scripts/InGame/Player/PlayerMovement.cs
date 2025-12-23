@@ -55,22 +55,22 @@ namespace MoreHit.Player
             rb = GetComponent<Rigidbody2D>();
             defaultGravityScale = rb.gravityScale;
             
-            // PlayerDataからパラメータをキャッシュ
-            if (playerData != null)
+            if (playerData == null)
             {
-                moveSpeed = playerData.MoveSpeed;
-                acceleration = playerData.Acceleration;
-                deceleration = playerData.Deceleration;
-                jumpForce = playerData.JumpForce;
-                jumpCutMultiplier = playerData.JumpCutMultiplier;
-                fallGravityMultiplier = playerData.FallGravityMultiplier;
-                maxJumpCount = playerData.MaxJumpCount;
-                backstepDistance = playerData.BackstepDistance;
-                backstepDuration = playerData.BackstepDuration;
-                backstepCooldown = playerData.BackstepCooldown;
-            }
-            else
                 Debug.LogError("PlayerDataが設定されていません！");
+                return;
+            }
+            
+            moveSpeed = playerData.MoveSpeed;
+            acceleration = playerData.Acceleration;
+            deceleration = playerData.Deceleration;
+            jumpForce = playerData.JumpForce;
+            jumpCutMultiplier = playerData.JumpCutMultiplier;
+            fallGravityMultiplier = playerData.FallGravityMultiplier;
+            maxJumpCount = playerData.MaxJumpCount;
+            backstepDistance = playerData.BackstepDistance;
+            backstepDuration = playerData.BackstepDuration;
+            backstepCooldown = playerData.BackstepCooldown;
         }
         
         private void Update()
@@ -82,13 +82,9 @@ namespace MoreHit.Player
         private void FixedUpdate()
         {
             if (isBackstepping)
-            {
                 HandleBackstep();
-            }
             else
-            {
                 HandleMovement();
-            }
             
             HandleGravity();
         }
@@ -101,18 +97,12 @@ namespace MoreHit.Player
             moveInput = input;
         }
         
-        /// <summary>
-        /// 地面判定チェック
-        /// </summary>
         private void CheckGroundStatus()
         {
-            if (groundCheck == null)
-                // groundCheckがない場合は簡易判定
-                isGrounded = Mathf.Abs(rb.linearVelocity.y) < 0.01f;
-            else
-                isGrounded = Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
+            isGrounded = groundCheck == null 
+                ? Mathf.Abs(rb.linearVelocity.y) < 0.01f 
+                : Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
             
-            // 地面に着地したらジャンプカウントをリセット
             if (isGrounded)
                 jumpCount = 0;
         }
@@ -143,11 +133,10 @@ namespace MoreHit.Player
         /// </summary>
         public void Jump()
         {
-            if (jumpCount < maxJumpCount)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                jumpCount++;
-            }
+            if (jumpCount >= maxJumpCount) return;
+            
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpCount++;
         }
         
         /// <summary>
@@ -164,17 +153,12 @@ namespace MoreHit.Player
         /// </summary>
         public void BackStep()
         {
-            if (backstepCooldownTimer <= 0f && !isBackstepping)
-            {
-                isBackstepping = true;
-                backstepTimer = backstepDuration;
-                backstepCooldownTimer = backstepCooldown;
-                
-                // バックステップの方向（プレイヤーの後ろ方向）
-                backstepDirection = isFacingRight ? Vector2.left : Vector2.right;
-                
-                // TODO: 無敵時間の設定
-            }
+            if (backstepCooldownTimer > 0f || isBackstepping) return;
+            
+            isBackstepping = true;
+            backstepTimer = backstepDuration;
+            backstepCooldownTimer = backstepCooldown;
+            backstepDirection = isFacingRight ? Vector2.left : Vector2.right;
         }
         
         /// <summary>
@@ -182,11 +166,10 @@ namespace MoreHit.Player
         /// </summary>
         private void HandleBackstep()
         {
-            if (backstepTimer > 0)
-            {
-                float backstepSpeed = backstepDistance / backstepDuration;
-                rb.linearVelocity = new Vector2(backstepDirection.x * backstepSpeed, rb.linearVelocity.y);
-            }
+            if (backstepTimer <= 0) return;
+            
+            float backstepSpeed = backstepDistance / backstepDuration;
+            rb.linearVelocity = new Vector2(backstepDirection.x * backstepSpeed, rb.linearVelocity.y);
         }
         
         /// <summary>
@@ -198,10 +181,7 @@ namespace MoreHit.Player
             {
                 backstepTimer -= Time.deltaTime;
                 if (backstepTimer <= 0)
-                {
                     isBackstepping = false;
-                    // TODO: 無敵時間の解除
-                }
             }
             
             if (backstepCooldownTimer > 0)
@@ -248,15 +228,5 @@ namespace MoreHit.Player
         /// バックステップ中かどうか（推奨: PlayerDataProvider経由でアクセス）
         /// </summary>
         public bool IsBackstepping => isBackstepping;
-        
-        // デバッグ用：地面判定の可視化
-        private void OnDrawGizmosSelected()
-        {
-            if (groundCheck != null)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
-            }
-        }
     }
 }
