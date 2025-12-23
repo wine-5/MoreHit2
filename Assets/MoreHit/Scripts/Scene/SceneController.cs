@@ -9,7 +9,8 @@ namespace MoreHit.Scene
     {
         Title,
         InGame,
-        Result
+        Clear,
+        GameOver,
     }
 
     /// <summary>
