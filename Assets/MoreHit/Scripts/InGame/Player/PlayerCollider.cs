@@ -1,19 +1,21 @@
 using UnityEngine;
 
-namespace MoreHit
+namespace MoreHit.Player
 {
+    /// <summary>
+    /// プレイヤーの当たり判定処理を管理するクラス
+    /// </summary>
     public class PlayerCollider : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        /// <summary>
+        /// コリジョン接触時の処理
+        /// </summary>
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            if (collision.collider.CompareTag("Enemy"))
+            {
+                Debug.Log($"敵との接触: {collision.collider.name}");
+            }
         }
     }
 }
