@@ -74,6 +74,16 @@
     border-bottom: 2px solid var(--pixel-accent2);
 }
 
+/* ===== メンバー職種（ポジション） ===== */
+.member-position {
+    font-size: 0.95rem;
+    color: var(--pixel-accent1);
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* ===== メンバー役割 ===== */
 .member-role {
     font-size: 0.9rem;
