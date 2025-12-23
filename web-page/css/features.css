@@ -1,0 +1,61 @@
+/* ===== 特徴セクション ===== */
+.features {
+    padding: 80px 0;
+    background: var(--pixel-darker);
+    border-bottom: 4px solid var(--pixel-accent1);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background: var(--pixel-dark);
+    padding: 30px;
+    border: 3px solid var(--pixel-border);
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.feature-card:hover {
+    border-color: var(--pixel-accent1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transform: translate(0, -4px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--pixel-accent1);
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    color: var(--pixel-light);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.feature-card h3 small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--pixel-accent2);
+    margin-top: 5px;
+    font-weight: normal;
+}
+
+.feature-card p {
+    font-size: 0.95rem;
+    color: var(--pixel-light);
+    line-height: 1.8;
+}
+
+/* ===== レスポンシブ 特徴 ===== */
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}

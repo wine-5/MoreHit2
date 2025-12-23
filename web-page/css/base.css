@@ -1,0 +1,48 @@
+/* ===== ドット絵スタイル ゲーム紹介ページ ===== */
+/* ===== リセット & 基本スタイル ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 14px;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    line-height: 1.8;
+    color: #e0e0e0;
+    background-color: #0d1b2a;
+    overflow-x: hidden;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.05) 0px,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+}
+
+/* ===== カラーパレット定義 ===== */
+:root {
+    --pixel-dark: #0d1b2a;
+    --pixel-darker: #0a0f1b;
+    --pixel-light: #e0e0e0;
+    --pixel-accent1: #ff6b6b;      /* 赤（攻撃） */
+    --pixel-accent2: #4ecdc4;      /* 青（射撃） */
+    --pixel-accent3: #ffd93d;      /* 黄（特殊技） */
+    --pixel-accent4: #a8e6cf;      /* 緑（防御） */
+    --pixel-border: #4a5a6a;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
