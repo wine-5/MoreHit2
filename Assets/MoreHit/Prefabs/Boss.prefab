@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7041541506216119544}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,6 +109,8 @@ MonoBehaviour:
   stockText: {fileID: 8587452591685352343}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
+  launchVector: {x: 1, y: 1}
+  launchPower: 10
 --- !u!50 &7041541506216119544
 Rigidbody2D:
   serializedVersion: 5

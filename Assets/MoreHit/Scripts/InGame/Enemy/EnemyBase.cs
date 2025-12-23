@@ -21,11 +21,17 @@ namespace MoreHit.Enemy
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1); // インスペクターで設定可能
         [SerializeField] protected float launchPower = 10f;
+        [Header("ストックリセット設定")]
+        [SerializeField] private float stockResetDuration = 5f; // リセットまでの時間
+        private float stockResetTimer = 0f;
+        private bool isStockTimerActive = false;
 
 
 
         protected EnemyData enemyData;
         protected float currentHP;
+        private bool isDead = false; // 死亡フラグを追加
+        public bool IsDead => isDead; // プロパティをフラグに変更
         protected float currentLaunchTimer = 0f;
         protected int currentStockCount;
 
@@ -56,7 +62,7 @@ namespace MoreHit.Enemy
             canMove = true;
         }
 
-        protected virtual void Awake()
+        protected virtual void Awake()//コンポーネントの取得・データの初期化
         {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
@@ -67,11 +73,14 @@ namespace MoreHit.Enemy
             UpdateStockText();
         }
 
-        public void AddStock(int amount)
+        public void AddStock(int amount)//ストックが増える処理
         {
             currentStockCount += amount;
             UpdateStockText();
             StopMovement(1.0f); // ストックが増えた衝撃で1秒止まる、などの演出
+                                // ★追加：ストックが増えたらタイマーをリセットして開始
+            stockResetTimer = stockResetDuration;
+            isStockTimerActive = true;
         }
 
         /// <summary>
@@ -79,11 +88,12 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            int enemyIndex = (int)enemyType;
+            int enemyIndex = (int)enemyType;//列挙型を整数に変換
 
             if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
-                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
-            {
+                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)//データを読み取る条件
+            { 
+                //自分のデータをゲーム中に増減する変数に変換
                 enemyData = enemyDataSO.EnemyDataList[enemyIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
@@ -95,7 +105,7 @@ namespace MoreHit.Enemy
             // 子クラスで独自の初期化処理をオーバーライド
         }
 
-        protected void UpdateStockText()
+        protected void UpdateStockText()//ストックUIを変えてる
         {
             if (stockText != null)
             {
@@ -130,30 +140,31 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void TakeDamage(float damage)
         {
-            if (IsDead) return;
-
-            currentHP -= damage;
-
-            OnDamageReceived(damage);
-
-            // HP が 0 以下になったらストック減少
             if (currentHP <= 0)
             {
-                currentStockCount--;
-                UpdateStockText();
-
+                // ストックが 1 以上の場合は、ストックを消費して復活
                 if (currentStockCount > 0)
                 {
-                    // ストックが残っている場合はHP回復
+                    currentStockCount--;
+                    UpdateStockText();
                     currentHP = enemyData.MaxHP;
                     OnStockLost();
                 }
                 else
                 {
-                    // ストックがなくなったら死亡
+                    // ストックが 0 の状態でさらにHPが 0 になったら死亡
                     Die();
                 }
             }
+        }
+
+        public virtual void Die()
+        {
+            if (isDead) return; // 二重に死ぬのを防ぐ
+            isDead = true; // ここでフラグを立てる
+
+            OnEnemyDeath?.Invoke(this);
+            Destroy(gameObject);
         }
 
         /// <summary>
@@ -167,11 +178,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// 死亡処理
         /// </summary>
-        public virtual void Die()
-        {
-            OnEnemyDeath?.Invoke(this);
-            Destroy(gameObject);
-        }
+        
 
         /// <summary>
         /// ダメージを受けた時の処理
@@ -196,6 +203,23 @@ namespace MoreHit.Enemy
         protected virtual void Update()
         {
             if (IsDead) return;
+
+            // ★追加：ストックリセットタイマーの処理
+            if (isStockTimerActive && currentState == EnemyState.Move)
+            {
+                stockResetTimer -= Time.deltaTime;
+
+                // 演出：残り1秒を切ったらテキストを赤くするなどのフィードバックがあると親切
+                if (stockText != null)
+                {
+                    stockText.color = (stockResetTimer < 1.0f) ? Color.red : Color.white;
+                }
+
+                if (stockResetTimer <= 0)
+                {
+                    ResetStock();
+                }
+            }
 
             // 状態に応じた振る舞いの分岐（ステートマシン）
             switch (currentState)
@@ -250,13 +274,25 @@ namespace MoreHit.Enemy
             }
         }
 
+        private void ResetStock()
+        {
+            isStockTimerActive = false;
+            currentStockCount = enemyData.StockCount; // 初期値（名簿の数値）に戻す
+            UpdateStockText();
+
+            if (stockText != null) stockText.color = Color.white;
+
+            // デバッグ用ログ
+            Debug.Log($"{gameObject.name} のストックがリセットされました");
+        }
+
         // フックメソッド：子クラスで「特定の瞬間」に処理を挟めるようにする
         protected virtual void OnStateChanged(EnemyState newState) { }
 
         // プロパティ
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
-        public bool IsDead => currentStockCount <= 0;
+       
         public EnemyData EnemyData => enemyData;
     }
 }
