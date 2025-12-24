@@ -106,7 +106,7 @@ namespace MoreHit.Player
         private void OnChargeRangedAttack()
         {
             if (!isAlive) return;
-            // TODO: 攻撃システム実装後に追加
+            attackManager?.ExecuteChargedAttack();
         }
 
         #endregion

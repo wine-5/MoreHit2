@@ -12,6 +12,7 @@ namespace MoreHit.Player
         [Header("攻撃コンポーネント")]
         [SerializeField] private NormalAttack normalAttack;
         [SerializeField] private RangedAttack rangedAttack;
+        [SerializeField] private ChargedAttack chargedAttack;
         [SerializeField] private StockSystem stockSystem;
         
         // プロパティ
@@ -33,6 +34,14 @@ namespace MoreHit.Player
         public void ExecuteRangedAttack()
         {
             rangedAttack?.Execute();
+        }
+        
+        /// <summary>
+        /// 溜め攻撃を実行
+        /// </summary>
+        public void ExecuteChargedAttack()
+        {
+            chargedAttack?.Execute();
         }
         
         /// <summary>
