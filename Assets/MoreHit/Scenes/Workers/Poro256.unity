@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 466115649}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -419,7 +419,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a87eff7b804e5be46b5dbeefcda44808, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -512,7 +512,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a87eff7b804e5be46b5dbeefcda44808, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -958,6 +958,7 @@ MonoBehaviour:
   enemyType: 0
   launchVector: {x: 1, y: 1}
   launchPower: 10
+  stockMultiplier: 0.1
   stockResetDuration: 5
   jumpForce: 8
   jumpInterval: 3
@@ -1118,6 +1119,7 @@ MonoBehaviour:
   enemyType: 1
   launchVector: {x: 1, y: 1}
   launchPower: 10
+  stockMultiplier: 0.1
   stockResetDuration: 5
   jumpForce: 8
   jumpInterval: 3
