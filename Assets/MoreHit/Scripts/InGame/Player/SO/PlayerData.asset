@@ -19,25 +19,10 @@ MonoBehaviour:
   jumpForce: 15
   jumpCutMultiplier: 0.5
   fallGravityMultiplier: 2.5
-  maxJumpCount: 2
+  maxJumpCount: 1
   backstepDistance: 3
   backstepDuration: 0.2
   backstepCooldown: 0.5
   backstepInvincibleTime: 0.15
   maxHealth: 100
   invincibleTimeAfterDamage: 1
-  normalAttackDamage: 10
-  normalAttackRange: 1.5
-  normalAttackCooldown: 0.3
-  normalAttackComboMax: 3
-  rangedAttackDamage: 8
-  rangedAttackSpeed: 15
-  rangedAttackCooldown: 0.5
-  rushAttackDamage: 12
-  rushAttackDistance: 5
-  rushAttackDuration: 0.3
-  rushAttackCooldown: 1
-  chargeAttackThreshold: 1
-  chargeRushAttackDamage: 30
-  chargeRangedAttackDamage: 25
-  chargeAttackKnockbackForce: 20

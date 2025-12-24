@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Attack;
 
 namespace MoreHit.Player
 {
@@ -13,6 +14,7 @@ namespace MoreHit.Player
         [Header("参照")]
         private PlayerInputManager inputManager;
         private PlayerMovement movement;
+        private NormalAttack normalAttack;
         
         [Header("プレイヤー状態")]
         [SerializeField] private bool isAlive = true;
@@ -22,6 +24,7 @@ namespace MoreHit.Player
             // コンポーネント取得
             inputManager = GetComponent<PlayerInputManager>();
             movement = GetComponent<PlayerMovement>();
+            normalAttack = GetComponent<NormalAttack>();
         }
 
         private void OnEnable()
@@ -75,7 +78,7 @@ namespace MoreHit.Player
         private void OnNormalAttack()
         {
             if (!isAlive) return;
-            // TODO: 攻撃システム実装後に追加
+            normalAttack?.Execute();
         }
 
         private void OnRangedAttack()

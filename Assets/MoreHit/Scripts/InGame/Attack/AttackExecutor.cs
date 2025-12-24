@@ -21,12 +21,25 @@ namespace MoreHit.Attack
         public int Execute(AttackData data, Vector3 origin, Vector2 direction, GameObject attacker)
         {
             Vector3 hitPos = origin + (Vector3)direction * data.Range;
-            Collider2D[] hits = Physics2D.OverlapBoxAll(hitPos, data.HitboxSize, 0, data.TargetLayers);
+            Collider2D[] hits = Physics2D.OverlapBoxAll(hitPos, data.HitboxSize, 0);
 
             int hitCount = 0;
             foreach (var hit in hits)
             {
                 if (hit.gameObject == attacker) continue;
+
+                // タグチェック
+                bool isValidTarget = false;
+                foreach (string targetTag in data.TargetTags)
+                {
+                    if (hit.CompareTag(targetTag))
+                    {
+                        isValidTarget = true;
+                        break;
+                    }
+                }
+
+                if (!isValidTarget) continue;
 
                 // ダメージ適用
                 var damageable = hit.GetComponent<IDamageable>();
@@ -49,7 +62,7 @@ namespace MoreHit.Attack
                     var effect = Instantiate(data.HitEffectPrefab, hit.transform.position, Quaternion.identity);
                     Destroy(effect, 2f);
                 }
-            }
+            }            
             return hitCount;
         }
     }

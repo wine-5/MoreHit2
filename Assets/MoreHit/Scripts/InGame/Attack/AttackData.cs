@@ -9,7 +9,7 @@ namespace MoreHit.Attack
         [SerializeField] private float damage = 10f;
         [SerializeField] private float range = 1.5f;
         [SerializeField] private Vector2 hitboxSize = new Vector2(1f, 1f);
-        [SerializeField] private LayerMask targetLayers = -1;
+        [SerializeField] private string[] targetTags = new string[] { "Enemy" };
         
         [Header("ストックシステム")]
         [SerializeField] private int stockAmount = 1;
@@ -21,7 +21,7 @@ namespace MoreHit.Attack
         public float Damage => damage;
         public float Range => range;
         public Vector2 HitboxSize => hitboxSize;
-        public LayerMask TargetLayers => targetLayers;
+        public string[] TargetTags => targetTags;
         public int StockAmount => stockAmount;
         public GameObject HitEffectPrefab => hitEffectPrefab;
     }
