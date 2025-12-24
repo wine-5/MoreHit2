@@ -46,15 +46,12 @@ namespace MoreHit.Player
 
         private void Awake()
         {
-            if (playerData == null)
+            if (playerData != null)
             {
-                Debug.LogError("PlayerDataが設定されていません！");
-                return;
+                maxHealth = playerData.MaxHealth;
+                invincibleDuration = playerData.InvincibleTimeAfterDamage;
+                currentHealth = maxHealth;
             }
-            
-            maxHealth = playerData.MaxHealth;
-            invincibleDuration = playerData.InvincibleTimeAfterDamage;
-            currentHealth = maxHealth;
         }
 
         private void Update()

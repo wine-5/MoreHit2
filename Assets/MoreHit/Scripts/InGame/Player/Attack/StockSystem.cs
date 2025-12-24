@@ -10,10 +10,10 @@ namespace MoreHit.Player
         [Header("プレイヤーデータ")]
         [SerializeField] private PlayerData playerData;
         
-        private int currentStock = 0;
-        
         [Header("イベント")]
         public UnityEvent<int> OnStockChanged;
+        
+        private int currentStock = 0;
         
         public int CurrentStock => currentStock;
         public int MaxStock => playerData != null ? playerData.MaxStock : 99;
@@ -23,10 +23,11 @@ namespace MoreHit.Player
         {
             if (amount <= 0) return;
             
-            int newStock = Mathf.Min(currentStock + amount, MaxStock);
-            if (newStock != currentStock)
+            int previousStock = currentStock;
+            currentStock = Mathf.Min(currentStock + amount, MaxStock);
+            
+            if (currentStock != previousStock)
             {
-                currentStock = newStock;
                 OnStockChanged?.Invoke(currentStock);
                 
                 if (currentStock >= MaxStock)
@@ -34,10 +35,7 @@ namespace MoreHit.Player
             }
         }
         
-        public bool CanUseStock(int cost)
-        {
-            return currentStock >= cost;
-        }
+        public bool CanUseStock(int cost) => currentStock >= cost;
         
         public bool UseStock(int cost)
         {
@@ -50,11 +48,10 @@ namespace MoreHit.Player
         
         public void ClearStock()
         {
-            if (currentStock > 0)
-            {
-                currentStock = 0;
-                OnStockChanged?.Invoke(currentStock);
-            }
+            if (currentStock == 0) return;
+            
+            currentStock = 0;
+            OnStockChanged?.Invoke(currentStock);
         }
     }
 }

@@ -139,16 +139,8 @@ namespace MoreHit.Player
 
         private void OnNormalAttack(InputAction.CallbackContext context)
         {
-            Debug.Log("左クリックが押された");
             if (!isChargingAttack)
-            {
                 onNormalAttack?.Invoke();
-                Debug.Log("通常攻撃の実行");
-            }
-            else
-            {
-                Debug.Log("溜め中のため通常攻撃をスキップ");
-            }
         }
 
         private void OnNormalAttackCanceled(InputAction.CallbackContext context)

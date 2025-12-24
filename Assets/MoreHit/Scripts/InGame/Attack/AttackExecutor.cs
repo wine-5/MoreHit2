@@ -13,11 +13,7 @@ namespace MoreHit.Attack
         /// </summary>
         public int Execute(AttackData data, Vector3 origin, Vector2 direction, GameObject attacker)
         {
-            if (data == null || attacker == null)
-            {
-                Debug.LogWarning("AttackData or Attacker is null!");
-                return 0;
-            }
+            if (data == null || attacker == null) return 0;
 
             Vector3 hitPosition = CalculateHitPosition(origin, direction, data.Range);
             Collider2D[] hits = DetectHits(hitPosition, data.HitboxSize);

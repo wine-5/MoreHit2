@@ -1,16 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using MoreHit.Attack;
 
-namespace MoreHit
+namespace MoreHit.Attack
 {
     public class RangedAttack : MonoBehaviour, IAttack
     {
+        private const float MIN_DIRECTION_MAGNITUDE = 0.1f;
+        
         [Header("射撃設定")]
         [SerializeField] private ProjectileData projectileData;
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private Transform firePoint;
-        [SerializeField] private float cooldownTime = 0.3f;
+        [SerializeField, Min(0)] private float cooldownTime = 0.3f;
         
         private Camera playerCamera;
         private float lastFireTime;
@@ -31,21 +32,22 @@ namespace MoreHit
         {
             if (!CanExecute()) return;
             
+            Vector3 direction = CalculateFireDirection();
+            FireProjectile(direction);
+            
+            lastFireTime = Time.time;
+        }
+        
+        private Vector3 CalculateFireDirection()
+        {
             Vector3 mouseWorldPos = GetMouseWorldPosition();
             Vector3 firePos = GetFirePosition();
             Vector3 direction = (mouseWorldPos - firePos).normalized;
             
-            // 無効な方向をチェック
-            if (direction.magnitude < 0.1f)
-            {
-                Debug.LogWarning("Invalid direction calculated. Using right direction as fallback.");
-                direction = Vector3.right;
-            }
+            if (direction.magnitude < MIN_DIRECTION_MAGNITUDE)
+                return Vector3.right;
             
-            Debug.Log($"Mouse World: {mouseWorldPos}, Fire Pos: {firePos}, Direction: {direction}");
-            
-            FireProjectile(direction);
-            lastFireTime = Time.time;
+            return direction;
         }
         
         private Vector3 GetMouseWorldPosition()
@@ -53,17 +55,12 @@ namespace MoreHit
             if (playerCamera == null || Mouse.current == null)
                 return transform.position + Vector3.right;
             
-            Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
+            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+            Vector3 mouseWorldPos = playerCamera.ScreenToWorldPoint(
+                new Vector3(mouseScreenPos.x, mouseScreenPos.y, playerCamera.WorldToScreenPoint(transform.position).z)
+            );
             
-            // 2Dゲームの場合、プレイヤーと同じZ平面にマウス位置を投影
-            Vector3 playerScreenPos = playerCamera.WorldToScreenPoint(transform.position);
-            mouseScreenPos.z = playerScreenPos.z;
-            
-            Vector3 mouseWorldPos = playerCamera.ScreenToWorldPoint(mouseScreenPos);
-            
-            // 2Dの場合、Z座標はプレイヤーと同じにする
             mouseWorldPos.z = transform.position.z;
-            
             return mouseWorldPos;
         }
         
@@ -75,14 +72,22 @@ namespace MoreHit
         private void FireProjectile(Vector3 direction)
         {
             Vector3 firePos = GetFirePosition();
-            GameObject projectileObj = Instantiate(projectilePrefab, firePos, Quaternion.identity);
+            Quaternion rotation = CalculateProjectileRotation(direction);
             
-            var projectile = projectileObj.GetComponent<Projectile>();
-            if (projectile != null)
-                projectile.Initialize(projectileData, direction, gameObject);
-            
+            GameObject projectileObj = Instantiate(projectilePrefab, firePos, rotation);
+            InitializeProjectile(projectileObj, direction);
+        }
+        
+        private Quaternion CalculateProjectileRotation(Vector3 direction)
+        {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            projectileObj.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            return Quaternion.Euler(0, 0, angle);
+        }
+        
+        private void InitializeProjectile(GameObject projectileObj, Vector3 direction)
+        {
+            var projectile = projectileObj.GetComponent<Projectile>();
+            projectile?.Initialize(projectileData, direction, gameObject);
         }
     }
 }

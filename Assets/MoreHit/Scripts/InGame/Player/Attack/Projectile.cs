@@ -1,15 +1,16 @@
 using UnityEngine;
-using MoreHit.Attack;
 
-namespace MoreHit
+namespace MoreHit.Attack
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Projectile : MonoBehaviour
     {
+        private const float EFFECT_LIFETIME = 2f;
+        
         private ProjectileData data;
         private Vector3 direction;
         private Vector3 startPosition;
         private GameObject shooter;
-        private float traveledDistance;
         private Rigidbody2D rb;
         
         private void Awake()
@@ -24,90 +25,100 @@ namespace MoreHit
             shooter = owner;
             startPosition = transform.position;
             
-            // Rigidbody2Dがある場合は初期速度を設定
+            SetInitialVelocity();
+            Destroy(gameObject, data.LifeTime);
+        }
+        
+        private void SetInitialVelocity()
+        {
             if (rb != null)
                 rb.linearVelocity = direction * data.Speed;
-            
-            Destroy(gameObject, data.LifeTime);
         }
         
         private void Update()
         {
-            MoveProjectile();
             CheckMaxDistance();
-        }
-        
-        private void MoveProjectile()
-        {
-            if (data == null)
-            {
-                Debug.LogError("ProjectileData is null!");
-                return;
-            }
-            
-            if (rb != null)
-            {
-                // Rigidbody2Dがある場合は物理エンジン任せ（速度は初期化時に設定済み）
-                Vector3 currentPos = transform.position;
-                traveledDistance = Vector3.Distance(startPosition, currentPos);
-            }
-            else
-            {
-                // Rigidbody2Dがない場合はTransform移動
-                Vector3 movement = direction * data.Speed * Time.deltaTime;
-                transform.Translate(movement, Space.World);
-                traveledDistance += movement.magnitude;
-            }
         }
         
         private void CheckMaxDistance()
         {
+            float traveledDistance = Vector3.Distance(startPosition, transform.position);
+            
             if (traveledDistance >= data.MaxDistance)
                 DestroyProjectile(false);
         }
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject == shooter) return;
+            if (ShouldIgnoreCollision(other))
+                return;
             
-            bool isValidTarget = false;
-            foreach (string targetTag in data.TargetTags)
-            {
-                if (other.CompareTag(targetTag))
-                {
-                    isValidTarget = true;
-                    break;
-                }
-            }
-            
-            if (!isValidTarget) return;
-            
-            var damageable = other.GetComponent<IDamageable>();
-            if (damageable != null)
-                damageable.TakeDamage((int)data.Damage);
-            
-            var stockable = shooter.GetComponent<IStockable>();
-            if (stockable != null && data.StockAmount > 0)
-                stockable.AddStock(data.StockAmount);
-            
-            if (data.HitEffectPrefab != null)
-            {
-                var effect = Instantiate(data.HitEffectPrefab, transform.position, Quaternion.identity);
-                Destroy(effect, 2f);
-            }
-            
+            ProcessHit(other);
             DestroyProjectile(true);
+        }
+        
+        private bool ShouldIgnoreCollision(Collider2D other)
+        {
+            if (other.gameObject == shooter)
+                return true;
+            
+            return !HasValidTag(other);
+        }
+        
+        private bool HasValidTag(Collider2D other)
+        {
+            foreach (string tag in data.TargetTags)
+            {
+                if (other.CompareTag(tag))
+                    return true;
+            }
+            return false;
+        }
+        
+        private void ProcessHit(Collider2D other)
+        {
+            ApplyDamage(other);
+            ApplyStock(other);
+            SpawnHitEffect();
+        }
+        
+        private void ApplyDamage(Collider2D other)
+        {
+            var damageable = other.GetComponent<IDamageable>();
+            damageable?.TakeDamage(data.Damage);
+        }
+        
+        private void ApplyStock(Collider2D other)
+        {
+            if (data.StockAmount <= 0) return;
+            
+            // 修正: otherにストックを付与（敵がストックを蓄積）
+            var stockable = other.GetComponent<IStockable>();
+            stockable?.AddStock(data.StockAmount);
+        }
+        
+        private void SpawnHitEffect()
+        {
+            if (data.HitEffectPrefab == null) return;
+            
+            GameObject effect = Instantiate(data.HitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, EFFECT_LIFETIME);
         }
         
         private void DestroyProjectile(bool wasHit)
         {
-            if (!wasHit && data.DestroyEffectPrefab != null)
-            {
-                var effect = Instantiate(data.DestroyEffectPrefab, transform.position, Quaternion.identity);
-                Destroy(effect, 2f);
-            }
+            if (!wasHit)
+                SpawnDestroyEffect();
             
             Destroy(gameObject);
+        }
+        
+        private void SpawnDestroyEffect()
+        {
+            if (data.DestroyEffectPrefab == null) return;
+            
+            GameObject effect = Instantiate(data.DestroyEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, EFFECT_LIFETIME);
         }
     }
 }

@@ -19,7 +19,7 @@ MonoBehaviour:
   - Enemy
   stockAmount: 1
   hitEffectPrefab: {fileID: 0}
-  speed: 100
+  speed: 20
   maxDistance: 100
   lifeTime: 5
   destroyEffectPrefab: {fileID: 0}
