@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Attack.AttackData
   damage: 10
   range: 1.5
-  hitboxSize: {x: 1, y: 1}
+  hitboxSize: {x: 2, y: 2}
   targetTags:
   - Enemy
-  stockAmount: 2
+  stockAmount: 1
   hitEffectPrefab: {fileID: 0}

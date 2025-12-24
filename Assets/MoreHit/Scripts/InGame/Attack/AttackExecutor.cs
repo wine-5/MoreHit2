@@ -7,6 +7,15 @@ namespace MoreHit.Attack
         private const float EFFECT_LIFETIME = 2f;
 
         protected override bool UseDontDestroyOnLoad => true;
+        
+        [Header("デバッグ表示")]
+        [SerializeField] private bool showAttackGizmos = true;
+        [SerializeField] private Color attackGizmosColor = Color.cyan;
+        
+        // デバッグ用の最後の攻撃データ
+        private AttackData lastAttackData;
+        private Vector3 lastHitPosition;
+        private float lastAttackTime;
 
         /// <summary>
         /// 攻撃を実行し、ヒット数を返す
@@ -17,6 +26,11 @@ namespace MoreHit.Attack
 
             Vector3 hitPosition = CalculateHitPosition(origin, direction, data.Range);
             Collider2D[] hits = DetectHits(hitPosition, data.HitboxSize);
+
+            // デバッグ情報を記録
+            lastAttackData = data;
+            lastHitPosition = hitPosition;
+            lastAttackTime = Time.time;
 
             return ProcessHits(hits, data, attacker);
         }
@@ -94,5 +108,25 @@ namespace MoreHit.Attack
             GameObject effect = Instantiate(effectPrefab, position, Quaternion.identity);
             Destroy(effect, EFFECT_LIFETIME);
         }
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            if (!showAttackGizmos || lastAttackData == null) return;
+            
+            // 最近の攻撃から1秒以内なら描画
+            if (Time.time - lastAttackTime < 1f)
+            {
+                Gizmos.color = attackGizmosColor;
+                Gizmos.DrawWireCube(lastHitPosition, lastAttackData.HitboxSize);
+                
+                // 半透明で塗りつぶし
+                Color fillColor = attackGizmosColor;
+                fillColor.a = 0.3f;
+                Gizmos.color = fillColor;
+                Gizmos.DrawCube(lastHitPosition, lastAttackData.HitboxSize);
+            }
+        }
+#endif
     }
 }

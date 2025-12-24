@@ -1651,9 +1651,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.StockSystem
   playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
-  OnStockChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1917242781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1688,6 +1685,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8882a1012eca95646b5596c382f4c864, type: 2}
   comboResetTime: 1
   attackDuration: 0.3
+  showHitBox: 0
+  hitBoxColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &2026347443
 GameObject:
   m_ObjectHideFlags: 0
