@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using MoreHit.Attack;
+using MoreHit.Player;
 using TMPro;
 
 namespace MoreHit.Enemy
@@ -19,6 +20,7 @@ namespace MoreHit.Enemy
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
+        [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1); // インスペクターで設定可能
         [SerializeField] protected float launchPower = 10f;
@@ -84,6 +86,55 @@ namespace MoreHit.Enemy
                                 // ★追加：ストックが増えたらタイマーをリセットして開始
             stockResetTimer = stockResetDuration;
             isStockTimerActive = true;
+        }
+
+        /// <summary>
+        /// プレイヤーに攻撃を実行（AttackExecutor経由）
+        /// </summary>
+        public virtual void AttackPlayer()
+        {
+            Debug.Log($"[{gameObject.name}] AttackPlayer()が呼ばれました");
+            
+            if (AttackExecutor.I == null)
+            {
+                Debug.LogError("AttackExecutorが見つかりません！");
+                return;
+            }
+            
+            if (enemyAttackData == null)
+            {
+                Debug.LogError($"[{gameObject.name}] enemyAttackDataが設定されていません！");
+                return;
+            }
+            
+            Debug.Log($"[{gameObject.name}] AttackData設定確認:");
+            Debug.Log($"  - Damage: {enemyAttackData.Damage}");
+            Debug.Log($"  - TargetTags: [{string.Join(", ", enemyAttackData.TargetTags)}]");
+            Debug.Log($"  - Range: {enemyAttackData.Range}");
+
+            // プレイヤー方向を取得
+            Vector2 direction = GetDirectionToPlayer();
+            Debug.Log($"[{gameObject.name}] 攻撃方向: {direction}");
+
+            int hitCount = AttackExecutor.I.Execute(
+                enemyAttackData,
+                transform.position,
+                direction,
+                gameObject
+            );
+            
+            Debug.Log($"[{gameObject.name}] 攻撃実行結果: {hitCount}体ヒット");
+        }
+        
+        /// <summary>
+        /// プレイヤーへの方向を取得
+        /// </summary>
+        protected virtual Vector2 GetDirectionToPlayer()
+        {
+            if (PlayerDataProvider.I == null) return Vector2.right;
+            
+            Vector2 direction = (PlayerDataProvider.I.Position - transform.position).normalized;
+            return direction;
         }
 
         /// <summary>

@@ -1,25 +1,50 @@
 using UnityEngine;
+using MoreHit.Enemy;
 
 namespace MoreHit
 {
     public class EnemyCollider : MonoBehaviour
     {
+        private EnemyBase enemyBase;
+        
+        private void Awake()
+        {
+            // è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰EnemyBaseã‚’å–å¾—
+            enemyBase = GetComponentInParent<EnemyBase>();
+            if (enemyBase == null)
+            {
+                Debug.LogWarning($"{gameObject.name}: EnemyBaseã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
+            }
+            else
+            {
+                Debug.Log($"{gameObject.name}: EnemyBaseå–å¾—æˆåŠŸ - {enemyBase.gameObject.name}");
+            }
+        }
         
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            // Õ“Ë‘Šè‚Ìƒ^ƒO‚ğƒ`ƒFƒbƒN
-            // u== "Player"v‚Å‚Í‚È‚­uCompareTagv‚ğg‚¤‚Ì‚ªƒvƒ‚Ì„§‚Å‚·
+            Debug.Log($"[EnemyCollider] è¡çªæ¤œå‡º: {collision.gameObject.name} (ã‚¿ã‚°: {collision.gameObject.tag})");
+            
+            // è¡çªç›¸æ‰‹ã®ã‚¿ã‚°ã‚’ãƒã‚§ãƒƒã‚¯
             if (collision.gameObject.CompareTag("Player"))
             {
-                Debug.Log($" ƒvƒŒƒCƒ„[‚É“–‚½‚è‚Ü‚µ‚½I‘ŠèF{collision.gameObject.name}");
+                Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å½“ãŸã‚Šã¾ã—ãŸï¼æ•µåï¼š{enemyBase?.gameObject.name}");
+                
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸æ”»æ’ƒã‚’å®Ÿè¡Œ
+                if (enemyBase != null && !enemyBase.IsDead)
+                {
+                    Debug.Log($"AttackPlayer()ã‚’å‘¼ã³å‡ºã—ã¾ã™ - Enemy: {enemyBase.gameObject.name}");
+                    enemyBase.AttackPlayer();
+                }
+                else
+                {
+                    Debug.LogWarning($"æ”»æ’ƒã§ãã¾ã›ã‚“ - enemyBase: {enemyBase}, IsDead: {enemyBase?.IsDead}");
+                }
+            }
+            else
+            {
+                Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä»¥å¤–ã¨ã®è¡çª: {collision.gameObject.name}");
             }
         }
-
-        private void Attack()
-        {
-            //‚±‚±‚ÉUŒ‚ˆ—
-        }
-
-
     }
 }

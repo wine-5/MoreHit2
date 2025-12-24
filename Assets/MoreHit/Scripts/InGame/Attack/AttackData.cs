@@ -10,13 +10,13 @@ namespace MoreHit.Attack
         [SerializeField, Min(0)] private float range = 1.5f;
         [SerializeField] private Vector2 hitboxSize = new Vector2(1f, 1f);
         [SerializeField] private string[] targetTags = { "Enemy" };
-        
+
         [Header("ストックシステム")]
         [SerializeField, Min(0)] private int stockAmount = 1;
-        
+
         [Header("エフェクト")]
         [SerializeField] private GameObject hitEffectPrefab;
-        
+
         public int Damage => damage;
         public float Range => range;
         public Vector2 HitboxSize => hitboxSize;
