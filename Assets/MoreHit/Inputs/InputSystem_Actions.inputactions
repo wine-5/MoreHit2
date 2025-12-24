@@ -296,10 +296,10 @@
                 {
                     "name": "",
                     "id": "36f568b7-b0a3-4602-9b3a-e39eb235d9eb",
-                    "path": "",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "RangedAttack",
                     "isComposite": false,
                     "isPartOfComposite": false

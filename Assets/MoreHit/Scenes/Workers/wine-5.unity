@@ -573,6 +573,8 @@ GameObject:
   - component: {fileID: 646675868}
   - component: {fileID: 646675867}
   - component: {fileID: 646675869}
+  - component: {fileID: 646675870}
+  - component: {fileID: 646675871}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -594,6 +596,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 606911441}
+  - {fileID: 1908131844}
   m_Father: {fileID: 1433901080}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &646675859
@@ -897,6 +900,50 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8882a1012eca95646b5596c382f4c864, type: 2}
   comboResetTime: 1
   attackDuration: 0.3
+--- !u!114 &646675870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646675856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09fa058f25c45a843b26f5cc611e81ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.StockSystem
+  playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
+  OnStockChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &646675871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646675856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe637b4e16634b41b1839e4a1b16beb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.RangedAttack
+  projectileData: {fileID: 11400000, guid: 8c6c1ada26c1729459c552d690fb5020, type: 2}
+  projectilePrefab: {fileID: 5266394483918783614, guid: 77d61f79999f38946ae2bc39905efc77, type: 3}
+  firePoint: {fileID: 1908131844}
+  cooldownTime: 0.3
 --- !u!1 &651621705
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,8 +989,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acfc1f5e84b884459e88b9e82e76ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
+  stockText: {fileID: 0}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
+  launchVector: {x: 1, y: 1}
+  launchPower: 10
+  stockResetDuration: 5
+  jumpForce: 8
+  jumpInterval: 3
 --- !u!212 &651621708
 SpriteRenderer:
   serializedVersion: 2
@@ -1081,8 +1134,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acfc1f5e84b884459e88b9e82e76ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
+  stockText: {fileID: 0}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
+  launchVector: {x: 1, y: 1}
+  launchPower: 10
+  stockResetDuration: 5
+  jumpForce: 8
+  jumpInterval: 3
 --- !u!212 &798230653
 SpriteRenderer:
   serializedVersion: 2
@@ -1407,7 +1466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1697172320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,6 +1596,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1433901080}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1908131843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908131844}
+  - component: {fileID: 1908131845}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1908131844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908131843}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.27, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 646675858}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &1908131845
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908131843}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.007637775, y: 0.10466435}
+  m_Size: {x: 0.09551336, y: 0.1615241}
+  m_Direction: 0
 --- !u!1 &2026347443
 GameObject:
   m_ObjectHideFlags: 0

@@ -204,6 +204,10 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void TakeDamage(int damage)
         {
+            if (isDead) return; // 既に死んでいる場合は何もしない
+            
+            currentHP -= damage; // HPからダメージを減算
+            
             if (currentHP <= 0)
             {
                 // ストックが 1 以上の場合は、ストックを消費して復活

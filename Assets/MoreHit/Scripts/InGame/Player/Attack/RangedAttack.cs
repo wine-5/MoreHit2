@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using MoreHit.Attack;
 
 namespace MoreHit
@@ -39,9 +40,10 @@ namespace MoreHit
         
         private Vector3 GetMouseWorldPosition()
         {
-            if (playerCamera == null) return transform.position + Vector3.right;
+            if (playerCamera == null || Mouse.current == null)
+                return transform.position + Vector3.right;
             
-            Vector3 mouseScreenPos = Input.mousePosition;
+            Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
             mouseScreenPos.z = playerCamera.nearClipPlane;
             return playerCamera.ScreenToWorldPoint(mouseScreenPos);
         }

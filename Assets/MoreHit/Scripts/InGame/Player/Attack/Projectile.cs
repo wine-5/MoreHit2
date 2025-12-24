@@ -10,6 +10,12 @@ namespace MoreHit
         private Vector3 startPosition;
         private GameObject shooter;
         private float traveledDistance;
+        private Rigidbody2D rb;
+        
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
         
         public void Initialize(ProjectileData projectileData, Vector3 dir, GameObject owner)
         {
@@ -17,6 +23,15 @@ namespace MoreHit
             direction = dir.normalized;
             shooter = owner;
             startPosition = transform.position;
+            
+            Debug.Log($"Projectile initialized - Direction: {direction}, Speed: {data.Speed}");
+            
+            // Rigidbody2Dがある場合は初期速度を設定
+            if (rb != null)
+            {
+                rb.linearVelocity = direction * data.Speed;
+                Debug.Log($"Using Rigidbody2D velocity: {rb.linearVelocity}");
+            }
             
             Destroy(gameObject, data.LifeTime);
         }
@@ -29,9 +44,29 @@ namespace MoreHit
         
         private void MoveProjectile()
         {
-            Vector3 movement = direction * data.Speed * Time.deltaTime;
-            transform.Translate(movement, Space.World);
-            traveledDistance += movement.magnitude;
+            if (data == null)
+            {
+                Debug.LogError("ProjectileData is null!");
+                return;
+            }
+            
+            if (rb != null)
+            {
+                // Rigidbody2Dがある場合は物理エンジン任せ（速度は初期化時に設定済み）
+                Vector3 currentPos = transform.position;
+                traveledDistance = Vector3.Distance(startPosition, currentPos);
+            }
+            else
+            {
+                // Rigidbody2Dがない場合はTransform移動
+                Vector3 movement = direction * data.Speed * Time.deltaTime;
+                transform.Translate(movement, Space.World);
+                traveledDistance += movement.magnitude;
+                
+                // 最初の数フレームだけデバッグ出力
+                if (Time.time - Time.fixedTime < 0.1f)
+                    Debug.Log($"Moving projectile - Movement: {movement}, Position: {transform.position}");
+            }
         }
         
         private void CheckMaxDistance()
