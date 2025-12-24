@@ -213,8 +213,13 @@ MonoBehaviour:
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
   launchVector: {x: 1, y: 1}
-  launchPower: 20
+  launchPower: 15
+  stockMultiplier: 0.1
   stockResetDuration: 5
+  baseLaunchDuration: 5
+  stockBonusThreshold: 5
+  collisionBounceMultiplier: 0.2
+  hitStopDuration: 1
   jumpForce: 5
   jumpInterval: 3
 --- !u!50 &5934706272814844944

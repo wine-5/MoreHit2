@@ -14,8 +14,8 @@ namespace MoreHit.Enemy
         [SerializeField] private float moveSpeed = 3f;
         
         [Header("ストックシステム")]
-        [SerializeField] private int stockCount = 0;//現在のストック数をカウント
-        [SerializeField] private int needstock = 5; //必要ストック数
+        [SerializeField] private int stockCount = 0;
+        [SerializeField] private int needstock = 5;
         
 
         public EnemyType EnemyType => enemyType;
