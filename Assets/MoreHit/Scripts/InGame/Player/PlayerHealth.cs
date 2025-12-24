@@ -1,6 +1,6 @@
 using UnityEngine;
 using MoreHit.Events;
-using MoreHit.Enemy;
+using MoreHit.Attack;
 
 namespace MoreHit.Player
 {
@@ -66,15 +66,14 @@ namespace MoreHit.Player
         /// ダメージを受ける
         /// </summary>
         /// <param name="damage">ダメージ量</param>
-        public void TakeDamage(float damage)
+        public void TakeDamage(int damage)
         {
             // 無敵状態または既に死亡している場合はダメージを受けない
             if (isInvincible || !isAlive)
                 return;
 
             // ダメージを適用
-            int damageAmount = Mathf.CeilToInt(damage);
-            currentHealth = Mathf.Max(0, currentHealth - damageAmount);
+            currentHealth = Mathf.Max(0, currentHealth - damage);
 
             // 無敵時間を開始
             StartInvincible();

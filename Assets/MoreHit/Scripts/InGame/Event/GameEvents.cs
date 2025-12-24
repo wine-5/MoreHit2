@@ -33,6 +33,7 @@ namespace MoreHit.Events
         public static void ClearAllEvents()
         {
             OnPlayerDeath = null;
+            OnStockFull = null;
         }
     }
 }

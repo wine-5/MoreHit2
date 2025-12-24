@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Attack;
 
 namespace MoreHit.Enemy
 {
@@ -57,7 +58,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// IDamageable実装：ダメージを受ける処理
         /// </summary>
-        public virtual void TakeDamage(float damage)
+        public virtual void TakeDamage(int damage)
         {
             if (IsDead) return;
 
@@ -104,7 +105,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// ダメージを受けた時の処理
         /// </summary>
-        protected virtual void OnDamageReceived(float damage)
+        protected virtual void OnDamageReceived(int damage)
         {
             // 子クラスでオーバーライド
         }

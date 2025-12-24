@@ -46,6 +46,10 @@ namespace MoreHit.Player
         [Tooltip("ダメージを受けた後の無敵時間（秒）")]
         [SerializeField] private float invincibleTimeAfterDamage = 1.0f;
 
+        [Header("ストック設定")]
+        [Tooltip("最大ストック数")]
+        [SerializeField] private int maxStock = 99;
+
         // 移動設定のプロパティ
         public float MoveSpeed => moveSpeed;
         public float Acceleration => acceleration;
@@ -66,5 +70,8 @@ namespace MoreHit.Player
         // HP設定のプロパティ
         public int MaxHealth => maxHealth;
         public float InvincibleTimeAfterDamage => invincibleTimeAfterDamage;
+        
+        // ストック設定のプロパティ
+        public int MaxStock => maxStock;
     }
 }
