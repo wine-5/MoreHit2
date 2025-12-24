@@ -46,28 +46,15 @@ namespace MoreHit.Attack
 
         private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
         {
-            Debug.Log($"[AttackExecutor] {hits.Length}個のColliderを検出");
             int hitCount = 0;
 
             foreach (var hit in hits)
             {
-                Debug.Log($"[AttackExecutor] 検出オブジェクト: {hit.gameObject.name}, タグ: {hit.tag}");
-                
                 if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
-                {
-                    Debug.Log($"[AttackExecutor] {hit.gameObject.name}をスキップ（攻撃者自身またはターゲット外）");
                     continue;
-                }
 
                 if (ApplyDamage(hit, data.Damage))
-                {
-                    Debug.Log($"[AttackExecutor] {hit.gameObject.name}に{data.Damage}ダメージ適用成功");
                     hitCount++;
-                }
-                else
-                {
-                    Debug.Log($"[AttackExecutor] {hit.gameObject.name}はIDamageableを実装していません");
-                }
 
                 ApplyStock(hit, data.StockAmount);
                 SpawnHitEffect(hit.transform.position, data.HitEffectPrefab);

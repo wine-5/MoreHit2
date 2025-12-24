@@ -93,37 +93,17 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void AttackPlayer()
         {
-            Debug.Log($"[{gameObject.name}] AttackPlayer()が呼ばれました");
-            
-            if (AttackExecutor.I == null)
-            {
-                Debug.LogError("AttackExecutorが見つかりません！");
-                return;
-            }
-            
-            if (enemyAttackData == null)
-            {
-                Debug.LogError($"[{gameObject.name}] enemyAttackDataが設定されていません！");
-                return;
-            }
-            
-            Debug.Log($"[{gameObject.name}] AttackData設定確認:");
-            Debug.Log($"  - Damage: {enemyAttackData.Damage}");
-            Debug.Log($"  - TargetTags: [{string.Join(", ", enemyAttackData.TargetTags)}]");
-            Debug.Log($"  - Range: {enemyAttackData.Range}");
+            if (AttackExecutor.I == null || enemyAttackData == null) return;
 
             // プレイヤー方向を取得
             Vector2 direction = GetDirectionToPlayer();
-            Debug.Log($"[{gameObject.name}] 攻撃方向: {direction}");
 
-            int hitCount = AttackExecutor.I.Execute(
+            AttackExecutor.I.Execute(
                 enemyAttackData,
                 transform.position,
                 direction,
                 gameObject
             );
-            
-            Debug.Log($"[{gameObject.name}] 攻撃実行結果: {hitCount}体ヒット");
         }
         
         /// <summary>
