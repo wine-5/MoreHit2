@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using MoreHit.Attack;
 
 namespace MoreHit.Player
 {
@@ -15,9 +13,7 @@ namespace MoreHit.Player
         [Header("参照")]
         private PlayerInputManager inputManager;
         private PlayerMovement movement;
-        private NormalAttack normalAttack;
-        private RangedAttack rangedAttack;
-        private StockSystem stockSystem;
+        private AttackManager attackManager;
         
         [Header("プレイヤー状態")]
         [SerializeField] private bool isAlive = true;
@@ -27,9 +23,7 @@ namespace MoreHit.Player
             // コンポーネント取得
             inputManager = GetComponent<PlayerInputManager>();
             movement = GetComponent<PlayerMovement>();
-            normalAttack = GetComponent<NormalAttack>();
-            rangedAttack = GetComponent<RangedAttack>();
-            stockSystem = GetComponent<StockSystem>();
+            attackManager = GetComponent<AttackManager>();
         }
 
         private void OnEnable()
@@ -83,13 +77,13 @@ namespace MoreHit.Player
         private void OnNormalAttack()
         {
             if (!isAlive) return;
-            normalAttack?.Execute();
+            attackManager?.ExecuteNormalAttack();
         }
 
         private void OnRangedAttack()
         {
             if (!isAlive) return;
-            rangedAttack?.Execute();
+            attackManager?.ExecuteRangedAttack();
         }
         private void OnRushAttack()
         {
