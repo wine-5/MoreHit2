@@ -24,14 +24,9 @@ namespace MoreHit
             shooter = owner;
             startPosition = transform.position;
             
-            Debug.Log($"Projectile initialized - Direction: {direction}, Speed: {data.Speed}");
-            
             // Rigidbody2Dがある場合は初期速度を設定
             if (rb != null)
-            {
                 rb.linearVelocity = direction * data.Speed;
-                Debug.Log($"Using Rigidbody2D velocity: {rb.linearVelocity}");
-            }
             
             Destroy(gameObject, data.LifeTime);
         }
@@ -62,10 +57,6 @@ namespace MoreHit
                 Vector3 movement = direction * data.Speed * Time.deltaTime;
                 transform.Translate(movement, Space.World);
                 traveledDistance += movement.magnitude;
-                
-                // 最初の数フレームだけデバッグ出力
-                if (Time.time - Time.fixedTime < 0.1f)
-                    Debug.Log($"Moving projectile - Movement: {movement}, Position: {transform.position}");
             }
         }
         

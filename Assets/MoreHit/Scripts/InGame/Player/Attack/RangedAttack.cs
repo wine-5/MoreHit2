@@ -32,7 +32,17 @@ namespace MoreHit
             if (!CanExecute()) return;
             
             Vector3 mouseWorldPos = GetMouseWorldPosition();
-            Vector3 direction = (mouseWorldPos - GetFirePosition()).normalized;
+            Vector3 firePos = GetFirePosition();
+            Vector3 direction = (mouseWorldPos - firePos).normalized;
+            
+            // 無効な方向をチェック
+            if (direction.magnitude < 0.1f)
+            {
+                Debug.LogWarning("Invalid direction calculated. Using right direction as fallback.");
+                direction = Vector3.right;
+            }
+            
+            Debug.Log($"Mouse World: {mouseWorldPos}, Fire Pos: {firePos}, Direction: {direction}");
             
             FireProjectile(direction);
             lastFireTime = Time.time;
@@ -44,8 +54,17 @@ namespace MoreHit
                 return transform.position + Vector3.right;
             
             Vector3 mouseScreenPos = Mouse.current.position.ReadValue();
-            mouseScreenPos.z = playerCamera.nearClipPlane;
-            return playerCamera.ScreenToWorldPoint(mouseScreenPos);
+            
+            // 2Dゲームの場合、プレイヤーと同じZ平面にマウス位置を投影
+            Vector3 playerScreenPos = playerCamera.WorldToScreenPoint(transform.position);
+            mouseScreenPos.z = playerScreenPos.z;
+            
+            Vector3 mouseWorldPos = playerCamera.ScreenToWorldPoint(mouseScreenPos);
+            
+            // 2Dの場合、Z座標はプレイヤーと同じにする
+            mouseWorldPos.z = transform.position.z;
+            
+            return mouseWorldPos;
         }
         
         private Vector3 GetFirePosition()
