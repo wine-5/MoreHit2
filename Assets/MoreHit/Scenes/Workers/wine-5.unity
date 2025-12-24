@@ -415,8 +415,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 646675858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &606911442
-CircleCollider2D:
+--- !u!70 &606911442
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -449,8 +449,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.017572373, y: 0.013703965}
-  m_Radius: 0.07497915
+  m_Offset: {x: 0.007637775, y: 0.10466435}
+  m_Size: {x: 0.09551336, y: 0.1615241}
+  m_Direction: 0
 --- !u!1 &616635093
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,6 +572,7 @@ GameObject:
   - component: {fileID: 646675861}
   - component: {fileID: 646675868}
   - component: {fileID: 646675867}
+  - component: {fileID: 646675869}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -588,7 +590,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2755.2136, y: 0, z: -3476.0361}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 606911441}
@@ -643,7 +645,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 36f8f68a3e9ff66428fdd9fb3dbf0099, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7ea6dcde3d0c42f46ae62894f39e813e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -759,17 +761,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.13841224, y: 0}
+  m_Offset: {x: -0.015178919, y: 0.014436543}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5, y: 5}
+    oldSize: {x: 3.2, y: 3.2}
     newSize: {x: 0.2, y: 0.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.8687477, y: 5}
+  m_Size: {x: 1.6761158, y: 3.2841382}
   m_EdgeRadius: 0
 --- !u!50 &646675865
 Rigidbody2D:
@@ -877,6 +879,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abca0607114ce0441af1109bf4dc6cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerCollider
+--- !u!114 &646675869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646675856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99602f234d8795b4b82a6c8b4032d027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.NormalAttack
+  comboAttacks:
+  - {fileID: 11400000, guid: 06bc00a32dc2b9140a71f7527422e978, type: 2}
+  - {fileID: 11400000, guid: 33d1181a3d100ad47872417c0496cd62, type: 2}
+  - {fileID: 11400000, guid: 8882a1012eca95646b5596c382f4c864, type: 2}
+  comboResetTime: 1
+  attackDuration: 0.3
 --- !u!1 &651621705
 GameObject:
   m_ObjectHideFlags: 0
