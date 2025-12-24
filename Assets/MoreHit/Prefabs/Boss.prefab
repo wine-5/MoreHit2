@@ -111,7 +111,7 @@ MonoBehaviour:
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
   launchVector: {x: 1, y: 1}
-  launchPower: 10
+  launchPower: 20
   stockResetDuration: 5
   jumpForce: 5
   jumpInterval: 3
@@ -131,7 +131,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a87eff7b804e5be46b5dbeefcda44808, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -152,7 +152,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a87eff7b804e5be46b5dbeefcda44808, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
