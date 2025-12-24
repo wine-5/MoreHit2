@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using MoreHit.Attack;
 using MoreHit.Events;
 
@@ -9,9 +8,6 @@ namespace MoreHit.Player
     {
         [Header("プレイヤーデータ")]
         [SerializeField] private PlayerData playerData;
-        
-        [Header("イベント")]
-        public UnityEvent<int> OnStockChanged;
         
         private int currentStock = 0;
         
@@ -28,7 +24,7 @@ namespace MoreHit.Player
             
             if (currentStock != previousStock)
             {
-                OnStockChanged?.Invoke(currentStock);
+                GameEvents.TriggerStockChanged(currentStock, MaxStock);
                 
                 if (currentStock >= MaxStock)
                     GameEvents.TriggerStockFull(gameObject);
@@ -42,7 +38,7 @@ namespace MoreHit.Player
             if (!CanUseStock(cost)) return false;
             
             currentStock -= cost;
-            OnStockChanged?.Invoke(currentStock);
+            GameEvents.TriggerStockChanged(currentStock, MaxStock);
             return true;
         }
         
@@ -51,7 +47,7 @@ namespace MoreHit.Player
             if (currentStock == 0) return;
             
             currentStock = 0;
-            OnStockChanged?.Invoke(currentStock);
+            GameEvents.TriggerStockChanged(currentStock, MaxStock);
         }
     }
 }

@@ -13,7 +13,16 @@ namespace MoreHit.Events
         /// プレイヤーが死亡した時
         /// </summary>
         public static event Action OnPlayerDeath;
+        
+        /// <summary>
+        /// ストックが満タンになった時
+        /// </summary>
         public static event Action<GameObject> OnStockFull;
+        
+        /// <summary>
+        /// ストック数が変更された時
+        /// </summary>
+        public static event Action<int, int> OnStockChanged; // (currentStock, maxStock)
 
 
         public static void TriggerPlayerDeath()
@@ -25,6 +34,11 @@ namespace MoreHit.Events
         {
             OnStockFull?.Invoke(target);
         }
+        
+        public static void TriggerStockChanged(int currentStock, int maxStock)
+        {
+            OnStockChanged?.Invoke(currentStock, maxStock);
+        }
 
 
         /// <summary>
@@ -34,6 +48,7 @@ namespace MoreHit.Events
         {
             OnPlayerDeath = null;
             OnStockFull = null;
+            OnStockChanged = null;
         }
     }
 }
