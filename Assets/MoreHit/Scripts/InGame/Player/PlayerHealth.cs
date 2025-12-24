@@ -71,6 +71,9 @@ namespace MoreHit.Player
 
             // ダメージを適用
             currentHealth = Mathf.Max(0, currentHealth - damage);
+            
+            // ダメージイベントを発火
+            GameEvents.TriggerPlayerDamage(damage, currentHealth);
 
             // 無敵時間を開始
             StartInvincible();
