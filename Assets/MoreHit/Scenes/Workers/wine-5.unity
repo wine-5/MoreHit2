@@ -705,6 +705,9 @@ MonoBehaviour:
   onChargeRangedAttack:
     m_PersistentCalls:
       m_Calls: []
+  onChargeStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &646675864
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -819,14 +822,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: afe15a02-82a9-4099-a403-032c248941ce
     m_ActionName: Player/RangedAttack
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6a7308d3-bc39-4be1-a357-332cefa0158f
-    m_ActionName: Player/RushAttack
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 7790512e-8c42-4b6e-924f-1f9eef670b85
-    m_ActionName: Player/BackStep
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -859,7 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.AttackManager
   normalAttack: {fileID: 1917242782}
   rangedAttack: {fileID: 1917242781}
-  chargedAttack: {fileID: 0}
+  chargedAttack: {fileID: 1917242783}
   stockSystem: {fileID: 1917242780}
 --- !u!114 &646675869
 MonoBehaviour:
@@ -873,7 +868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a184190e20010624ab2c63b2b86b6ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerController
-  playerData: {fileID: 0}
+  playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
   isAlive: 1
 --- !u!1 &651621705
 GameObject:
@@ -1745,7 +1740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.ChargedAttack
   projectileData: {fileID: 11400000, guid: db39ed13109f2344c96fda4c0d6fdc11, type: 2}
-  projectilePrefab: {fileID: 5266394483918783614, guid: 77d61f79999f38946ae2bc39905efc77, type: 3}
+  projectilePrefab: {fileID: 5266394483918783614, guid: b41f7453a2d486b46a0f282887df70a8, type: 3}
   firePoint: {fileID: 1908131844}
   cooldownTime: 0.5
   chargeEffect: {fileID: 0}
