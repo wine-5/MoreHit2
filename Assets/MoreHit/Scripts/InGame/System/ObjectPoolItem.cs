@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace MoreHit.System
+namespace MoreHit.Pool
 {
     /// <summary>
     /// オブジェクトプールの各アイテムを定義するクラス

@@ -1,12 +1,16 @@
 using UnityEngine;
-using MoreHit;
+using MoreHit.Pool;
 
 namespace MoreHit.Attack
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Projectile : MonoBehaviour
+    public class Projectile : MonoBehaviour, IPoolable
     {
         private const float EFFECT_LIFETIME = 2f;
+        
+        // 初期状態保存用
+        private Vector3 originalScale;
+        private bool hasOriginalScale = false;
         
         private ProjectileData data;
         private Vector3 direction;
@@ -17,6 +21,13 @@ namespace MoreHit.Attack
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            
+            // 初期スケールを保存
+            if (!hasOriginalScale)
+            {
+                originalScale = transform.localScale;
+                hasOriginalScale = true;
+            }
         }
         
         public void Initialize(ProjectileData projectileData, Vector3 dir, GameObject owner)
@@ -150,5 +161,53 @@ namespace MoreHit.Attack
             // エフェクトは後で別クラスで実装する
             // TODO: EffectFactoryで処理する
         }
+        
+        #region IPoolable Implementation
+        
+        /// <summary>
+        /// プールから取得された時に呼ばれる初期化処理
+        /// </summary>
+        public void OnPoolGet()
+        {
+            // 元のスケールを復元
+            if (hasOriginalScale)
+            {
+                transform.localScale = originalScale;
+            }
+            
+            // Rigidbodyをリセット
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+            
+            // Invoke のクリア
+            CancelInvoke();
+        }
+        
+        /// <summary>
+        /// プールに返却される時に呼ばれるリセット処理
+        /// </summary>
+        public void OnPoolReturn()
+        {
+            // データをクリア
+            data = null;
+            direction = Vector3.zero;
+            startPosition = Vector3.zero;
+            shooter = null;
+            
+            // Invoke のクリア
+            CancelInvoke();
+            
+            // Rigidbodyをリセット
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+        }
+        
+        #endregion
     }
 }

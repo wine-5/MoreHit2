@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoreHit.System
+namespace MoreHit.Pool
 {
     /// <summary>
     /// オブジェクトプール
@@ -159,6 +159,11 @@ namespace MoreHit.System
                 }
 
                 pooledObject.SetActive(true);
+                
+                // IPoolable インターフェースをサポート
+                var poolable = pooledObject.GetComponent<IPoolable>();
+                poolable?.OnPoolGet();
+                
                 return pooledObject;
             }
             else
@@ -177,6 +182,11 @@ namespace MoreHit.System
                         {
                             GameObject pooledObject = objectPools[prefab].Dequeue();
                             pooledObject.SetActive(true);
+                            
+                            // IPoolable インターフェースをサポート
+                            var poolable = pooledObject.GetComponent<IPoolable>();
+                            poolable?.OnPoolGet();
+                            
                             return pooledObject;
                         }
                     }
@@ -269,6 +279,10 @@ namespace MoreHit.System
                 return;
             }
 
+            // IPoolable インターフェースをサポート
+            var poolable = obj.GetComponent<IPoolable>();
+            poolable?.OnPoolReturn();
+
             // オブジェクトをリセット（位置・回転・スケール）
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localRotation = Quaternion.identity;
@@ -307,7 +321,7 @@ namespace MoreHit.System
         /// <returns>各プールのサイズを含む文字列</returns>
         public string GetPoolStats()
         {
-            global::System.Text.StringBuilder sb = new global::System.Text.StringBuilder();
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.AppendLine("Object Pool 統計:");
 
             foreach (var poolItem in poolItems)
@@ -360,7 +374,7 @@ namespace MoreHit.System
         /// 全てのプール内の非アクティブオブジェクトに任意の処理を実行します
         /// </summary>
         /// <param name="action">処理するアクション。GameObjectを引数に取ります</param>
-        public void ForEachInactiveInPool(global::System.Action<GameObject> action)
+        public void ForEachInactiveInPool(System.Action<GameObject> action)
         {
             if (action == null) return;
 
