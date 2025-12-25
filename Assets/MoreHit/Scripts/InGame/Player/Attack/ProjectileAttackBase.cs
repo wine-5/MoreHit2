@@ -17,12 +17,12 @@ namespace MoreHit.Attack
         [SerializeField] protected Transform firePoint;
         [SerializeField, Min(0)] protected float cooldownTime = 0.3f;
         
-        protected Camera playerCamera;
+        protected UnityEngine.Camera playerCamera;
         protected float lastFireTime;
         
         protected virtual void Awake()
         {
-            playerCamera = Camera.main;
+            playerCamera = UnityEngine.Camera.main;
         }
         
         public virtual bool CanExecute()

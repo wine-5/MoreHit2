@@ -445,7 +445,7 @@ namespace MoreHit.Enemy
                 rb.linearVelocity = rb.linearVelocity.normalized * currentConstantSpeed;
             }
 
-            Camera cam = Camera.main;
+            UnityEngine.Camera cam = UnityEngine.Camera.main;
             Vector3 pos = transform.position;
             Vector3 viewportPos = cam.WorldToViewportPoint(pos);
 
