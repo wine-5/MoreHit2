@@ -27,8 +27,8 @@ namespace MoreHit.Enemy
         [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
-        [SerializeField] protected float launchPower = 10f;
-        [SerializeField] protected float stockMultiplier = 0.1f;
+        [SerializeField] protected float launchPower = 50f; // 大幅に強化
+        [SerializeField] protected float stockMultiplier = 0.2f; // 倍率も少し強化
         [Header("ストックリセット設定")]
         [SerializeField] private float stockResetDuration = 5f;
         private float stockResetTimer = 0f;
@@ -99,11 +99,7 @@ namespace MoreHit.Enemy
 
         public void AddStock(int amount)
         {
-            Debug.Log($"EnemyBase.AddStock: {gameObject.name} に {amount} のストックを追加中。現在: {currentStockCount}");
-            
             currentStockCount += amount;
-            
-            Debug.Log($"EnemyBase.AddStock: {gameObject.name} のストック更新完了。新しい値: {currentStockCount}/{enemyData.Needstock}");
             
             UpdateStockText(); // TMPテキストを更新
             
@@ -133,13 +129,21 @@ namespace MoreHit.Enemy
         /// </summary>
         private void OnStockReachedRequired()
         {
+            Debug.Log($"OnStockReachedRequired: {gameObject.name} がReadyToLaunch状態に移行中");
+            
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
+            
+            Debug.Log($"OnStockReachedRequired: {gameObject.name} の移動を停止");
             
             // エフェクトを表示
             if (readyToLaunchEffect != null)
             {
                 readyToLaunchEffect.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning($"OnStockReachedRequired: {gameObject.name} のreadyToLaunchEffectが設定されていません");
             }
             
             OnStateChanged(currentState);
@@ -150,7 +154,10 @@ namespace MoreHit.Enemy
         /// </summary>
         public void TriggerBounceEffect()
         {
-            if (currentState != EnemyState.ReadyToLaunch) return;
+            if (currentState != EnemyState.ReadyToLaunch) 
+            {
+                return;
+            }
             
             // 必要数を超えた分のストックを計算（ボーナス威力の算出用）
             int extraStocks = currentStockCount - enemyData.Needstock;
@@ -169,6 +176,8 @@ namespace MoreHit.Enemy
 
             currentConstantSpeed = finalLaunchSpeed;
             rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
+            
+            Debug.Log($"TriggerBounceEffect: {gameObject.name} を速度 {finalLaunchSpeed} で発射！（余剰ストック: {extraStocks}）");
             
             // エフェクトを非表示
             if (readyToLaunchEffect != null)

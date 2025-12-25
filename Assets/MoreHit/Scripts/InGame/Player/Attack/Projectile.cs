@@ -95,6 +95,13 @@ namespace MoreHit.Attack
             // 修正: otherにストックを付与（敵がストックを蓄積）
             var stockable = other.GetComponent<IStockable>();
             stockable?.AddStock(data.StockAmount);
+            
+            // ReadyToLaunch状態の敵なら反射効果を発動
+            var enemyBase = other.GetComponent<MoreHit.Enemy.EnemyBase>();
+            if (enemyBase != null && enemyBase.CurrentState == MoreHit.Enemy.EnemyState.ReadyToLaunch)
+            {
+                enemyBase.TriggerBounceEffect();
+            }
         }
         
         private void SpawnHitEffect()
