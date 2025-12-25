@@ -10,7 +10,6 @@ namespace MoreHit.Enemy
         
         [Header("ステータス")]
         [SerializeField] private float maxHP = 100f;
-        [SerializeField] private float attackPower = 10f;
         [SerializeField] private float moveSpeed = 3f;
         
         [Header("ストックシステム")]
@@ -20,10 +19,8 @@ namespace MoreHit.Enemy
 
         public EnemyType EnemyType => enemyType;
         public float MaxHP => maxHP;
-        public float AttackPower => attackPower;
         public float MoveSpeed => moveSpeed;
         public int StockCount => stockCount;
-
         public int Needstock => needstock;
        
     }

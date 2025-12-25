@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6822142014998240576}
   - component: {fileID: 7041541506216119544}
   - component: {fileID: -7493313424748788123}
+  - component: {fileID: -8166487400663178444}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Enemy
@@ -110,6 +111,7 @@ MonoBehaviour:
   stockText: {fileID: 8587452591685352343}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
+  enemyAttackData: {fileID: 11400000, guid: cf2e219f3318d4b47a4cb5d5480b9a33, type: 2}
   launchVector: {x: 1, y: 1}
   launchPower: 15
   stockMultiplier: 0.1
@@ -193,6 +195,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &-8166487400663178444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322971721124354888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30314fbca3eb2154f86d9f602e147e0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.EnemyCollider
 --- !u!1 &4442717356278819873
 GameObject:
   m_ObjectHideFlags: 0

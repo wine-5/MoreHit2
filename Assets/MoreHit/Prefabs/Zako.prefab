@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 6370705370894734867}
   - component: {fileID: 5934706272814844944}
   - component: {fileID: 5216220234928681814}
+  - component: {fileID: -4122080702705760679}
   m_Layer: 0
   m_Name: Zako
   m_TagString: Enemy
@@ -212,6 +213,7 @@ MonoBehaviour:
   stockText: {fileID: 2707430625757391743}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
+  enemyAttackData: {fileID: 11400000, guid: cf2e219f3318d4b47a4cb5d5480b9a33, type: 2}
   launchVector: {x: 1, y: 1}
   launchPower: 15
   stockMultiplier: 0.1
@@ -295,6 +297,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &-4122080702705760679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6310792540888457486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30314fbca3eb2154f86d9f602e147e0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.EnemyCollider
 --- !u!1 &8770848819621907761
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,8 +376,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8834e75c48fa4eb46a2080bd979868ab, type: 2}
+  m_sharedMaterial: {fileID: -4606138022287472320, guid: 8834e75c48fa4eb46a2080bd979868ab, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

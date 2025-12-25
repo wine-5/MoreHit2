@@ -36,7 +36,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// ダメージを受けた時のボス敵固有の処理
         /// </summary>
-        protected override void OnDamageReceived(float damage)
+        protected override void OnDamageReceived(int damage)
         {
             base.OnDamageReceived(damage);
             // TODO: ダメージ時のエフェクト、アニメーション、フェーズ変更などを実装

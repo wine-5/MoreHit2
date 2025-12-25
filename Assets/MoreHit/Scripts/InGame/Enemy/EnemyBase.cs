@@ -1,27 +1,34 @@
 using System.Collections;
 using UnityEngine;
+using MoreHit.Attack;
+using MoreHit.Player;
+using MoreHit.Events;
 using TMPro;
 
 namespace MoreHit.Enemy
 {
 
-    public enum EnemyState { Idle, Move, HitStun, Launch }
+    public enum EnemyState { Idle, Move, HitStun, ReadyToLaunch, Launch }
     /// <summary>
     /// 敵の基底クラス
     /// </summary>
-    public abstract class EnemyBase : MonoBehaviour, IDamageable
+    public abstract class EnemyBase : MonoBehaviour, IDamageable, IStockable
     {
-        protected EnemyState currentState = EnemyState.Move; 
+        protected EnemyState currentState = EnemyState.Move;
 
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
+        [Header("エフェクト設定")]
+        [SerializeField] protected GameObject readyToLaunchEffect; // 準備完了時のエフェクト
+        [SerializeField] protected float bounceEffectDuration = 3f; // 反射効果の時間
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
+        [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
-        [SerializeField] protected float launchPower = 10f;
-        [SerializeField] protected float stockMultiplier = 0.1f;
+        [SerializeField] protected float launchPower = 70f; // 大幅に強化
+        [SerializeField] protected float stockMultiplier = 0.2f; // 倍率も少し強化
         [Header("ストックリセット設定")]
         [SerializeField] private float stockResetDuration = 5f;
         private float stockResetTimer = 0f;
@@ -42,7 +49,7 @@ namespace MoreHit.Enemy
 
         protected EnemyData enemyData;
         protected float currentHP;
-        private bool isDead = false; 
+        private bool isDead = false;
         public bool IsDead => isDead;
         protected float currentLaunchTimer = 0f;
         // 吹っ飛ばし中の固定速度を保持
@@ -57,7 +64,7 @@ namespace MoreHit.Enemy
         // イベント
         public System.Action<EnemyBase> OnEnemyDeath;
 
-        protected bool canMove = true; 
+        protected bool canMove = true;
         protected bool isSmash = false;
 
         public void StopMovement(float duration)
@@ -71,7 +78,7 @@ namespace MoreHit.Enemy
             // 物理速度を完全にゼロにする（これがないと滑る）
             if (rb != null) rb.linearVelocity = Vector2.zero;
 
-            yield return new WaitForSeconds(duration); 
+            yield return new WaitForSeconds(duration);
 
             canMove = true;
         }
@@ -90,18 +97,124 @@ namespace MoreHit.Enemy
         }
 
 
-
-      
         public void AddStock(int amount)
         {
             currentStockCount += amount;
-            UpdateStockText();
-
-           
+            
+            UpdateStockText(); // TMPテキストを更新
+            
             StopMovement(hitStopDuration);
 
             stockResetTimer = stockResetDuration;
             isStockTimerActive = true;
+
+            // ストックが必要数に達したかチェック
+            if (currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
+            {
+                OnStockReachedRequired();
+            }
+        }
+        
+        /// <summary>
+        /// ストックをクリア（IStockableインターフェース実装）
+        /// </summary>
+        public void ClearStock()
+        {
+            currentStockCount = 0;
+            UpdateStockText();
+        }
+        
+        /// <summary>
+        /// ストックが必要数に達したときの処理（準備状態に移行）
+        /// </summary>
+        private void OnStockReachedRequired()
+        {
+            Debug.Log($"OnStockReachedRequired: {gameObject.name} がReadyToLaunch状態に移行中");
+            
+            currentState = EnemyState.ReadyToLaunch;
+            canMove = false; // 移動停止
+            
+            Debug.Log($"OnStockReachedRequired: {gameObject.name} の移動を停止");
+            
+            // エフェクトを表示
+            if (readyToLaunchEffect != null)
+            {
+                readyToLaunchEffect.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning($"OnStockReachedRequired: {gameObject.name} のreadyToLaunchEffectが設定されていません");
+            }
+            
+            OnStateChanged(currentState);
+        }
+        
+        /// <summary>
+        /// ReadyToLaunch状態で攻撃を受けた時の処理
+        /// </summary>
+        public void TriggerBounceEffect()
+        {
+            if (currentState != EnemyState.ReadyToLaunch) 
+            {
+                return;
+            }
+            
+            // 必要数を超えた分のストックを計算（ボーナス威力の算出用）
+            int extraStocks = currentStockCount - enemyData.Needstock;
+            // 基本時間に、余剰ストックに応じた追加時間を加算
+            currentLaunchTimer = bounceEffectDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
+
+            currentState = EnemyState.Launch;
+            // レイヤーを変更して、吹っ飛ばし中の敵同士の衝突を無視させる
+            gameObject.layer = LayerMask.NameToLayer(LayerFlyingEnemy);
+            canMove = false;
+            rb.gravityScale = 0;
+
+            // 余剰ストックに応じて威力を強化
+            float speedMultiplier = 1f + (extraStocks * stockMultiplier);
+            float finalLaunchSpeed = launchPower * speedMultiplier;
+
+            currentConstantSpeed = finalLaunchSpeed;
+            rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
+            
+            Debug.Log($"TriggerBounceEffect: {gameObject.name} を速度 {finalLaunchSpeed} で発射！（余剰ストック: {extraStocks}）");
+            
+            // エフェクトを非表示
+            if (readyToLaunchEffect != null)
+            {
+                readyToLaunchEffect.SetActive(false);
+            }
+            
+            OnStateChanged(currentState);
+        }
+
+        /// <summary>
+        /// プレイヤーに攻撃を実行（AttackExecutor経由）
+        /// </summary>
+        public virtual void AttackPlayer()
+        {
+            if (AttackExecutor.I == null || enemyAttackData == null) return;
+
+            // プレイヤー方向を取得
+            Vector2 direction = GetDirectionToPlayer();
+
+            AttackExecutor.I.Execute(
+                enemyAttackData,
+                transform.position,
+                direction,
+                gameObject
+            );
+        }
+
+        /// <summary>
+        /// プレイヤーへの方向を取得
+        /// </summary>
+        protected virtual Vector2 GetDirectionToPlayer()
+        {
+            if (PlayerDataProvider.I == null) return Vector2.right;
+
+            Vector2 direction = (PlayerDataProvider.I.Position - transform.position).normalized;
+            return direction;
         }
 
         /// <summary>
@@ -113,8 +226,8 @@ namespace MoreHit.Enemy
 
             if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
                 enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
-            { 
-                
+            {
+
                 enemyData = enemyDataSO.EnemyDataList[enemyIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
@@ -173,12 +286,7 @@ namespace MoreHit.Enemy
             if (collision.gameObject.CompareTag(TagWall) || collision.gameObject.CompareTag(TagGround))
             {
                 Vector2 normal = collision.contacts[0].normal;
-
-                // 【修正点】物理演算で書き換わる前の「入射ベクトル」を collision.relativeVelocity から取得する
-                // staticな壁への衝突時、-relativeVelocity は衝突直前の自分の速度を指す
                 Vector2 incomingDir = -collision.relativeVelocity.normalized;
-
-                // 【修正点】速度は現在の実測値ではなく、保持している「currentConstantSpeed」をそのまま使う
                 rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
             }
         }
@@ -189,7 +297,6 @@ namespace MoreHit.Enemy
             {
                 Vector2 normal = collision.contacts[0].normal;
 
-                
                 Vector2 incomingDir = -collision.relativeVelocity.normalized;
                 rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
 
@@ -209,7 +316,7 @@ namespace MoreHit.Enemy
         {
             if (isDead) return;
 
-            
+
             currentLaunchTimer = baseLaunchDuration;
             currentState = EnemyState.Launch;
             canMove = false;
@@ -225,8 +332,15 @@ namespace MoreHit.Enemy
         /// <summary>
         /// IDamageable実装：ダメージを受ける処理
         /// </summary>
-        public virtual void TakeDamage(float damage)
+        public virtual void TakeDamage(int damage)
         {
+            if (isDead) return; // 既に死んでいる場合は何もしない
+            
+            // ReadyToLaunch状態では無敵（反射効果用）
+            if (currentState == EnemyState.ReadyToLaunch) return;
+
+            currentHP -= damage; // HPからダメージを減算
+
             if (currentHP <= 0)
             {
                 // ストックが 1 以上の場合は、ストックを消費して復活
@@ -270,7 +384,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// ダメージを受けた時の処理
         /// </summary>
-        protected virtual void OnDamageReceived(float damage)
+        protected virtual void OnDamageReceived(int damage)
         {
             // 子クラスでオーバーライド
         }
@@ -287,12 +401,12 @@ namespace MoreHit.Enemy
 
 
 
-        
+
         protected virtual void Update()
         {
             if (IsDead) return;
 
-          
+
 
             switch (currentState)
             {
@@ -306,12 +420,16 @@ namespace MoreHit.Enemy
                     if (canMove) Move();
                     break;
 
+                case EnemyState.ReadyToLaunch:
+                    // 準備状態では何もしない（エフェクト表示中）
+                    break;
+
                 case EnemyState.Launch:
                     ProcessLaunch();
                     break;
             }
         }
-       
+
         private void ProcessLaunch()
         {
             currentLaunchTimer -= Time.deltaTime;
@@ -327,7 +445,7 @@ namespace MoreHit.Enemy
                 rb.linearVelocity = rb.linearVelocity.normalized * currentConstantSpeed;
             }
 
-            Camera cam = Camera.main;
+            UnityEngine.Camera cam = UnityEngine.Camera.main;
             Vector3 pos = transform.position;
             Vector3 viewportPos = cam.WorldToViewportPoint(pos);
 
@@ -344,7 +462,7 @@ namespace MoreHit.Enemy
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -rb.linearVelocity.y);
 
-              
+
                 viewportPos.y = 1f - ViewportMargin;
                 transform.position = cam.ViewportToWorldPoint(viewportPos);
             }
@@ -359,13 +477,13 @@ namespace MoreHit.Enemy
 
         }
 
-      
+
         protected virtual void OnStateChanged(EnemyState newState) { }
 
         // プロパティ
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
-       
+        public EnemyState CurrentState => currentState;
         public EnemyData EnemyData => enemyData;
     }
 }
