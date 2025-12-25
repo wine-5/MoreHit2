@@ -17,5 +17,5 @@ MonoBehaviour:
   hitboxSize: {x: 1, y: 1}
   targetTags:
   - Player
-  stockAmount: 1
+  stockAmount: 0
   hitEffectPrefab: {fileID: 0}

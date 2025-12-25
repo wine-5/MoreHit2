@@ -1,5 +1,6 @@
 using UnityEngine;
 using MoreHit.Attack;
+using MoreHit.Events;
 
 namespace MoreHit.Player
 {
@@ -12,6 +13,12 @@ namespace MoreHit.Player
         [SerializeField] private NormalAttack normalAttack;
         [SerializeField] private RangedAttack rangedAttack;
         [SerializeField] private ChargedAttack chargedAttack;
+        [SerializeField] private StockSystem stockSystem;
+        
+        // プロパティ
+        public int CurrentStock => stockSystem?.CurrentStock ?? 0;
+        public int MaxStock => stockSystem?.MaxStock ?? 0;
+        public bool IsStockFull => stockSystem?.IsFull ?? false;
         
         /// <summary>
         /// 通常攻撃を実行
@@ -43,6 +50,31 @@ namespace MoreHit.Player
         public void ResetNormalAttackCombo()
         {
             normalAttack?.ResetCombo();
+        }
+        
+        /// <summary>
+        /// ストックが使用可能かチェック
+        /// </summary>
+        public bool CanUseStock(int amount)
+        {
+            return stockSystem?.CanUseStock(amount) ?? false;
+        }
+        
+        /// <summary>
+        /// ストックを追加（敵を攻撃した時に呼ばれる）
+        /// </summary>
+        public void AddStock(int amount)
+        {
+            stockSystem?.AddStock(amount);
+            Debug.Log($"ストックを {amount} 追加！現在のストック: {CurrentStock}/{MaxStock}");
+        }
+        
+        /// <summary>
+        /// ストックをクリア
+        /// </summary>
+        public void ClearStock()
+        {
+            stockSystem?.ClearStock();
         }
     }
 }

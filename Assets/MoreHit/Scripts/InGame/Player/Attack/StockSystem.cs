@@ -45,5 +45,10 @@ namespace MoreHit.Player
             currentStock = 0;
             GameEvents.TriggerStockChanged(currentStock, MaxStock);
         }
+        
+        public bool CanUseStock(int amount)
+        {
+            return currentStock >= amount;
+        }
     }
 }

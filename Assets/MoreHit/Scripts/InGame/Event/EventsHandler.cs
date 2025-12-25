@@ -13,11 +13,13 @@ namespace MoreHit.InGame
         private void OnEnable()
         {
             GameEvents.OnPlayerDeath += OnPlayerDeath;
+            GameEvents.OnStockFull += OnStockFull;
         }
 
         private void OnDisable()
         {
             GameEvents.OnPlayerDeath -= OnPlayerDeath;
+            GameEvents.OnStockFull -= OnStockFull;
         }
 
         /// <summary>
@@ -29,6 +31,15 @@ namespace MoreHit.InGame
                 SceneController.I.LoadScene(SceneName.GameOver);
             else
                 Debug.LogError("EventsHandler: SceneController instance not found!");
+        }
+        
+        /// <summary>
+        /// 敵のストックが満タンになった時の処理
+        /// </summary>
+        private void OnStockFull(GameObject enemy)
+        {
+            Debug.Log($"敵 {enemy.name} のストックが満タンになりました！敵が無効化されます。");
+            // 必要に応じて追加の処理（エフェクト、スコア加算など）をここに追加
         }
     }
 }

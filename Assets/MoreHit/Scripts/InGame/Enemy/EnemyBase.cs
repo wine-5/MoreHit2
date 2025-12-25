@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using MoreHit.Attack;
 using MoreHit.Player;
+using MoreHit.Events;
 using TMPro;
 
 namespace MoreHit.Enemy
@@ -13,7 +14,7 @@ namespace MoreHit.Enemy
     /// </summary>
     public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
-        protected EnemyState currentState = EnemyState.Move; 
+        protected EnemyState currentState = EnemyState.Move;
 
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
@@ -45,7 +46,7 @@ namespace MoreHit.Enemy
 
         protected EnemyData enemyData;
         protected float currentHP;
-        private bool isDead = false; 
+        private bool isDead = false;
         public bool IsDead => isDead;
         protected float currentLaunchTimer = 0f;
         // 吹っ飛ばし中の固定速度を保持
@@ -60,7 +61,7 @@ namespace MoreHit.Enemy
         // イベント
         public System.Action<EnemyBase> OnEnemyDeath;
 
-        protected bool canMove = true; 
+        protected bool canMove = true;
         protected bool isSmash = false;
 
         public void StopMovement(float duration)
@@ -74,7 +75,7 @@ namespace MoreHit.Enemy
             // 物理速度を完全にゼロにする（これがないと滑る）
             if (rb != null) rb.linearVelocity = Vector2.zero;
 
-            yield return new WaitForSeconds(duration); 
+            yield return new WaitForSeconds(duration);
 
             canMove = true;
         }
@@ -93,18 +94,26 @@ namespace MoreHit.Enemy
         }
 
 
-
-      
         public void AddStock(int amount)
         {
             currentStockCount += amount;
+            Debug.Log($"{gameObject.name}: ストック {amount} 追加 → 現在: {currentStockCount}/{enemyData.Needstock}");
             UpdateStockText();
 
-           
             StopMovement(hitStopDuration);
 
             stockResetTimer = stockResetDuration;
             isStockTimerActive = true;
+
+            // ストックが上限に達したかチェック
+            if (currentStockCount >= enemyData.Needstock)
+            {
+                Debug.Log($"{gameObject.name}: ストックが上限に到達！敵を無効化します");
+                GameEvents.TriggerStockFull(gameObject);
+
+                // 敵を無効化
+                gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -124,14 +133,14 @@ namespace MoreHit.Enemy
                 gameObject
             );
         }
-        
+
         /// <summary>
         /// プレイヤーへの方向を取得
         /// </summary>
         protected virtual Vector2 GetDirectionToPlayer()
         {
             if (PlayerDataProvider.I == null) return Vector2.right;
-            
+
             Vector2 direction = (PlayerDataProvider.I.Position - transform.position).normalized;
             return direction;
         }
@@ -145,8 +154,8 @@ namespace MoreHit.Enemy
 
             if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
                 enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
-            { 
-                
+            {
+
                 enemyData = enemyDataSO.EnemyDataList[enemyIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
@@ -163,6 +172,11 @@ namespace MoreHit.Enemy
             if (stockText != null)
             {
                 stockText.text = currentStockCount.ToString();
+                Debug.Log($"{gameObject.name}: TMPテキスト更新 → '{stockText.text}'");
+            }
+            else
+            {
+                Debug.LogWarning($"{gameObject.name}: stockText が null です！Inspectorで設定してください");
             }
         }
 
@@ -205,12 +219,7 @@ namespace MoreHit.Enemy
             if (collision.gameObject.CompareTag(TagWall) || collision.gameObject.CompareTag(TagGround))
             {
                 Vector2 normal = collision.contacts[0].normal;
-
-                // 【修正点】物理演算で書き換わる前の「入射ベクトル」を collision.relativeVelocity から取得する
-                // staticな壁への衝突時、-relativeVelocity は衝突直前の自分の速度を指す
                 Vector2 incomingDir = -collision.relativeVelocity.normalized;
-
-                // 【修正点】速度は現在の実測値ではなく、保持している「currentConstantSpeed」をそのまま使う
                 rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
             }
         }
@@ -221,7 +230,6 @@ namespace MoreHit.Enemy
             {
                 Vector2 normal = collision.contacts[0].normal;
 
-                
                 Vector2 incomingDir = -collision.relativeVelocity.normalized;
                 rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
 
@@ -241,7 +249,7 @@ namespace MoreHit.Enemy
         {
             if (isDead) return;
 
-            
+
             currentLaunchTimer = baseLaunchDuration;
             currentState = EnemyState.Launch;
             canMove = false;
@@ -260,9 +268,9 @@ namespace MoreHit.Enemy
         public virtual void TakeDamage(int damage)
         {
             if (isDead) return; // 既に死んでいる場合は何もしない
-            
+
             currentHP -= damage; // HPからダメージを減算
-            
+
             if (currentHP <= 0)
             {
                 // ストックが 1 以上の場合は、ストックを消費して復活
@@ -323,12 +331,12 @@ namespace MoreHit.Enemy
 
 
 
-        
+
         protected virtual void Update()
         {
             if (IsDead) return;
 
-          
+
 
             switch (currentState)
             {
@@ -347,7 +355,7 @@ namespace MoreHit.Enemy
                     break;
             }
         }
-       
+
         private void ProcessLaunch()
         {
             currentLaunchTimer -= Time.deltaTime;
@@ -380,7 +388,7 @@ namespace MoreHit.Enemy
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -rb.linearVelocity.y);
 
-              
+
                 viewportPos.y = 1f - ViewportMargin;
                 transform.position = cam.ViewportToWorldPoint(viewportPos);
             }
@@ -395,13 +403,13 @@ namespace MoreHit.Enemy
 
         }
 
-      
+
         protected virtual void OnStateChanged(EnemyState newState) { }
 
         // プロパティ
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
-       
+
         public EnemyData EnemyData => enemyData;
     }
 }

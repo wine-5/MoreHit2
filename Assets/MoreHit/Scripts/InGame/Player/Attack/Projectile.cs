@@ -90,7 +90,15 @@ namespace MoreHit.Attack
         
         private void ApplyStock(Collider2D other)
         {
-            if (data.StockAmount <= 0) return;
+            Debug.Log($"Projectile: データのStockAmount = {data.StockAmount}");
+            
+            if (data.StockAmount <= 0) 
+            {
+                Debug.Log("Projectile: StockAmountが0以下のため、ストック処理をスキップ");
+                return;
+            }
+            
+            Debug.Log($"Projectile: {other.gameObject.name}に{data.StockAmount}のストックを適用");
             
             // 修正: otherにストックを付与（敵がストックを蓄積）
             var stockable = other.GetComponent<IStockable>();
