@@ -41,24 +41,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "RushAttack",
-                    "type": "Button",
-                    "id": "6a7308d3-bc39-4be1-a357-332cefa0158f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "BackStep",
-                    "type": "Button",
-                    "id": "7790512e-8c42-4b6e-924f-1f9eef670b85",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -301,28 +283,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "RangedAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "54b875b2-b927-4ac5-be7d-d301934d6383",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RushAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "552ddc9f-17b2-46b6-8542-9925d7ba9539",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "BackStep",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

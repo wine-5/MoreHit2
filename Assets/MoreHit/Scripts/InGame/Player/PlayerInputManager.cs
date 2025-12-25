@@ -18,9 +18,6 @@ namespace MoreHit.Player
         public UnityEvent onJumpCanceled;
         public UnityEvent onNormalAttack;
         public UnityEvent onRangedAttack;
-        public UnityEvent onRushAttack;
-        public UnityEvent onBackStep;
-        public UnityEvent onChargeRushAttack;
         public UnityEvent onChargeRangedAttack;
 
         private PlayerInput playerInput;
@@ -28,14 +25,12 @@ namespace MoreHit.Player
         private InputAction jumpAction;
         private InputAction normalAttackAction;
         private InputAction rangedAttackAction;
-        private InputAction rushAttackAction;
-        private InputAction backStepAction;
 
         // 溜め攻撃管理
         private float attackHoldTime = 0f;
-        private float backstepHoldTime = 0f;
+        private float rangedHoldTime = 0f;  // 遠距離攻撃の長押し時間
         private bool isChargingAttack = false;
-        private bool isChargingBackstep = false;
+        private bool isChargingRanged = false;  // 遠距離攻撃の長押し状態
         private const float chargeAttackThreshold = 1.0f; // 溜め攻撃の閾値
 
         private void Awake()
@@ -47,8 +42,6 @@ namespace MoreHit.Player
             jumpAction = playerInput.actions["Jump"];
             normalAttackAction = playerInput.actions["NormalAttack"];
             rangedAttackAction = playerInput.actions["RangedAttack"];
-            rushAttackAction = playerInput.actions["RushAttack"];
-            backStepAction = playerInput.actions["BackStep"];
         }
 
         private void OnEnable()
@@ -64,9 +57,7 @@ namespace MoreHit.Player
             normalAttackAction.canceled += OnNormalAttackCanceled;
 
             rangedAttackAction.performed += OnRangedAttack;
-            rushAttackAction.performed += OnRushAttack;
-            backStepAction.performed += OnBackStep;
-            backStepAction.canceled += OnBackStepCanceled;
+            rangedAttackAction.canceled += OnRangedAttackCanceled;
         }
 
         private void OnDisable()
@@ -82,9 +73,7 @@ namespace MoreHit.Player
             normalAttackAction.canceled -= OnNormalAttackCanceled;
 
             rangedAttackAction.performed -= OnRangedAttack;
-            rushAttackAction.performed -= OnRushAttack;
-            backStepAction.performed -= OnBackStep;
-            backStepAction.canceled -= OnBackStepCanceled;
+            rangedAttackAction.canceled -= OnRangedAttackCanceled;
         }
 
         private void Update()
@@ -109,15 +98,15 @@ namespace MoreHit.Player
                 }
             }
 
-            // バックステップの溜め処理
-            if (backStepAction.IsPressed() && !isChargingBackstep)
+            // 遠距離攻撃（右クリック）の溜め処理
+            if (rangedAttackAction.IsPressed() && !isChargingRanged)
             {
-                backstepHoldTime += Time.deltaTime;
+                rangedHoldTime += Time.deltaTime;
 
-                if (backstepHoldTime >= chargeAttackThreshold)
+                if (rangedHoldTime >= chargeAttackThreshold)
                 {
-                    onChargeRushAttack?.Invoke();
-                    isChargingBackstep = true;
+                    onChargeRangedAttack?.Invoke();  // チャージ攻撃を発動
+                    isChargingRanged = true;
                 }
             }
         }
@@ -151,24 +140,15 @@ namespace MoreHit.Player
 
         private void OnRangedAttack(InputAction.CallbackContext context)
         {
-            onRangedAttack?.Invoke();
+            // 長押しでチャージ中でなければ、通常の遠距離攻撃を実行
+            if (!isChargingRanged)
+                onRangedAttack?.Invoke();
         }
 
-        private void OnRushAttack(InputAction.CallbackContext context)
+        private void OnRangedAttackCanceled(InputAction.CallbackContext context)
         {
-            onRushAttack?.Invoke();
-        }
-
-        private void OnBackStep(InputAction.CallbackContext context)
-        {
-            if (!isChargingBackstep)
-                onBackStep?.Invoke();
-        }
-
-        private void OnBackStepCanceled(InputAction.CallbackContext context)
-        {
-            backstepHoldTime = 0f;
-            isChargingBackstep = false;
+            rangedHoldTime = 0f;
+            isChargingRanged = false;
         }
     }
 }

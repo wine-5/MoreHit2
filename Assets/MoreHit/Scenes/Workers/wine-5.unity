@@ -702,15 +702,6 @@ MonoBehaviour:
   onRangedAttack:
     m_PersistentCalls:
       m_Calls: []
-  onRushAttack:
-    m_PersistentCalls:
-      m_Calls: []
-  onBackStep:
-    m_PersistentCalls:
-      m_Calls: []
-  onChargeRushAttack:
-    m_PersistentCalls:
-      m_Calls: []
   onChargeRangedAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -868,6 +859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.AttackManager
   normalAttack: {fileID: 1917242782}
   rangedAttack: {fileID: 1917242781}
+  chargedAttack: {fileID: 0}
   stockSystem: {fileID: 1917242780}
 --- !u!114 &646675869
 MonoBehaviour:
@@ -934,7 +926,12 @@ MonoBehaviour:
   enemyAttackData: {fileID: 0}
   launchVector: {x: 1, y: 1}
   launchPower: 10
+  stockMultiplier: 0.1
   stockResetDuration: 5
+  baseLaunchDuration: 5
+  stockBonusThreshold: 5
+  collisionBounceMultiplier: 0.2
+  hitStopDuration: 1
   jumpForce: 8
   jumpInterval: 3
 --- !u!212 &651621708
@@ -1080,7 +1077,12 @@ MonoBehaviour:
   enemyAttackData: {fileID: 0}
   launchVector: {x: 1, y: 1}
   launchPower: 10
+  stockMultiplier: 0.1
   stockResetDuration: 5
+  baseLaunchDuration: 5
+  stockBonusThreshold: 5
+  collisionBounceMultiplier: 0.2
+  hitStopDuration: 1
   jumpForce: 8
   jumpInterval: 3
 --- !u!212 &798230653
@@ -1658,6 +1660,7 @@ GameObject:
   - component: {fileID: 1917242782}
   - component: {fileID: 1917242781}
   - component: {fileID: 1917242780}
+  - component: {fileID: 1917242783}
   m_Layer: 0
   m_Name: AttackManager
   m_TagString: Untagged
@@ -1729,6 +1732,23 @@ MonoBehaviour:
   attackDuration: 0.3
   showHitBox: 0
   hitBoxColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &1917242783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917242778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 426f55db3c4e49448bc272409b661c85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.ChargedAttack
+  projectileData: {fileID: 11400000, guid: db39ed13109f2344c96fda4c0d6fdc11, type: 2}
+  projectilePrefab: {fileID: 5266394483918783614, guid: 77d61f79999f38946ae2bc39905efc77, type: 3}
+  firePoint: {fileID: 1908131844}
+  cooldownTime: 0.5
+  chargeEffect: {fileID: 0}
 --- !u!1 &2026347443
 GameObject:
   m_ObjectHideFlags: 0

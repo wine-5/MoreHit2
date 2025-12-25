@@ -64,7 +64,6 @@ namespace MoreHit.Enemy
 
         protected override void Move()
         {
-            
             float currentX = transform.position.x;
 
             if (direction > 0 && currentX >= rightLimit) direction = -1;
@@ -72,8 +71,6 @@ namespace MoreHit.Enemy
 
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
             spriteRenderer.flipX = (direction < 0);
-
-
         }
 
        
@@ -93,11 +90,9 @@ namespace MoreHit.Enemy
         protected override void InitializeEnemy()
         {
             base.InitializeEnemy();
-
             
             jumpTimer = jumpInterval;
 
-         
             spawnX = transform.position.x;
             leftLimit = spawnX - leftRange;
             rightLimit = spawnX + rightRange;
@@ -109,13 +104,6 @@ namespace MoreHit.Enemy
         protected override void OnDamageReceived(int damage)
         {
             base.OnDamageReceived(damage);
-         
-           
-           
-          
         }
-
-       
-
     }
 }

@@ -34,9 +34,6 @@ namespace MoreHit.Player
             inputManager.onJumpCanceled.AddListener(OnJumpCanceled);
             inputManager.onNormalAttack.AddListener(OnNormalAttack);
             inputManager.onRangedAttack.AddListener(OnRangedAttack);
-            inputManager.onRushAttack.AddListener(OnRushAttack);
-            inputManager.onBackStep.AddListener(OnBackStep);
-            inputManager.onChargeRushAttack.AddListener(OnChargeRushAttack);
             inputManager.onChargeRangedAttack.AddListener(OnChargeRangedAttack);
         }
 
@@ -48,9 +45,6 @@ namespace MoreHit.Player
             inputManager.onJumpCanceled.RemoveListener(OnJumpCanceled);
             inputManager.onNormalAttack.RemoveListener(OnNormalAttack);
             inputManager.onRangedAttack.RemoveListener(OnRangedAttack);
-            inputManager.onRushAttack.RemoveListener(OnRushAttack);
-            inputManager.onBackStep.RemoveListener(OnBackStep);
-            inputManager.onChargeRushAttack.RemoveListener(OnChargeRushAttack);
             inputManager.onChargeRangedAttack.RemoveListener(OnChargeRangedAttack);
         }
 
@@ -85,27 +79,11 @@ namespace MoreHit.Player
             if (!isAlive) return;
             attackManager?.ExecuteRangedAttack();
         }
-        private void OnRushAttack()
-        {
-            if (!isAlive) return;
-            // TODO: 攻撃システム実装後に追加
-        }
-
-        private void OnBackStep()
-        {
-            if (!isAlive) return;
-            movement.BackStep();
-        }
-
-        private void OnChargeRushAttack()
-        {
-            if (!isAlive) return;
-            // TODO: 攻撃システム実装後に追加
-        }
 
         private void OnChargeRangedAttack()
         {
             if (!isAlive) return;
+            Debug.Log("チャージ攻撃が発動されました！");
             attackManager?.ExecuteChargedAttack();
         }
 
