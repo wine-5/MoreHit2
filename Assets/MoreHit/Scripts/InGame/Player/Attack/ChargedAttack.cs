@@ -10,10 +10,10 @@ namespace MoreHit.Attack
         [Header("溜め攻撃エフェクト")]
         [SerializeField] private GameObject chargeEffect;
         
-        protected override void OnBeforeProjectileSpawn(Vector3 position, Quaternion rotation)
+        protected override void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
         {
-            if (chargeEffect != null)
-                Instantiate(chargeEffect, position, rotation);
+            // エフェクトは後で別クラスで実装する
+            // TODO: EffectFactoryで処理する
         }
     }
 }

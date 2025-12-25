@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit;
 
 namespace MoreHit.Attack
 {
@@ -26,7 +27,17 @@ namespace MoreHit.Attack
             startPosition = transform.position;
             
             SetInitialVelocity();
-            Destroy(gameObject, data.LifeTime);
+            
+            // Factoryのプールシステムとの連携のため、一定時間後に自動返却
+            Invoke(nameof(ReturnToPool), data.LifeTime);
+        }
+        
+        /// <summary>
+        /// プールへ返却する
+        /// </summary>
+        private void ReturnToPool()
+        {
+            DestroyProjectile(false);
         }
         
         private void SetInitialVelocity()
@@ -108,8 +119,8 @@ namespace MoreHit.Attack
         {
             if (data.HitEffectPrefab == null) return;
             
-            GameObject effect = Instantiate(data.HitEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(effect, EFFECT_LIFETIME);
+            // エフェクトは後で別クラスで実装する
+            // TODO: EffectFactoryで処理する
         }
         
         private void DestroyProjectile(bool wasHit)
@@ -117,15 +128,27 @@ namespace MoreHit.Attack
             if (!wasHit)
                 SpawnDestroyEffect();
             
-            Destroy(gameObject);
+            // Invokeで実行中の自動返却をキャンセル
+            CancelInvoke(nameof(ReturnToPool));
+            
+            // Factoryのプールシステムに返却
+            if (ProjectileFactory.Instance != null)
+            {
+                ProjectileFactory.Instance.ReturnProjectile(gameObject);
+            }
+            else
+            {
+                // Factoryが無い場合は直接破棄
+                Destroy(gameObject);
+            }
         }
         
         private void SpawnDestroyEffect()
         {
             if (data.DestroyEffectPrefab == null) return;
             
-            GameObject effect = Instantiate(data.DestroyEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(effect, EFFECT_LIFETIME);
+            // エフェクトは後で別クラスで実装する
+            // TODO: EffectFactoryで処理する
         }
     }
 }
