@@ -43,9 +43,7 @@ namespace MoreHit.Enemy
             if (autoSpawn && CanSpawn())
                 SpawnEnemySequentially();
 
-            // デバッグ用：スペースキーで手動生成
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-                SpawnEnemySequentially();
+           
         }
 
         private bool CanSpawn()

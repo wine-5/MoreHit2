@@ -24,9 +24,7 @@ namespace MoreHit
             {
                 // プレイヤーへ攻撃を実行
                 if (enemyBase != null && !enemyBase.IsDead)
-                {
                     enemyBase.AttackPlayer();
-                }
             }
         }
     }

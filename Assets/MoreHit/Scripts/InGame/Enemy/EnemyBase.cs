@@ -7,13 +7,13 @@ using TMPro;
 namespace MoreHit.Enemy
 {
 
-    public enum EnemyState { Idle, Move, HitStun, Launch }//状態の定義
+    public enum EnemyState { Idle, Move, HitStun, Launch }
     /// <summary>
     /// 敵の基底クラス
     /// </summary>
     public abstract class EnemyBase : MonoBehaviour, IDamageable
     {
-        protected EnemyState currentState = EnemyState.Move; // 現在の状態
+        protected EnemyState currentState = EnemyState.Move; 
 
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
@@ -22,20 +22,34 @@ namespace MoreHit.Enemy
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
         [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
-        [SerializeField] protected Vector2 launchVector = new Vector2(1, 1); // インスペクターで設定可能
+        [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
         [SerializeField] protected float launchPower = 10f;
+        [SerializeField] protected float stockMultiplier = 0.1f;
         [Header("ストックリセット設定")]
-        [SerializeField] private float stockResetDuration = 5f; // リセットまでの時間
+        [SerializeField] private float stockResetDuration = 5f;
         private float stockResetTimer = 0f;
         private bool isStockTimerActive = false;
+        [Header("システム定数")]
+        [SerializeField] private float baseLaunchDuration = 5f;
+        [SerializeField] private float stockBonusThreshold = 5f;
+        [SerializeField] private float collisionBounceMultiplier = 0.2f;
+        [SerializeField] private float hitStopDuration = 1.0f;
+
+        private const float ViewportMargin = 0.01f;
+        private const string TagWall = "Wall";
+        private const string TagGround = "Ground";
+        private const string LayerEnemy = "Enemy";
+        private const string LayerFlyingEnemy = "FlyingEnemy";
 
 
 
         protected EnemyData enemyData;
         protected float currentHP;
-        private bool isDead = false; // 死亡フラグを追加
-        public bool IsDead => isDead; // プロパティをフラグに変更
+        private bool isDead = false; 
+        public bool IsDead => isDead;
         protected float currentLaunchTimer = 0f;
+        // 吹っ飛ばし中の固定速度を保持
+        private float currentConstantSpeed;
         protected int currentStockCount;
 
         // コンポーネント
@@ -46,10 +60,10 @@ namespace MoreHit.Enemy
         // イベント
         public System.Action<EnemyBase> OnEnemyDeath;
 
-        protected bool canMove = true; // 移動可能フラグ
-        protected bool isSmash = false;// 吹っ飛ばされているか
+        protected bool canMove = true; 
+        protected bool isSmash = false;
 
-        public void StopMovement(float duration)//敵を止める処理
+        public void StopMovement(float duration)
         {
             StartCoroutine(StopRoutine(duration));
         }
@@ -60,30 +74,35 @@ namespace MoreHit.Enemy
             // 物理速度を完全にゼロにする（これがないと滑る）
             if (rb != null) rb.linearVelocity = Vector2.zero;
 
-            yield return new WaitForSeconds(duration); // 指定秒数待機
+            yield return new WaitForSeconds(duration); 
 
             canMove = true;
         }
 
-        protected virtual void Awake()//コンポーネントの取得・データの初期化
+        protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-            if (rb != null) rb.gravityScale = 1; // 開始時は重力ありにする
+            if (rb != null) rb.gravityScale = 1;
 
             LoadEnemyData();
             InitializeEnemy();
             UpdateStockText();
         }
 
-        public void AddStock(int amount)//ストックが増える処理
+
+
+      
+        public void AddStock(int amount)
         {
             currentStockCount += amount;
             UpdateStockText();
-            StopMovement(1.0f); // ストックが増えた衝撃で1秒止まる、などの演出
-                                // ★追加：ストックが増えたらタイマーをリセットして開始
+
+           
+            StopMovement(hitStopDuration);
+
             stockResetTimer = stockResetDuration;
             isStockTimerActive = true;
         }
@@ -122,12 +141,12 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            int enemyIndex = (int)enemyType;//列挙型を整数に変換
+            int enemyIndex = (int)enemyType;
 
             if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
-                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)//データを読み取る条件
+                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
             { 
-                //自分のデータをゲーム中に増減する変数に変換
+                
                 enemyData = enemyDataSO.EnemyDataList[enemyIndex];
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
@@ -139,7 +158,7 @@ namespace MoreHit.Enemy
             // 子クラスで独自の初期化処理をオーバーライド
         }
 
-        protected void UpdateStockText()//ストックUIを変えてる
+        protected void UpdateStockText()
         {
             if (stockText != null)
             {
@@ -148,86 +167,91 @@ namespace MoreHit.Enemy
         }
 
         // 吹っ飛ばし開始処理
-        // 1. TryLaunch に重力カットを追加
         public void TryLaunch()
         {
             if (currentStockCount < enemyData.Needstock) return;
-
+            // 必要数を超えた分のストックを計算（ボーナス時間の算出用）
             int extraStocks = currentStockCount - enemyData.Needstock;
-            currentLaunchTimer = 5f + Mathf.Floor(extraStocks / 5f);
+            // 基本時間に、余剰ストックに応じた追加時間を加算して「飛んでいる時間」を決める
+            currentLaunchTimer = baseLaunchDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
 
             currentState = EnemyState.Launch;
+            // レイヤーを変更して、吹っ飛ばし中の敵同士の衝突を無視させる
+            gameObject.layer = LayerMask.NameToLayer(LayerFlyingEnemy);
             canMove = false;
-
-            // ★重要：重力を切ることで放物線にならず、勢いを維持する
             rb.gravityScale = 0;
 
-            float speedMultiplier = 1f + (currentStockCount * 0.2f);
+            float speedMultiplier = 1f + (currentStockCount * stockMultiplier);
             float finalLaunchSpeed = launchPower * speedMultiplier;
 
+            currentConstantSpeed = finalLaunchSpeed;// 減速しないよう、現在の速度を固定値として保持
             rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
             OnStateChanged(currentState);
         }
+
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (currentState != EnemyState.Launch) return;
 
             EnemyBase otherEnemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (otherEnemy == null || otherEnemy.isDead) return;
 
-            // --- 吹っ飛び状態の敵同士が当たった場合の処理 ---
-            if (otherEnemy.currentState == EnemyState.Launch)
+            if (otherEnemy != null && !otherEnemy.isDead)
             {
-                // 1. お互いの中心点からの方向を計算（ビリヤードの球が離れる方向）
-                Vector2 awayDirection = (transform.position - otherEnemy.transform.position).normalized;
-
-                // 2. めり込み防止：お互いを少しだけ外側に強制移動させる
-                // これがないと次のフレームでも「衝突中」と判定されてグルグル回る
-                transform.position += (Vector3)awayDirection * 0.1f;
-
-                // 3. 速度の再計算（自分のストックに応じた勢いで弾き飛ぶ）
-                float speedMultiplier = 1f + (currentStockCount * 0.2f);
-                float billiardSpeed = launchPower * speedMultiplier;
-
-                // 進行方向を完全に「相手から離れる方向」に上書き
-                rb.linearVelocity = awayDirection * billiardSpeed;
-
-                Debug.Log($"{gameObject.name} が吹っ飛び同士で弾け飛びました");
-                return; // 吹っ飛び同士の場合はここで終了
+                HandleEnemyCollision(collision, otherEnemy);
+                return;
             }
 
-            // --- 以下は吹っ飛んでいない敵（巡回中など）に当たった時の既存処理 ---
-            if (otherEnemy.currentState != EnemyState.Launch)
+            if (collision.gameObject.CompareTag(TagWall) || collision.gameObject.CompareTag(TagGround))
             {
-                float mySpeed = Mathf.Max(rb.linearVelocity.magnitude, launchPower);
                 Vector2 normal = collision.contacts[0].normal;
-                rb.linearVelocity = Vector2.Reflect(rb.linearVelocity.normalized, normal) * mySpeed;
 
-                Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
-                float otherSpeedMultiplier = 1f + (otherEnemy.currentStockCount * 0.2f);
-                float otherLaunchSpeed = launchPower * otherSpeedMultiplier;
+                // 【修正点】物理演算で書き換わる前の「入射ベクトル」を collision.relativeVelocity から取得する
+                // staticな壁への衝突時、-relativeVelocity は衝突直前の自分の速度を指す
+                Vector2 incomingDir = -collision.relativeVelocity.normalized;
 
-                otherEnemy.ForceLaunch(impactDir * otherLaunchSpeed);
+                // 【修正点】速度は現在の実測値ではなく、保持している「currentConstantSpeed」をそのまま使う
+                rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
             }
         }
 
+        private void HandleEnemyCollision(Collision2D collision, EnemyBase otherEnemy)
+        {
+            if (otherEnemy.currentState != EnemyState.Launch)
+            {
+                Vector2 normal = collision.contacts[0].normal;
+
+                
+                Vector2 incomingDir = -collision.relativeVelocity.normalized;
+                rb.linearVelocity = Vector2.Reflect(incomingDir, normal) * currentConstantSpeed;
+
+                // 相手を吹っ飛ばす処理
+                Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
+                int effectiveStock = Mathf.Max(this.currentStockCount, enemyData.Needstock);
+                float attackerStockMultiplier = 1f + (effectiveStock * collisionBounceMultiplier);
+                float finalLaunchSpeed = launchPower * attackerStockMultiplier;
+
+                otherEnemy.ForceLaunch(impactDir * finalLaunchSpeed);
+            }
+        }
         /// <summary>
         /// 他の敵からの衝突などによって、強制的に吹っ飛ばし状態にする
         /// </summary>
         public void ForceLaunch(Vector2 initialVelocity)
         {
             if (isDead) return;
-            currentLaunchTimer = 5f;
+
+            
+            currentLaunchTimer = baseLaunchDuration;
             currentState = EnemyState.Launch;
             canMove = false;
 
-            rb.gravityScale = 0; // ★追加：重力をゼロにして下に落ちないようにする
+            rb.gravityScale = 0;
+            currentConstantSpeed = initialVelocity.magnitude;
             rb.linearVelocity = initialVelocity;
             OnStateChanged(currentState);
         }
 
-        
 
 
         /// <summary>
@@ -259,8 +283,8 @@ namespace MoreHit.Enemy
 
         public virtual void Die()
         {
-            if (isDead) return; // 二重に死ぬのを防ぐ
-            isDead = true; // ここでフラグを立てる
+            if (isDead) return;
+            isDead = true;
 
             OnEnemyDeath?.Invoke(this);
             Destroy(gameObject);
@@ -277,7 +301,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// 死亡処理
         /// </summary>
-        
+
 
         /// <summary>
         /// ダメージを受けた時の処理
@@ -299,17 +323,17 @@ namespace MoreHit.Enemy
 
 
 
-        // EnemyBase.cs の Update 内を修正
+        
         protected virtual void Update()
         {
             if (IsDead) return;
 
-            // (ストックリセットの処理などはそのまま)
+          
 
             switch (currentState)
             {
                 case EnemyState.Move:
-                    // ★重要：通常移動時は重力を 1 に戻す
+                    //通常移動時はジャンプ動作のため重力を 1 に戻す
                     if (rb != null && rb.gravityScale != 1)
                     {
                         rb.gravityScale = 1;
@@ -319,60 +343,59 @@ namespace MoreHit.Enemy
                     break;
 
                 case EnemyState.Launch:
-                    // 吹っ飛ばし中は重力 0（ProcessLaunch内でタイマー処理）
                     ProcessLaunch();
                     break;
             }
         }
-        // カメラ端での跳ね返り処理
+       
         private void ProcessLaunch()
         {
-            // タイマー減少
             currentLaunchTimer -= Time.deltaTime;
             if (currentLaunchTimer <= 0)
             {
-                // 仕様変更：時間切れで復帰せず、そのまま撃破（消滅）させる
-                Die();
+                Die();// 時間切れで消滅
                 return;
             }
 
-            // カメラの範囲を取得 (Viewport 0.0〜1.0 をワールド座標に変換)
+            // 勝手に減速しないよう、常に固定速度を維持させる
+            if (rb.linearVelocity.sqrMagnitude > 0)
+            {
+                rb.linearVelocity = rb.linearVelocity.normalized * currentConstantSpeed;
+            }
+
             Camera cam = Camera.main;
             Vector3 pos = transform.position;
             Vector3 viewportPos = cam.WorldToViewportPoint(pos);
 
-            // 左右の壁で跳ね返り
             if (viewportPos.x < 0 || viewportPos.x > 1)
             {
                 rb.linearVelocity = new Vector2(-rb.linearVelocity.x, rb.linearVelocity.y);
-                // 画面内に押し戻す補正
-                viewportPos.x = Mathf.Clamp(viewportPos.x, 0.01f, 0.99f);
+
+                // 画面内に押し戻して、壁にめり込むのを防ぐ
+                viewportPos.x = Mathf.Clamp(viewportPos.x, ViewportMargin, 1f - ViewportMargin);
                 transform.position = cam.ViewportToWorldPoint(viewportPos);
             }
 
-            // 上下の壁（天井・地面）で跳ね返り
-            if (viewportPos.y < 0 || viewportPos.y > 1)
+            if (viewportPos.y > 1)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, -rb.linearVelocity.y);
-                // 画面内に押し戻す補正
-                viewportPos.y = Mathf.Clamp(viewportPos.y, 0.01f, 0.99f);
+
+              
+                viewportPos.y = 1f - ViewportMargin;
                 transform.position = cam.ViewportToWorldPoint(viewportPos);
             }
         }
-
         private void ResetStock()
         {
             isStockTimerActive = false;
-            currentStockCount = enemyData.StockCount; // 初期値（名簿の数値）に戻す
+            currentStockCount = enemyData.StockCount;
             UpdateStockText();
 
             if (stockText != null) stockText.color = Color.white;
 
-            // デバッグ用ログ
-            Debug.Log($"{gameObject.name} のストックがリセットされました");
         }
 
-        // フックメソッド：子クラスで「特定の瞬間」に処理を挟めるようにする
+      
         protected virtual void OnStateChanged(EnemyState newState) { }
 
         // プロパティ
