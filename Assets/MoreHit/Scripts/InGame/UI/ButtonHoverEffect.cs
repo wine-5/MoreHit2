@@ -8,33 +8,33 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private float scaleFactor = 1.5f;
     [SerializeField] private float animationDuration = 0.1f;
 
-    private Vector3 _initialScale;
-    private Coroutine _currentCoroutine;
+    private Vector3 initialScale;
+    private Coroutine currentCoroutine;
 
     void Awake()
     {
-        _initialScale = transform.localScale;
+        initialScale = transform.localScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //ヌルっとしたアニメーションのためのコルーチン
-        StartScaleAnimation(_initialScale * scaleFactor);
+        StartScaleAnimation(initialScale * scaleFactor);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        StartScaleAnimation(_initialScale);
+        StartScaleAnimation(initialScale);
     }
 
     private void StartScaleAnimation(Vector3 targetScale)
     {
         // 特定のコルーチンのみを停止させて干渉を防ぐ
-        if (_currentCoroutine != null)
+        if (currentCoroutine != null)
         {
-            StopCoroutine(_currentCoroutine);
+            StopCoroutine(currentCoroutine);
         }
-        _currentCoroutine = StartCoroutine(ScaleAnimationRoutine(targetScale));
+        currentCoroutine = StartCoroutine(ScaleAnimationRoutine(targetScale));
     }
 
     private IEnumerator ScaleAnimationRoutine(Vector3 targetScale)
@@ -53,6 +53,6 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
 
         transform.localScale = targetScale;
-        _currentCoroutine = null;
+        currentCoroutine = null;
     }
 }
