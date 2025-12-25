@@ -41,11 +41,9 @@ namespace MoreHit.Enemy
         private void Update()
         {
             if (autoSpawn && CanSpawn())
-                SpawnRandomEnemy();
+                SpawnEnemySequentially();
 
-            // デバッグ用：スペースキーで手動生成
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-                SpawnRandomEnemy();
+           
         }
 
         private bool CanSpawn()
@@ -55,17 +53,28 @@ namespace MoreHit.Enemy
                    Time.time - lastSpawnTime >= spawnInterval;
         }
 
-        public EnemyBase SpawnRandomEnemy()
-        {
-            if (enemyFactory == null) return null;
+        // クラスの変数として追加
+        private int nextSpawnIndex = 0;
 
-            Vector3 spawnPosition = GetRandomSpawnPosition();
+        public EnemyBase SpawnEnemySequentially() // 名前を「Sequential」に変更すると分かりやすい
+        {
+            if (enemyFactory == null || spawnPoints.Length == 0) return null;
+
+            // 1. カウンターを使って現在の地点を選ぶ
+            Transform selectedPoint = spawnPoints[nextSpawnIndex];
+
+            // 2. 敵を生成する
+            Vector3 spawnPosition = selectedPoint.position;
             EnemyBase enemy = enemyFactory.CreateRandomEnemy(spawnPosition);
 
             if (enemy != null)
             {
-                RegisterEnemy(enemy);
+                RegisterEnemy(enemy, selectedPoint);
             }
+
+            // 3. 重要：カウンターを次に進める
+            // リストの最後に到達したら 0 に戻るように計算する
+            nextSpawnIndex = (nextSpawnIndex + 1) % spawnPoints.Length;
 
             return enemy;
         }
@@ -112,17 +121,25 @@ namespace MoreHit.Enemy
             EnemyBase enemy = enemyFactory.CreateEnemyByIndex(index, position);
             if (enemy != null)
             {
-                RegisterEnemy(enemy);
+                RegisterEnemy(enemy, transform); // とりあえず自分自身（Spawner）を渡す
             }
 
             return enemy;
         }
 
-        private void RegisterEnemy(EnemyBase enemy)
+        private void RegisterEnemy(EnemyBase enemy, Transform spawnPoint)
         {
             spawnedEnemies.Add(enemy);
             enemy.OnEnemyDeath += OnEnemyDeath;
             lastSpawnTime = Time.time;
+
+            // スポーン地点に設定スクリプトが付いているか確認
+            EnemySpawnSettings settings = spawnPoint.GetComponent<EnemySpawnSettings>();
+            if (settings != null && enemy is ZakoEnemy zako)
+            {
+                // 敵がZakoEnemyなら、設定値を反映させる
+                zako.SetPatrolRange(settings.leftRange, settings.rightRange);
+            }
         }
 
         private void OnEnemyDeath(EnemyBase enemy)

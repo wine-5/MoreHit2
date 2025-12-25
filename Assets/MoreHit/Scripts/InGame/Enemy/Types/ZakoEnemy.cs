@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 namespace MoreHit.Enemy
 {
     /// <summary>
@@ -8,11 +11,72 @@ namespace MoreHit.Enemy
         /// <summary>
         /// 雑魚敵の移動処理
         /// </summary>
+        /// 
+
+        [Header("ジャンプ設定")]
+        [SerializeField] private float jumpForce = 8f;
+        [SerializeField] private float jumpInterval = 3f;
+        private float jumpTimer;
+
+        private float leftRange = 3f;
+        private float rightRange = 3f;
+
+        private float spawnX;
+        private float leftLimit;
+        private float rightLimit;
+        private int direction = 1;
+
+       
+
+       
+        public void SetPatrolRange(float left, float right)
+        {
+            leftRange = left;
+            rightRange = right;
+            InitializeEnemy();
+        }
+
+        protected override void Update()
+        {
+          
+            base.Update();
+
+        }
+       
+
+        private void HandleJumpTimer()
+        {
+            jumpTimer -= Time.deltaTime;
+
+            if (jumpTimer <= 0)
+            {
+                Jump();
+                jumpTimer = jumpInterval; 
+            }
+        }
+
+        private void Jump()
+        {
+           
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+        }
+
         protected override void Move()
         {
-            // TODO: 雑魚敵の移動ロジックを実装
-            // 例: プレイヤーに向かって移動、パトロールなど
+            
+            float currentX = transform.position.x;
+
+            if (direction > 0 && currentX >= rightLimit) direction = -1;
+            else if (direction < 0 && currentX <= leftLimit) direction = 1;
+
+            rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
+            spriteRenderer.flipX = (direction < 0);
+
+
         }
+
+       
 
         /// <summary>
         /// 雑魚敵の攻撃処理
@@ -29,7 +93,14 @@ namespace MoreHit.Enemy
         protected override void InitializeEnemy()
         {
             base.InitializeEnemy();
-            // TODO: 雑魚敵固有の初期化処理を実装
+
+            
+            jumpTimer = jumpInterval;
+
+         
+            spawnX = transform.position.x;
+            leftLimit = spawnX - leftRange;
+            rightLimit = spawnX + rightRange;
         }
 
         /// <summary>
@@ -38,7 +109,13 @@ namespace MoreHit.Enemy
         protected override void OnDamageReceived(float damage)
         {
             base.OnDamageReceived(damage);
-            // TODO: ダメージ時のエフェクト、アニメーション、ノックバックなどを実装
+         
+           
+           
+          
         }
+
+       
+
     }
 }
