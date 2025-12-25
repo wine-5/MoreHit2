@@ -66,7 +66,6 @@ namespace MoreHit.Player
         public void AddStock(int amount)
         {
             stockSystem?.AddStock(amount);
-            Debug.Log($"ストックを {amount} 追加！現在のストック: {CurrentStock}/{MaxStock}");
         }
         
         /// <summary>

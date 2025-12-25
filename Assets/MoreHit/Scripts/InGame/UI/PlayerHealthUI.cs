@@ -74,8 +74,6 @@ namespace MoreHit.UI
                 float fillRatio = maxHealth > 0 ? (float)currentHealth / maxHealth : 1f;
                 healthImage.fillAmount = fillRatio;
                 targetFillAmount = fillRatio;
-                
-                Debug.Log($"PlayerHealthUI初期化: HP {currentHealth}/{maxHealth}, Fill = {fillRatio:F2}");
             }
             else
             {
@@ -139,7 +137,6 @@ namespace MoreHit.UI
                 {
                     maxHealth = playerDataProvider.MaxHealth;
                     isInitialized = true;
-                    Debug.Log($"PlayerHealthUI: 遅延初期化完了、MaxHP = {maxHealth}");
                 }
             }
             
@@ -155,8 +152,7 @@ namespace MoreHit.UI
             {
                 UpdateImageImmediately();
             }
-            
-            Debug.Log($"PlayerHealthUI: HP更新 {currentHealth}/{maxHealth}, 目標Fill = {fillRatio:F2}");
+
         }
         
         /// <summary>

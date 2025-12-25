@@ -47,7 +47,6 @@ namespace MoreHit.Attack
         private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
         {
             int hitCount = 0;
-            Debug.Log($"AttackExecutor: 攻撃データのStockAmount = {data.StockAmount}");
 
             foreach (var hit in hits)
             {
@@ -97,8 +96,6 @@ namespace MoreHit.Attack
         {
             if (stockAmount <= 0) return;
 
-            Debug.Log($"AttackExecutor: {hit.gameObject.name}に{stockAmount}のストックを適用中");
-            
             var stockable = hit.GetComponent<IStockable>();
             stockable?.AddStock(stockAmount);
         }

@@ -97,7 +97,6 @@ namespace MoreHit.Enemy
         public void AddStock(int amount)
         {
             currentStockCount += amount;
-            Debug.Log($"{gameObject.name}: ストック {amount} 追加 → 現在: {currentStockCount}/{enemyData.Needstock}");
             UpdateStockText();
 
             StopMovement(hitStopDuration);
@@ -108,7 +107,6 @@ namespace MoreHit.Enemy
             // ストックが上限に達したかチェック
             if (currentStockCount >= enemyData.Needstock)
             {
-                Debug.Log($"{gameObject.name}: ストックが上限に到達！敵を無効化します");
                 GameEvents.TriggerStockFull(gameObject);
 
                 // 敵を無効化
@@ -172,11 +170,6 @@ namespace MoreHit.Enemy
             if (stockText != null)
             {
                 stockText.text = currentStockCount.ToString();
-                Debug.Log($"{gameObject.name}: TMPテキスト更新 → '{stockText.text}'");
-            }
-            else
-            {
-                Debug.LogWarning($"{gameObject.name}: stockText が null です！Inspectorで設定してください");
             }
         }
 
