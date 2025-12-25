@@ -9,9 +9,6 @@ namespace MoreHit.Player
     /// </summary>
     public class PlayerInputManager : MonoBehaviour
     {
-        [Header("プレイヤーデータ")]
-        [SerializeField] private PlayerData playerData;
-
         [Header("イベント")]
         public UnityEvent<Vector2> onMove;
         public UnityEvent onJumpPerformed;
@@ -19,25 +16,23 @@ namespace MoreHit.Player
         public UnityEvent onNormalAttack;
         public UnityEvent onRangedAttack;
         public UnityEvent onChargeRangedAttack;
-        public UnityEvent<bool> onChargeStateChanged; // チャージ状態変更
+        public UnityEvent<bool> onChargeStateChanged;
 
         private PlayerInput playerInput;
         private InputAction moveAction;
         private InputAction jumpAction;
         private InputAction normalAttackAction;
         private InputAction rangedAttackAction;
-        private InputAction chargeButtonAction; // Wキー
+        private InputAction chargeButtonAction;
 
-        // チャージ管理
-        private float chargeHoldTime = 0f;  // Wキーの長押し時間
-        private bool isChargeReady = false; // チャージ準備状態
-        private const float chargeReadyThreshold = 1.0f; // チャージ準備の闾値
+        private float chargeHoldTime = 0f;
+        private bool isChargeReady = false;
+        private const float CHARGE_READY_THRESHOLD = 1.0f;
 
         private void Awake()
         {
             playerInput = GetComponent<PlayerInput>();
 
-            // アクションの取得
             moveAction = playerInput.actions["Move"];
             jumpAction = playerInput.actions["Jump"];
             normalAttackAction = playerInput.actions["NormalAttack"];
@@ -47,7 +42,6 @@ namespace MoreHit.Player
 
         private void OnEnable()
         {
-            // イベント登録
             moveAction.performed += OnMove;
             moveAction.canceled += OnMove;
 
@@ -55,18 +49,14 @@ namespace MoreHit.Player
             jumpAction.canceled += OnJumpCanceled;
 
             normalAttackAction.performed += OnNormalAttack;
-            normalAttackAction.canceled += OnNormalAttackCanceled;
 
             rangedAttackAction.performed += OnRangedAttack;
-            rangedAttackAction.canceled += OnRangedAttackCanceled;
             
-            chargeButtonAction.performed += OnChargeButtonPressed;
             chargeButtonAction.canceled += OnChargeButtonCanceled;
         }
 
         private void OnDisable()
         {
-            // イベント解除
             moveAction.performed -= OnMove;
             moveAction.canceled -= OnMove;
 
@@ -74,12 +64,9 @@ namespace MoreHit.Player
             jumpAction.canceled -= OnJumpCanceled;
 
             normalAttackAction.performed -= OnNormalAttack;
-            normalAttackAction.canceled -= OnNormalAttackCanceled;
 
             rangedAttackAction.performed -= OnRangedAttack;
-            rangedAttackAction.canceled -= OnRangedAttackCanceled;
             
-            chargeButtonAction.performed -= OnChargeButtonPressed;
             chargeButtonAction.canceled -= OnChargeButtonCanceled;
         }
 
@@ -93,16 +80,14 @@ namespace MoreHit.Player
         /// </summary>
         private void UpdateChargeAttacks()
         {
-            // Wキーの長押し処理
             if (chargeButtonAction.IsPressed() && !isChargeReady)
             {
                 chargeHoldTime += Time.deltaTime;
 
-                if (chargeHoldTime >= chargeReadyThreshold)
+                if (chargeHoldTime >= CHARGE_READY_THRESHOLD)
                 {
                     isChargeReady = true;
-                    onChargeStateChanged?.Invoke(true); // チャージ状態を通知
-                    Debug.Log("チャージ準備完了！右クリックでチャージ攻撃！");
+                    onChargeStateChanged?.Invoke(true);
                 }
             }
         }
@@ -127,39 +112,19 @@ namespace MoreHit.Player
             onNormalAttack?.Invoke();
         }
 
-        private void OnNormalAttackCanceled(InputAction.CallbackContext context)
-        {
-            // 特に処理なし
-        }
-
         private void OnRangedAttack(InputAction.CallbackContext context)
         {
             if (isChargeReady)
             {
-                // チャージ状態で右クリック → チャージ攻撃
                 onChargeRangedAttack?.Invoke();
-                ResetChargeState(); // チャージ状態をリセット
+                ResetChargeState();
             }
             else
-            {
-                // 通常状態で右クリック → 通常の遠距離攻撃
                 onRangedAttack?.Invoke();
-            }
-        }
-
-        private void OnRangedAttackCanceled(InputAction.CallbackContext context)
-        {
-            // 特に処理なし
-        }
-        
-        private void OnChargeButtonPressed(InputAction.CallbackContext context)
-        {
-            // Wキーが押された時の処理（特になし）
         }
         
         private void OnChargeButtonCanceled(InputAction.CallbackContext context)
         {
-            // Wキーが離された時の処理
             ResetChargeState();
         }
         
@@ -168,7 +133,6 @@ namespace MoreHit.Player
             chargeHoldTime = 0f;
             isChargeReady = false;
             onChargeStateChanged?.Invoke(false);
-            Debug.Log("チャージ状態をリセット");
         }
     }
 }

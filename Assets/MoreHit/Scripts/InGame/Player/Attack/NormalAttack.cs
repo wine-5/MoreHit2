@@ -9,10 +9,8 @@ namespace MoreHit.Attack
     /// </summary>
     public class NormalAttack : MonoBehaviour, IAttack
     {
-        private const int COMBO_COUNT = 3;
-        
         [Header("コンボ攻撃設定")]
-        [SerializeField] private AttackData[] comboAttacks = new AttackData[COMBO_COUNT];
+        [SerializeField] private AttackData[] comboAttacks = new AttackData[3];
         [SerializeField, Min(0)] private float comboResetTime = 1f;
         [SerializeField, Min(0)] private float attackDuration = 0.3f;
         
@@ -20,7 +18,6 @@ namespace MoreHit.Attack
         [SerializeField] private bool showHitBox = true;
         [SerializeField] private Color hitBoxColor = Color.red;
         
-        // コンポーネント参照
         private PlayerMovement playerMovement;
         
         private int comboIndex = 0;
@@ -36,7 +33,9 @@ namespace MoreHit.Attack
         
         public void Execute()
         {
-            if (!CanExecute()) return;
+            if (!CanExecute())
+                return;
+            
             StartCoroutine(AttackRoutine());
         }
         
@@ -91,11 +90,8 @@ namespace MoreHit.Attack
         private Vector2 GetAttackDirection()
         {
             if (playerMovement != null)
-            {
                 return playerMovement.IsFacingRight ? Vector2.right : Vector2.left;
-            }
             
-            // フォールバック：transform.localScaleで判定
             return transform.localScale.x > 0 ? Vector2.right : Vector2.left;
         }
         
@@ -110,24 +106,27 @@ namespace MoreHit.Attack
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if (!showHitBox) return;
+            if (!showHitBox)
+                return;
             
             AttackData currentAttack = GetCurrentAttackData();
-            if (currentAttack == null) return;
+            if (currentAttack == null)
+                return;
             
             DrawHitBox(currentAttack, hitBoxColor);
         }
         
         private void OnDrawGizmosSelected()
         {
-            if (!showHitBox) return;
+            if (!showHitBox)
+                return;
             
-            // 全コンボ段階の攻撃範囲を表示
             if (comboAttacks != null)
             {
                 for (int i = 0; i < comboAttacks.Length; i++)
                 {
-                    if (comboAttacks[i] == null) continue;
+                    if (comboAttacks[i] == null)
+                        continue;
                     
                     Color gizmoColor = Color.Lerp(Color.yellow, Color.red, (float)i / (comboAttacks.Length - 1));
                     gizmoColor.a = 0.3f;
@@ -144,12 +143,10 @@ namespace MoreHit.Attack
             Gizmos.color = color;
             Gizmos.DrawWireCube(hitPosition, attackData.HitboxSize);
             
-            // 半透明で塗りつぶし
             color.a = 0.2f;
             Gizmos.color = color;
             Gizmos.DrawCube(hitPosition, attackData.HitboxSize);
             
-            // 攻撃原点から攻撃位置への線
             Gizmos.color = Color.white;
             Gizmos.DrawLine(transform.position, hitPosition);
         }

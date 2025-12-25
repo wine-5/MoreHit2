@@ -111,7 +111,7 @@ MonoBehaviour:
   stockText: {fileID: 8587452591685352343}
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
-  enemyAttackData: {fileID: 11400000, guid: 67b5e02c3a9d7d84cb202431ac067b84, type: 2}
+  enemyAttackData: {fileID: 11400000, guid: cf2e219f3318d4b47a4cb5d5480b9a33, type: 2}
   launchVector: {x: 1, y: 1}
   launchPower: 15
   stockMultiplier: 0.1

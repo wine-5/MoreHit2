@@ -4,31 +4,26 @@ namespace MoreHit.Player
 {
     /// <summary>
     /// プレイヤーのメイン制御クラス
+    /// プレイヤーの状態管理と入力の振り分けを担当
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
-        [Header("プレイヤーデータ")]
-        [SerializeField] private PlayerData playerData;
-        
         [Header("参照")]
         private PlayerInputManager inputManager;
         private PlayerMovement movement;
+        private PlayerHealth health;
         private AttackManager attackManager;
-        
-        [Header("プレイヤー状態")]
-        [SerializeField] private bool isAlive = true;
 
         private void Awake()
         {
-            // コンポーネント取得
             inputManager = GetComponent<PlayerInputManager>();
             movement = GetComponent<PlayerMovement>();
+            health = GetComponent<PlayerHealth>();
             attackManager = GetComponent<AttackManager>();
         }
 
         private void OnEnable()
         {
-            // 入力イベントのバインド
             inputManager.onMove.AddListener(OnMoveInput);
             inputManager.onJumpPerformed.AddListener(OnJumpInput);
             inputManager.onJumpCanceled.AddListener(OnJumpCanceled);
@@ -39,7 +34,6 @@ namespace MoreHit.Player
 
         private void OnDisable()
         {
-            // 入力イベントの解除
             inputManager.onMove.RemoveListener(OnMoveInput);
             inputManager.onJumpPerformed.RemoveListener(OnJumpInput);
             inputManager.onJumpCanceled.RemoveListener(OnJumpCanceled);
@@ -48,47 +42,52 @@ namespace MoreHit.Player
             inputManager.onChargeRangedAttack.RemoveListener(OnChargeRangedAttack);
         }
 
-        #region 入力ハンドラー
-
         private void OnMoveInput(Vector2 moveInput)
         {
-            if (!isAlive) return;
+            if (!health.IsAlive)
+                return;
+            
             movement.SetMoveInput(moveInput);
         }
 
         private void OnJumpInput()
         {
-            if (!isAlive) return;
+            if (!health.IsAlive)
+                return;
+            
             movement.Jump();
         }
 
         private void OnJumpCanceled()
         {
-            if (!isAlive) return;
+            if (!health.IsAlive)
+                return;
+            
             movement.CancelJump();
         }
 
         private void OnNormalAttack()
         {
-            if (!isAlive) return;
+            if (!health.IsAlive)
+                return;
+            
             attackManager?.ExecuteNormalAttack();
         }
 
         private void OnRangedAttack()
         {
-            if (!isAlive) return;
+            if (!health.IsAlive)
+                return;
+            
             attackManager?.ExecuteRangedAttack();
         }
 
         private void OnChargeRangedAttack()
         {
-            if (!isAlive) return;
-            Debug.Log("チャージ攻撃が発動されました！");
+            if (!health.IsAlive)
+                return;
+            
             attackManager?.ExecuteChargedAttack();
         }
-
-        #endregion
-
-
     }
 }

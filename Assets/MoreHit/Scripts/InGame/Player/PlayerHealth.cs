@@ -12,36 +12,18 @@ namespace MoreHit.Player
         [Header("プレイヤーデータ")]
         [SerializeField] private PlayerData playerData;
 
-        // HP状態
         private int currentHealth;
         private int maxHealth;
 
-        // 無敵状態管理
         private bool isInvincible = false;
         private float invincibleTimer = 0f;
         private float invincibleDuration;
 
-        // 生存状態
         private bool isAlive = true;
 
-        /// <summary>
-        /// 現在のHPを取得
-        /// </summary>
         public int CurrentHealth => currentHealth;
-
-        /// <summary>
-        /// 最大HPを取得
-        /// </summary>
         public int MaxHealth => maxHealth;
-
-        /// <summary>
-        /// 無敵状態かどうか
-        /// </summary>
         public bool IsInvincible => isInvincible;
-
-        /// <summary>
-        /// 生存状態かどうか
-        /// </summary>
         public bool IsAlive => isAlive;
 
         private void Awake()
@@ -62,20 +44,15 @@ namespace MoreHit.Player
         /// <summary>
         /// ダメージを受ける
         /// </summary>
-        /// <param name="damage">ダメージ量</param>
         public void TakeDamage(int damage)
         {
-            // 無敵状態または既に死亡している場合はダメージを受けない
             if (isInvincible || !isAlive)
                 return;
 
-            // ダメージを適用
             currentHealth = Mathf.Max(0, currentHealth - damage);
             
-            // ダメージイベントを発火
             GameEvents.TriggerPlayerDamage(damage, currentHealth);
 
-            // 無敵時間を開始
             StartInvincible();
 
             if (currentHealth <= 0)
@@ -112,8 +89,8 @@ namespace MoreHit.Player
         /// </summary>
         private void Die()
         {
-            if (!isAlive) return;
-                
+            if (!isAlive)
+                return;
 
             isAlive = false;
             GameEvents.TriggerPlayerDeath();

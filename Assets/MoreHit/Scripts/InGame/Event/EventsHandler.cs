@@ -25,13 +25,10 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnPlayerDeath()
         {
-            Debug.Log("EventsHandler: プレイヤー死亡を検知 - GameOverシーンへ遷移");
-            
-            // SceneControllerを使ってGameOverシーンに遷移
             if (SceneController.I != null)
                 SceneController.I.LoadScene(SceneName.GameOver);
             else
-                Debug.LogError("SceneController instance not found!");
+                Debug.LogError("EventsHandler: SceneController instance not found!");
         }
     }
 }

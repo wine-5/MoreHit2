@@ -17,7 +17,7 @@ namespace MoreHit.Events
         /// <summary>
         /// プレイヤーがダメージを受けた時
         /// </summary>
-        public static event Action<int, int> OnPlayerDamage; // (damage, currentHealth)
+        public static event Action<int, int> OnPlayerDamage;
         
         /// <summary>
         /// ストックが満タンになった時
@@ -27,8 +27,7 @@ namespace MoreHit.Events
         /// <summary>
         /// ストック数が変更された時
         /// </summary>
-        public static event Action<int, int> OnStockChanged; // (currentStock, maxStock)
-
+        public static event Action<int, int> OnStockChanged;
 
         public static void TriggerPlayerDeath()
         {
@@ -49,7 +48,6 @@ namespace MoreHit.Events
         {
             OnStockChanged?.Invoke(currentStock, maxStock);
         }
-
 
         /// <summary>
         /// 全てのイベントリスナーをクリアする（シーン切り替え時などに使用）

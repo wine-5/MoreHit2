@@ -30,48 +30,25 @@ namespace MoreHit.Player
         [Tooltip("最大ジャンプ回数（2で2段ジャンプ）")]
         [SerializeField] private int maxJumpCount = 2;
 
-        [Header("バックステップ設定")]
-        [Tooltip("バックステップで移動する距離")]
-        [SerializeField] private float backstepDistance = 3f;
-        [Tooltip("バックステップの移動時間（秒）")]
-        [SerializeField] private float backstepDuration = 0.2f;
-        [Tooltip("バックステップのクールタイム（秒）")]
-        [SerializeField] private float backstepCooldown = 0.5f;
-        [Tooltip("バックステップ中の無敵時間（秒）")]
-        [SerializeField] private float backstepInvincibleTime = 0.15f;
-
         [Header("HP設定")]
         [Tooltip("プレイヤーの最大HP")]
         [SerializeField] private int maxHealth = 100;
         [Tooltip("ダメージを受けた後の無敵時間（秒）")]
         [SerializeField] private float invincibleTimeAfterDamage = 1.0f;
 
-        [Header("ストック設定")]
-        [Tooltip("最大ストック数")]
-        [SerializeField] private int maxStock = 99;
-
-        // 移動設定のプロパティ
+        // プロパティ
+        public string PlayerName => playerName;
+        
         public float MoveSpeed => moveSpeed;
         public float Acceleration => acceleration;
         public float Deceleration => deceleration;
 
-        // ジャンプ設定のプロパティ
         public float JumpForce => jumpForce;
         public float JumpCutMultiplier => jumpCutMultiplier;
         public float FallGravityMultiplier => fallGravityMultiplier;
         public int MaxJumpCount => maxJumpCount;
 
-        // バックステップ設定のプロパティ
-        public float BackstepDistance => backstepDistance;
-        public float BackstepDuration => backstepDuration;
-        public float BackstepCooldown => backstepCooldown;
-        public float BackstepInvincibleTime => backstepInvincibleTime;
-
-        // HP設定のプロパティ
         public int MaxHealth => maxHealth;
         public float InvincibleTimeAfterDamage => invincibleTimeAfterDamage;
-        
-        // ストック設定のプロパティ
-        public int MaxStock => maxStock;
     }
 }
