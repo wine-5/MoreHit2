@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zako
       objectReference: {fileID: 0}
+    - target: {fileID: 6370705370894734867, guid: 68b2f32aed8e62c4fa20f6d4fe0a7da0, type: 3}
+      propertyPath: readyToLaunchEffect
+      value: 
+      objectReference: {fileID: 5949787932723397724, guid: 6794c49c63dedcd4d86e8bc0e2b52637, type: 3}
     - target: {fileID: 7519184687076746466, guid: 68b2f32aed8e62c4fa20f6d4fe0a7da0, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
