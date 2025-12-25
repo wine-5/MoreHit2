@@ -53,10 +53,13 @@ namespace MoreHit.Attack
                 if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
                     continue;
 
+                // 先にストックを適用（敵が生き残るため）
+                ApplyStock(hit, data.StockAmount);
+
+                // その後でダメージを適用
                 if (ApplyDamage(hit, data.Damage))
                     hitCount++;
 
-                ApplyStock(hit, data.StockAmount);
                 SpawnHitEffect(hit.transform.position, data.HitEffectPrefab);
             }
 
@@ -98,6 +101,13 @@ namespace MoreHit.Attack
 
             var stockable = hit.GetComponent<IStockable>();
             stockable?.AddStock(stockAmount);
+            
+            // ReadyToLaunch状態の敵なら反射効果を発動
+            var enemyBase = hit.GetComponent<MoreHit.Enemy.EnemyBase>();
+            if (enemyBase != null && enemyBase.CurrentState == MoreHit.Enemy.EnemyState.ReadyToLaunch)
+            {
+                enemyBase.TriggerBounceEffect();
+            }
         }
 
         private void SpawnHitEffect(Vector3 position, GameObject effectPrefab)

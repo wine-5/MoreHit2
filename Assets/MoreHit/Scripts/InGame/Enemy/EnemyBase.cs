@@ -8,16 +8,19 @@ using TMPro;
 namespace MoreHit.Enemy
 {
 
-    public enum EnemyState { Idle, Move, HitStun, Launch }
+    public enum EnemyState { Idle, Move, HitStun, ReadyToLaunch, Launch }
     /// <summary>
     /// 敵の基底クラス
     /// </summary>
-    public abstract class EnemyBase : MonoBehaviour, IDamageable
+    public abstract class EnemyBase : MonoBehaviour, IDamageable, IStockable
     {
         protected EnemyState currentState = EnemyState.Move;
 
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
+        [Header("エフェクト設定")]
+        [SerializeField] protected GameObject readyToLaunchEffect; // 準備完了時のエフェクト
+        [SerializeField] protected float bounceEffectDuration = 3f; // 反射効果の時間
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
@@ -96,22 +99,84 @@ namespace MoreHit.Enemy
 
         public void AddStock(int amount)
         {
+            Debug.Log($"EnemyBase.AddStock: {gameObject.name} に {amount} のストックを追加中。現在: {currentStockCount}");
+            
             currentStockCount += amount;
-            UpdateStockText();
-
+            
+            Debug.Log($"EnemyBase.AddStock: {gameObject.name} のストック更新完了。新しい値: {currentStockCount}/{enemyData.Needstock}");
+            
+            UpdateStockText(); // TMPテキストを更新
+            
             StopMovement(hitStopDuration);
 
             stockResetTimer = stockResetDuration;
             isStockTimerActive = true;
 
-            // ストックが上限に達したかチェック
-            if (currentStockCount >= enemyData.Needstock)
+            // ストックが必要数に達したかチェック
+            if (currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
             {
-                GameEvents.TriggerStockFull(gameObject);
-
-                // 敵を無効化
-                gameObject.SetActive(false);
+                OnStockReachedRequired();
             }
+        }
+        
+        /// <summary>
+        /// ストックをクリア（IStockableインターフェース実装）
+        /// </summary>
+        public void ClearStock()
+        {
+            currentStockCount = 0;
+            UpdateStockText();
+        }
+        
+        /// <summary>
+        /// ストックが必要数に達したときの処理（準備状態に移行）
+        /// </summary>
+        private void OnStockReachedRequired()
+        {
+            currentState = EnemyState.ReadyToLaunch;
+            canMove = false; // 移動停止
+            
+            // エフェクトを表示
+            if (readyToLaunchEffect != null)
+            {
+                readyToLaunchEffect.SetActive(true);
+            }
+            
+            OnStateChanged(currentState);
+        }
+        
+        /// <summary>
+        /// ReadyToLaunch状態で攻撃を受けた時の処理
+        /// </summary>
+        public void TriggerBounceEffect()
+        {
+            if (currentState != EnemyState.ReadyToLaunch) return;
+            
+            // 必要数を超えた分のストックを計算（ボーナス威力の算出用）
+            int extraStocks = currentStockCount - enemyData.Needstock;
+            // 基本時間に、余剰ストックに応じた追加時間を加算
+            currentLaunchTimer = bounceEffectDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
+
+            currentState = EnemyState.Launch;
+            // レイヤーを変更して、吹っ飛ばし中の敵同士の衝突を無視させる
+            gameObject.layer = LayerMask.NameToLayer(LayerFlyingEnemy);
+            canMove = false;
+            rb.gravityScale = 0;
+
+            // 余剰ストックに応じて威力を強化
+            float speedMultiplier = 1f + (extraStocks * stockMultiplier);
+            float finalLaunchSpeed = launchPower * speedMultiplier;
+
+            currentConstantSpeed = finalLaunchSpeed;
+            rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
+            
+            // エフェクトを非表示
+            if (readyToLaunchEffect != null)
+            {
+                readyToLaunchEffect.SetActive(false);
+            }
+            
+            OnStateChanged(currentState);
         }
 
         /// <summary>
@@ -261,6 +326,9 @@ namespace MoreHit.Enemy
         public virtual void TakeDamage(int damage)
         {
             if (isDead) return; // 既に死んでいる場合は何もしない
+            
+            // ReadyToLaunch状態では無敵（反射効果用）
+            if (currentState == EnemyState.ReadyToLaunch) return;
 
             currentHP -= damage; // HPからダメージを減算
 
@@ -343,6 +411,10 @@ namespace MoreHit.Enemy
                     if (canMove) Move();
                     break;
 
+                case EnemyState.ReadyToLaunch:
+                    // 準備状態では何もしない（エフェクト表示中）
+                    break;
+
                 case EnemyState.Launch:
                     ProcessLaunch();
                     break;
@@ -402,7 +474,7 @@ namespace MoreHit.Enemy
         // プロパティ
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
-
+        public EnemyState CurrentState => currentState;
         public EnemyData EnemyData => enemyData;
     }
 }

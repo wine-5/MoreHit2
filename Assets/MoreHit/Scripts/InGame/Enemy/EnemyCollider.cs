@@ -1,5 +1,6 @@
 using UnityEngine;
 using MoreHit.Enemy;
+using MoreHit.Attack;
 
 namespace MoreHit
 {
