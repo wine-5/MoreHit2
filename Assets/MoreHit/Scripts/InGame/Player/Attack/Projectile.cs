@@ -1,13 +1,13 @@
 using UnityEngine;
+using MoreHit;
 using MoreHit.Pool;
+using MoreHit.Effect;
 
 namespace MoreHit.Attack
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Projectile : MonoBehaviour, IPoolable
-    {
-        private const float EFFECT_LIFETIME = 2f;
-        
+    {        
         // 初期状態保存用
         private Vector3 originalScale;
         private bool hasOriginalScale = false;
@@ -37,7 +37,9 @@ namespace MoreHit.Attack
             shooter = owner;
             startPosition = transform.position;
             
-            SetInitialVelocity();
+            // 初期速度を設定
+            if (rb != null)
+                rb.linearVelocity = direction * data.Speed;
             
             // Factoryのプールシステムとの連携のため、一定時間後に自動返却
             Invoke(nameof(ReturnToPool), data.LifeTime);
@@ -46,21 +48,9 @@ namespace MoreHit.Attack
         /// <summary>
         /// プールへ返却する
         /// </summary>
-        private void ReturnToPool()
-        {
-            DestroyProjectile(false);
-        }
+        private void ReturnToPool() => DestroyProjectile(false);
         
-        private void SetInitialVelocity()
-        {
-            if (rb != null)
-                rb.linearVelocity = direction * data.Speed;
-        }
-        
-        private void Update()
-        {
-            CheckMaxDistance();
-        }
+        private void Update() => CheckMaxDistance();
         
         private void CheckMaxDistance()
         {
@@ -72,10 +62,22 @@ namespace MoreHit.Attack
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (ShouldIgnoreCollision(other))
-                return;
+            if (ShouldIgnoreCollision(other)) return;
             
-            ProcessHit(other);
+            // ヒット処理とエフェクト生成
+            var damageable = other.GetComponent<IDamageable>();
+            damageable?.TakeDamage(data.Damage);
+            
+            ApplyStock(other);
+            
+            // ヒットエフェクト
+            if (EffectFactory.Instance != null)
+            {
+                var effect = EffectFactory.Instance.CreateEffect(EffectType.HitEffect, transform.position);
+                if (effect != null)
+                    EffectFactory.Instance.ReturnEffectDelayed(effect, 2f);
+            }
+            
             DestroyProjectile(true);
         }
         
@@ -97,19 +99,6 @@ namespace MoreHit.Attack
             return false;
         }
         
-        private void ProcessHit(Collider2D other)
-        {
-            ApplyDamage(other);
-            ApplyStock(other);
-            SpawnHitEffect();
-        }
-        
-        private void ApplyDamage(Collider2D other)
-        {
-            var damageable = other.GetComponent<IDamageable>();
-            damageable?.TakeDamage(data.Damage);
-        }
-        
         private void ApplyStock(Collider2D other)
         {
             if (data.StockAmount <= 0) return;
@@ -121,45 +110,21 @@ namespace MoreHit.Attack
             // ReadyToLaunch状態の敵なら反射効果を発動
             var enemyBase = other.GetComponent<MoreHit.Enemy.EnemyBase>();
             if (enemyBase != null && enemyBase.CurrentState == MoreHit.Enemy.EnemyState.ReadyToLaunch)
-            {
                 enemyBase.TriggerBounceEffect();
-            }
-        }
-        
-        private void SpawnHitEffect()
-        {
-            if (data.HitEffectPrefab == null) return;
-            
-            // エフェクトは後で別クラスで実装する
-            // TODO: EffectFactoryで処理する
         }
         
         private void DestroyProjectile(bool wasHit)
         {
-            if (!wasHit)
-                SpawnDestroyEffect();
+            // 消滅時のエフェクトは不要（シンプルに保つ）
             
             // Invokeで実行中の自動返却をキャンセル
             CancelInvoke(nameof(ReturnToPool));
             
             // Factoryのプールシステムに返却
             if (ProjectileFactory.Instance != null)
-            {
                 ProjectileFactory.Instance.ReturnProjectile(gameObject);
-            }
             else
-            {
-                // Factoryが無い場合は直接破棄
-                Destroy(gameObject);
-            }
-        }
-        
-        private void SpawnDestroyEffect()
-        {
-            if (data.DestroyEffectPrefab == null) return;
-            
-            // エフェクトは後で別クラスで実装する
-            // TODO: EffectFactoryで処理する
+                Destroy(gameObject); // Factoryが無い場合は直接破棄
         }
         
         #region IPoolable Implementation

@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Effect;
 
 namespace MoreHit.Attack
 {
@@ -7,13 +8,15 @@ namespace MoreHit.Attack
     /// </summary>
     public class ChargedAttack : ProjectileAttackBase
     {
-        [Header("溜め攻撃エフェクト")]
-        [SerializeField] private GameObject chargeEffect;
-        
         protected override void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
         {
-            // エフェクトは後で別クラスで実装する
-            // TODO: EffectFactoryで処理する
+            // EffectFactoryでチャージ攻撃エフェクトを生成
+            if (EffectFactory.Instance != null)
+            {
+                var effect = EffectFactory.Instance.CreateEffect(EffectType.ChargeAttackEffect, position);
+                if (effect != null)
+                    EffectFactory.Instance.ReturnEffectDelayed(effect, 2f);
+            }
         }
     }
 }
