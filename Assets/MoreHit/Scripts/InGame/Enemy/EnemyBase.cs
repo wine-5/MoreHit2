@@ -27,7 +27,7 @@ namespace MoreHit.Enemy
         [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
-        [SerializeField] protected float launchPower = 50f; // 大幅に強化
+        [SerializeField] protected float launchPower = 70f; // 大幅に強化
         [SerializeField] protected float stockMultiplier = 0.2f; // 倍率も少し強化
         [Header("ストックリセット設定")]
         [SerializeField] private float stockResetDuration = 5f;
