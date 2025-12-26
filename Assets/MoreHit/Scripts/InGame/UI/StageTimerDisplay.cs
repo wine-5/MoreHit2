@@ -11,11 +11,14 @@ public class StageTimerDisplay : MonoBehaviour
         if (ElapsedTime.Instance != null)
         {
             float t = ElapsedTime.Instance.CurrentTime;
-            // 分:秒.ミリ秒 の形式に整形
-            timerText.text = string.Format("{0:00}:{1:00}.{2:00}",
-                Mathf.FloorToInt(t / 60),
-                Mathf.FloorToInt(t % 60),
-                Mathf.FloorToInt((t * 100) % 100));
+
+            // 整数にキャストして計算（計算負荷の軽減）
+            int totalSeconds = (int)t;
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+
+            // {0} は桁数制限なし、{1:00} は常に2桁（05秒などを表現）
+            timerText.text = string.Format("{0}:{1:00}", minutes, seconds);
         }
     }
 }
