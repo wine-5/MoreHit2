@@ -1,11 +1,16 @@
 using UnityEngine;
+using MoreHit;
+using MoreHit.Pool;
+using MoreHit.Effect;
 
 namespace MoreHit.Attack
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Projectile : MonoBehaviour
-    {
-        private const float EFFECT_LIFETIME = 2f;
+    public class Projectile : MonoBehaviour, IPoolable
+    {        
+        // 初期状態保存用
+        private Vector3 originalScale;
+        private bool hasOriginalScale = false;
         
         private ProjectileData data;
         private Vector3 direction;
@@ -16,6 +21,13 @@ namespace MoreHit.Attack
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            
+            // 初期スケールを保存
+            if (!hasOriginalScale)
+            {
+                originalScale = transform.localScale;
+                hasOriginalScale = true;
+            }
         }
         
         public void Initialize(ProjectileData projectileData, Vector3 dir, GameObject owner)
@@ -25,20 +37,20 @@ namespace MoreHit.Attack
             shooter = owner;
             startPosition = transform.position;
             
-            SetInitialVelocity();
-            Destroy(gameObject, data.LifeTime);
-        }
-        
-        private void SetInitialVelocity()
-        {
+            // 初期速度を設定
             if (rb != null)
                 rb.linearVelocity = direction * data.Speed;
+            
+            // Factoryのプールシステムとの連携のため、一定時間後に自動返却
+            Invoke(nameof(ReturnToPool), data.LifeTime);
         }
         
-        private void Update()
-        {
-            CheckMaxDistance();
-        }
+        /// <summary>
+        /// プールへ返却する
+        /// </summary>
+        private void ReturnToPool() => DestroyProjectile(false);
+        
+        private void Update() => CheckMaxDistance();
         
         private void CheckMaxDistance()
         {
@@ -50,10 +62,22 @@ namespace MoreHit.Attack
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (ShouldIgnoreCollision(other))
-                return;
+            if (ShouldIgnoreCollision(other)) return;
             
-            ProcessHit(other);
+            // ヒット処理とエフェクト生成
+            var damageable = other.GetComponent<IDamageable>();
+            damageable?.TakeDamage(data.Damage);
+            
+            ApplyStock(other);
+            
+            // ヒットエフェクト
+            if (EffectFactory.Instance != null)
+            {
+                var effect = EffectFactory.Instance.CreateEffect(EffectType.HitEffect, transform.position);
+                if (effect != null)
+                    EffectFactory.Instance.ReturnEffectDelayed(effect, 2f);
+            }
+            
             DestroyProjectile(true);
         }
         
@@ -75,19 +99,6 @@ namespace MoreHit.Attack
             return false;
         }
         
-        private void ProcessHit(Collider2D other)
-        {
-            ApplyDamage(other);
-            ApplyStock(other);
-            SpawnHitEffect();
-        }
-        
-        private void ApplyDamage(Collider2D other)
-        {
-            var damageable = other.GetComponent<IDamageable>();
-            damageable?.TakeDamage(data.Damage);
-        }
-        
         private void ApplyStock(Collider2D other)
         {
             if (data.StockAmount <= 0) return;
@@ -99,33 +110,69 @@ namespace MoreHit.Attack
             // ReadyToLaunch状態の敵なら反射効果を発動
             var enemyBase = other.GetComponent<MoreHit.Enemy.EnemyBase>();
             if (enemyBase != null && enemyBase.CurrentState == MoreHit.Enemy.EnemyState.ReadyToLaunch)
-            {
                 enemyBase.TriggerBounceEffect();
-            }
-        }
-        
-        private void SpawnHitEffect()
-        {
-            if (data.HitEffectPrefab == null) return;
-            
-            GameObject effect = Instantiate(data.HitEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(effect, EFFECT_LIFETIME);
         }
         
         private void DestroyProjectile(bool wasHit)
         {
-            if (!wasHit)
-                SpawnDestroyEffect();
+            // 消滅時のエフェクトは不要（シンプルに保つ）
             
-            Destroy(gameObject);
+            // Invokeで実行中の自動返却をキャンセル
+            CancelInvoke(nameof(ReturnToPool));
+            
+            // Factoryのプールシステムに返却
+            if (ProjectileFactory.Instance != null)
+                ProjectileFactory.Instance.ReturnProjectile(gameObject);
+            else
+                Destroy(gameObject); // Factoryが無い場合は直接破棄
         }
         
-        private void SpawnDestroyEffect()
+        #region IPoolable Implementation
+        
+        /// <summary>
+        /// プールから取得された時に呼ばれる初期化処理
+        /// </summary>
+        public void OnPoolGet()
         {
-            if (data.DestroyEffectPrefab == null) return;
+            // 元のスケールを復元
+            if (hasOriginalScale)
+            {
+                transform.localScale = originalScale;
+            }
             
-            GameObject effect = Instantiate(data.DestroyEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(effect, EFFECT_LIFETIME);
+            // Rigidbodyをリセット
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+            
+            // Invoke のクリア
+            CancelInvoke();
         }
+        
+        /// <summary>
+        /// プールに返却される時に呼ばれるリセット処理
+        /// </summary>
+        public void OnPoolReturn()
+        {
+            // データをクリア
+            data = null;
+            direction = Vector3.zero;
+            startPosition = Vector3.zero;
+            shooter = null;
+            
+            // Invoke のクリア
+            CancelInvoke();
+            
+            // Rigidbodyをリセット
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+        }
+        
+        #endregion
     }
 }

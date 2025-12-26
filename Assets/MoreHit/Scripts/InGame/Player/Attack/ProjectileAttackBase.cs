@@ -77,30 +77,32 @@ namespace MoreHit.Attack
         protected virtual void FireProjectile(Vector3 direction)
         {
             Vector3 firePos = GetFirePosition();
-            Quaternion rotation = CalculateProjectileRotation(direction);
             
-            OnBeforeProjectileSpawn(firePos, rotation);
+            OnBeforeProjectileSpawn(firePos, direction);
             
-            GameObject projectileObj = Instantiate(projectilePrefab, firePos, rotation);
-            InitializeProjectile(projectileObj, direction);
-        }
-        
-        protected Quaternion CalculateProjectileRotation(Vector3 direction)
-        {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            return Quaternion.Euler(0, 0, angle);
-        }
-        
-        protected void InitializeProjectile(GameObject projectileObj, Vector3 direction)
-        {
-            var projectile = projectileObj.GetComponent<Projectile>();
-            projectile?.Initialize(projectileData, direction, gameObject);
+            // Factoryを使用してプロジェクタイル生成
+            GameObject projectileObj = ProjectileFactory.Instance.CreateProjectile(
+                projectilePrefab, 
+                firePos, 
+                direction, 
+                projectileData, 
+                gameObject
+            );
+            
+            OnAfterProjectileSpawn(projectileObj);
         }
         
         /// <summary>
         /// 弾丸生成前の処理（エフェクト生成など）をオーバーライド可能
         /// </summary>
-        protected virtual void OnBeforeProjectileSpawn(Vector3 position, Quaternion rotation)
+        protected virtual void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
+        {
+        }
+        
+        /// <summary>
+        /// 弾丸生成後の処理をオーバーライド可能
+        /// </summary>
+        protected virtual void OnAfterProjectileSpawn(GameObject projectileObj)
         {
         }
     }

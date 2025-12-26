@@ -3,6 +3,7 @@ using UnityEngine;
 using MoreHit.Attack;
 using MoreHit.Player;
 using MoreHit.Events;
+using MoreHit.Effect;
 using TMPro;
 
 namespace MoreHit.Enemy
@@ -67,6 +68,9 @@ namespace MoreHit.Enemy
         protected bool canMove = true;
         protected bool isSmash = false;
 
+        // FullStockEffectの管理用
+        private GameObject currentFullStockEffect = null;
+
         public void StopMovement(float duration)
         {
             StartCoroutine(StopRoutine(duration));
@@ -129,21 +133,20 @@ namespace MoreHit.Enemy
         /// </summary>
         private void OnStockReachedRequired()
         {
-            Debug.Log($"OnStockReachedRequired: {gameObject.name} がReadyToLaunch状態に移行中");
-            
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
             
-            Debug.Log($"OnStockReachedRequired: {gameObject.name} の移動を停止");
+            // イベント駆動でストック満タンを通知
+            GameEvents.TriggerStockFull(gameObject);
             
-            // エフェクトを表示
-            if (readyToLaunchEffect != null)
+            // EffectFactoryを使ってFullStockEffectを表示
+            if (EffectFactory.I != null)
             {
-                readyToLaunchEffect.SetActive(true);
+                currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
             }
             else
             {
-                Debug.LogWarning($"OnStockReachedRequired: {gameObject.name} のreadyToLaunchEffectが設定されていません");
+                Debug.LogError("❌ EffectFactory が見つかりません! Singletonが初期化されていない可能性があります");
             }
             
             OnStateChanged(currentState);
@@ -177,9 +180,14 @@ namespace MoreHit.Enemy
             currentConstantSpeed = finalLaunchSpeed;
             rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
             
-            Debug.Log($"TriggerBounceEffect: {gameObject.name} を速度 {finalLaunchSpeed} で発射！（余剰ストック: {extraStocks}）");
+            // FullStockEffectを非表示
+            if (currentFullStockEffect != null)
+            {
+                EffectFactory.I?.ReturnEffect(currentFullStockEffect);
+                currentFullStockEffect = null;
+            }
             
-            // エフェクトを非表示
+            // 既存のreadyToLaunchEffectも非表示（後方互換性のため）
             if (readyToLaunchEffect != null)
             {
                 readyToLaunchEffect.SetActive(false);

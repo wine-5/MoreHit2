@@ -14,14 +14,10 @@ namespace MoreHit.Attack
         [Header("ストックシステム")]
         [SerializeField, Min(0)] private int stockAmount = 1;
 
-        [Header("エフェクト")]
-        [SerializeField] private GameObject hitEffectPrefab;
-
         public int Damage => damage;
         public float Range => range;
         public Vector2 HitboxSize => hitboxSize;
         public string[] TargetTags => targetTags;
         public int StockAmount => stockAmount;
-        public GameObject HitEffectPrefab => hitEffectPrefab;
     }
 }
