@@ -16,13 +16,9 @@ MonoBehaviour:
   moveSpeed: 8
   acceleration: 10
   deceleration: 10
-  jumpForce: 15
+  jumpForce: 7
   jumpCutMultiplier: 0.5
   fallGravityMultiplier: 2.5
   maxJumpCount: 1
-  backstepDistance: 3
-  backstepDuration: 0.2
-  backstepCooldown: 0.5
-  backstepInvincibleTime: 0.15
   maxHealth: 100
   invincibleTimeAfterDamage: 1
