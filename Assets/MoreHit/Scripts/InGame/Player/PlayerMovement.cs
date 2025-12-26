@@ -82,11 +82,14 @@ namespace MoreHit.Player
 
         private void CheckGroundStatus()
         {
+            bool previouslyGrounded = isGrounded;
+            
             isGrounded = groundCheck == null
                 ? Mathf.Abs(rb.linearVelocity.y) < 0.01f
                 : Physics2D.OverlapBox(groundCheck.position, groundCheckSize, 0f, groundLayer);
 
-            if (isGrounded)
+            // 地面に着地した瞬間のみジャンプカウントをリセット
+            if (isGrounded && !previouslyGrounded)
                 jumpCount = 0;
         }
 
