@@ -17,6 +17,10 @@ namespace MoreHit.ElapsedTime
         public float CurrentTime { get; private set; }
         private bool isTimerRunning = false;
 
+        private void Start()
+        {
+            StartTimer(); // 自分の開始メソッドを自分で呼ぶ
+        }
         private void Update()
         {
             if (isTimerRunning)
