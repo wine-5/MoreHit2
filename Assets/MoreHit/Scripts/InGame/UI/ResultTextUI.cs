@@ -1,27 +1,29 @@
 using UnityEngine;
 using TMPro;
+using MoreHit.ElapsedTime;
 
-namespace MoreHit
+namespace MoreHit.UI
 {
+    /// <summary>
+    /// リザルト画面において、最終的な確定タイムを読み取り、整形して表示するクラス
+    /// </summary>
     public class ResultTextUI : MonoBehaviour
     {
-        public TextMeshProUGUI timeText;
+        [SerializeField]
+        private TextMeshProUGUI timeText;
 
         public void Start()
         {
-            if (ElapsedTime.Instance == null) return; // Nullチェックは必須
+            // インスタンスの存在確認
+            if (ElapsedTimeManager.I == null)
+            {
+                Debug.LogWarning("ElapsedTimeManagerが見つかりません。");
+                return;
+            }
 
-            float finalTime = ElapsedTime.Instance.CurrentTime;
-
-            // 小数点以下は不要なので、最初に整数（秒単位）に変換
-            int totalSeconds = (int)finalTime;
-            int minutes = totalSeconds / 60;
-            int seconds = totalSeconds % 60;
-
-            // 分 {0} は桁数制限なし（100分なら100と出る）
-            // 秒 {1:00} は2桁固定（5秒なら05と出る）
-            timeText.text = string.Format("Clear Time: {0}:{1:00}", minutes, seconds);
+            // マネージャー側で整形済みの文字列を取得し、接頭辞を付けるだけ
+            string timeString = ElapsedTimeManager.I.GetFormattedTime();
+            timeText.text = $"Clear Time: {timeString}";
         }
-
     }
 }

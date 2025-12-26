@@ -1,24 +1,23 @@
 using UnityEngine;
 using TMPro; // TextMeshProを使用するために必要
-using MoreHit;
+using MoreHit.ElapsedTime;
 
-public class StageTimerDisplay : MonoBehaviour
+/// <summary>
+/// プレイ中の経過時間をマネージャーから取得し、UIテキストへリアルタイムに反映する表示専用クラス
+/// </summary>
+namespace MoreHit.UI // UI関連であることを明示
 {
-    [SerializeField] private TextMeshProUGUI timerText; // インスペクターでUIをドラッグ＆ドロップ
-
-    void Update()
+    public class StageTimerDisplay : MonoBehaviour
     {
-        if (ElapsedTime.Instance != null)
+        [SerializeField] private TextMeshProUGUI timerText; // インスペクターでUIをドラッグ＆ドロップ
+
+        void Update()
         {
-            float t = ElapsedTime.Instance.CurrentTime;
-
-            // 整数にキャストして計算（計算負荷の軽減）
-            int totalSeconds = (int)t;
-            int minutes = totalSeconds / 60;
-            int seconds = totalSeconds % 60;
-
-            // {0} は桁数制限なし、{1:00} は常に2桁（05秒などを表現）
-            timerText.text = string.Format("{0}:{1:00}", minutes, seconds);
+            if (ElapsedTimeManager.I != null) // Instanceを I と定義している場合
+            {
+                // 複雑な計算はマネージャーに任せ、UIは「表示するだけ」に専念する
+                timerText.text = ElapsedTimeManager.I.GetFormattedTime();
+            }
         }
     }
 }
