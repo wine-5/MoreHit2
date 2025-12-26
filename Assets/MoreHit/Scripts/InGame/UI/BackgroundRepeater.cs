@@ -54,7 +54,6 @@ namespace MoreHit.UI
                 bgSize.x *= scale.x;
                 bgSize.y *= scale.y;
                 
-                Debug.Log($"背景サイズ: {bgSize} (sprite: {sprite.rect.size}, PPU: {sprite.pixelsPerUnit}, scale: {scale})");
                 return;
             }
             
@@ -99,8 +98,6 @@ namespace MoreHit.UI
                     bgInstance.name = $"Background_{row}_{col}";
                 }
             }
-            
-            Debug.Log($"背景を {verticalCount}×{horizontalCount} = {verticalCount * horizontalCount} 個生成しました");
         }
         
         /// <summary>
