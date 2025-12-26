@@ -1,7 +1,6 @@
 using UnityEngine;
 using MoreHit.Events;
 using MoreHit.Scene;
-using MoreHit.Effect;
 
 namespace MoreHit.InGame
 {
@@ -45,8 +44,8 @@ namespace MoreHit.InGame
                 var effect = EffectFactory.I.CreateEffect(MoreHit.Effect.EffectType.FullStockEffect, enemy.transform.position);
                 if (effect != null)
                 {
-                    // 3秒後にエフェクトを非表示にする
-                    EffectFactory.I.ReturnEffectDelayed(effect, 3f);
+                    float duration = EffectFactory.I.GetEffectDuration(MoreHit.Effect.EffectType.FullStockEffect);
+                    EffectFactory.I.ReturnEffectDelayed(effect, duration);
                 }
             }
             else

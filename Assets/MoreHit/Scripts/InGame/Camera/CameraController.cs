@@ -7,8 +7,10 @@ namespace MoreHit.Camera
     {
         [Header("プレイヤー追従設定")]
         [SerializeField] private Transform target; // 追従対象（Player）
-        [SerializeField] private Vector3 offset = new Vector3(-2f, 0f, -10f); // オフセット（左にズラす）
+        [SerializeField] private Vector3 offset = new Vector3(-2f, 2f, -10f); // オフセット（左にズラす、少し上に）
         [SerializeField] private float followSpeed = 5f; // 追従速度
+        [SerializeField] private float verticalFollowSpeed = 3f; // Y軸追従速度
+        [SerializeField] private float groundOffset = 1.5f; // 地面からの最低オフセット
         
         [Header("カメラ制限")]
         [SerializeField] private bool useBounds = false; // カメラの移動範囲を制限するか
@@ -20,15 +22,11 @@ namespace MoreHit.Camera
         [SerializeField] private float shakeDuration = 0.2f;  // シェイクの持続時間
         
         private Vector3 originalPosition;
-        private float baseYPosition; // Y軸の基準位置を保持
         private CameraShake cameraShake;
         private bool isShaking = false;
         
         void Start()
         {
-            // 基準Y位置を保持
-            baseYPosition = transform.position.y;
-            
             // プレイヤーを自動で検索（targetが設定されていない場合）
             if (target == null)
             {
@@ -59,16 +57,20 @@ namespace MoreHit.Camera
             // X軸の目標位置を計算
             float targetX = target.position.x + offset.x;
             
-            // カメラの範囲制限（X軸のみ）
+            // Y軸の目標位置を計算（プレイヤー位置 + groundOffset + offset.y）
+            float targetY = target.position.y + groundOffset + offset.y;
+            
+            // カメラの範囲制限
             if (useBounds)
             {
                 targetX = Mathf.Clamp(targetX, minBounds.x, maxBounds.x);
+                targetY = Mathf.Clamp(targetY, minBounds.y, maxBounds.y);
             }
             
-            // X軸のみ滑らかな追従、Y軸は基準位置を保持
+            // X軸とY軸を滑らかに追従
             Vector3 basePosition = new Vector3(
                 Mathf.Lerp(transform.position.x, targetX, followSpeed * Time.deltaTime),
-                baseYPosition + offset.y,
+                Mathf.Lerp(transform.position.y, targetY, verticalFollowSpeed * Time.deltaTime),
                 transform.position.z
             );
             
