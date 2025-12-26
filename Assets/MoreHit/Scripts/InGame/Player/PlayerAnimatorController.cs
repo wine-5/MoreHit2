@@ -21,6 +21,9 @@ namespace MoreHit.Player
 
         void Update()
         {
+            // Animatorコンポーネントの存在チェック
+            if (animator == null) return;
+
             // 左右移動判定
             animator.SetBool("isWalking", playerMovement.IsWalking);
 
@@ -28,11 +31,6 @@ namespace MoreHit.Player
             animator.SetBool("isGrounded", playerMovement.IsGrounded);
 
             // Y方向速度
-            animator.SetFloat("yVelocity", rb.linearVelocity.y);
-        }
-
-        void FixedUpdate()
-        {
             animator.SetFloat("yVelocity", rb.linearVelocity.y);
         }
     }
