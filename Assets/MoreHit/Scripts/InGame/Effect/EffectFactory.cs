@@ -104,6 +104,12 @@ namespace MoreHit
             // プールからエフェクトオブジェクトを取得
             var result = objectPool.GetObject(data.effectPrefab, position, Quaternion.identity);
             
+            // スケールをプレハブの元の値にリセット
+            if (result != null)
+            {
+                result.transform.localScale = data.effectPrefab.transform.localScale;
+            }
+            
             return result;
         }
         

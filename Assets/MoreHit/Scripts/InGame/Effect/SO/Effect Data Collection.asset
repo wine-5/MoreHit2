@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:MoreHit.Effect:EffectDataSO
   effectList:
   - effectType: 0
-    effectPrefab: {fileID: 1192326235886297752, guid: 18d0c1cb96d99904f91e3689258b8f09, type: 3}
+    effectPrefab: {fileID: 8483607875659123052, guid: fa1c78629e5c76940a2954812b13ce7e, type: 3}
     duration: 2
   - effectType: 1
     effectPrefab: {fileID: 1192326235886297752, guid: 18d0c1cb96d99904f91e3689258b8f09, type: 3}
