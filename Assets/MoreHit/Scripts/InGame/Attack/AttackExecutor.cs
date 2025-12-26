@@ -5,7 +5,7 @@ namespace MoreHit.Attack
 {
     public class AttackExecutor : Singleton<AttackExecutor>
     {
-        protected override bool UseDontDestroyOnLoad => true;
+        protected override bool UseDontDestroyOnLoad => false;
     
         [Header("デバッグ表示")]
         [SerializeField] private bool showAttackGizmos = true;

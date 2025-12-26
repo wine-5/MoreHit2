@@ -1,38 +1,37 @@
 using UnityEngine;
 
-namespace MoreHit
+namespace MoreHit.Player
 {
-    /// <summary>
-    /// プレイヤーのアニメーション制御クラス
-    /// </summary>
     public class PlayerAnimatorController : MonoBehaviour
     {
-        /*（参考程度に）
-         * TODO: PlayerAnimatorController 実装タスク
-         * 
-         * 【アニメーション制御】
-         * - 待機アニメーション制御
-         * - ジャンプアニメーション制御
-         * 
-         * 【状態判定】
-         * - PlayerMovementから状態を参照（同じGameObjectなのでProvider不要）
-         * - ジャンプ判定: IsGrounded の逆で判定
-         * 
-         * 【実装方針】
-         * - Update()でジャンプ状態をチェック
-         * - animator.SetBool("IsJumping", isJumping); でアニメーション切り替え
-         */
-        
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private Animator animator;
+        private PlayerController playerController;
+        private Rigidbody2D rb;
+        private PlayerMovement playerMovement;
+
+        void Awake()
         {
-        
+            animator = GetComponent<Animator>();
+            playerController = GetComponent<PlayerController>();
+            rb = GetComponent<Rigidbody2D>();
+            playerMovement = GetComponent<PlayerMovement>();
         }
 
-        // Update is called once per frame
+
+
         void Update()
         {
-        
+            // Animatorコンポーネントの存在チェック
+            if (animator == null) return;
+
+            // 左右移動判定
+            animator.SetBool("isWalking", playerMovement.IsWalking);
+
+            // 接地判定
+            animator.SetBool("isGrounded", playerMovement.IsGrounded);
+
+            // Y方向速度
+            animator.SetFloat("yVelocity", rb.linearVelocity.y);
         }
     }
 }

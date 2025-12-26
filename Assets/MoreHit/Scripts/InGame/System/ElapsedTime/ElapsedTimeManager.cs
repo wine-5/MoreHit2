@@ -3,15 +3,15 @@ using UnityEngine;
 namespace MoreHit.ElapsedTime
 {
     /// <summary>
-    /// ƒQ[ƒ€“à‚ÌŒo‰ßŠÔ‚ğŠÇ—‚·‚éƒ}ƒl[ƒWƒƒ[
+    /// ï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒoï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½lï¿½[ï¿½Wï¿½ï¿½ï¿½[
     /// </summary>
-    // SceneController‚Æ“¯‚¶‚­‹¤’Ê‚ÌSingletoneƒNƒ‰ƒX‚ğŒp³‚³‚¹‚é
+    // SceneControllerï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚ï¿½Singletonï¿½eï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public class ElapsedTimeManager : Singleton<ElapsedTimeManager>
     {
-        // ƒvƒƒWƒFƒNƒg‘S‘Ì‚Åg‚¤uŠÔ‚Ì’è”v‚Í‚±‚±‚ÉW–ñ‚·‚é
+        // ï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½gï¿½Sï¿½Ì‚Ågï¿½ï¿½ï¿½uï¿½ï¿½ï¿½Ô‚Ì’è”ï¿½vï¿½Í‚ï¿½ï¿½ï¿½ï¿½ÉWï¿½ñ‚·‚ï¿½
         public const int SECONDS_PER_MINUTE = 60;
 
-        // DontDestroyOnLoad‚ğ—LŒø‚É‚·‚éiSingletoneƒNƒ‰ƒX‚Ì‹@”\‚ğ—˜—pj
+        // DontDestroyOnLoadï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½iSingletonï¿½eï¿½Nï¿½ï¿½ï¿½Xï¿½Ì‹@ï¿½\ï¿½ğ—˜—pï¿½j
         protected override bool UseDontDestroyOnLoad => true;
 
         public float CurrentTime { get; private set; }
@@ -19,7 +19,7 @@ namespace MoreHit.ElapsedTime
 
         private void Start()
         {
-            StartTimer(); // ©•ª‚ÌŠJnƒƒ\ƒbƒh‚ğ©•ª‚ÅŒÄ‚Ô
+            StartTimer(); // ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠJï¿½nï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅŒÄ‚ï¿½
         }
         private void Update()
         {
@@ -41,7 +41,7 @@ namespace MoreHit.ElapsedTime
         }
 
         /// <summary>
-        /// Œ»İ‚ÌŠÔ‚ğ "0:00" Œ`®‚Ì•¶š—ñ‚Åæ“¾‚·‚é
+        /// ï¿½ï¿½ï¿½İ‚Ìï¿½ï¿½Ô‚ï¿½ "0:00" ï¿½`ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½Åæ“¾ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public string GetFormattedTime()
         {
@@ -49,7 +49,7 @@ namespace MoreHit.ElapsedTime
             int minutes = totalSeconds / SECONDS_PER_MINUTE;
             int seconds = totalSeconds % SECONDS_PER_MINUTE;
 
-            return string.Format("{0}:{1:00}", minutes, seconds);
+            return string.Format("æ™‚é–“ {0}:{1:00}", minutes, seconds);
         }
     }
 }
