@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MoreHit.Pool
@@ -29,10 +30,18 @@ namespace MoreHit.Pool
         /// </summary>
         private void InitializeAllPools()
         {
+            Debug.Log($"[ObjectPool] 初期化開始: poolItems count = {poolItems?.Count ?? 0}");
+            
             if (poolItems == null || poolItems.Count == 0)
             {
                 Debug.LogWarning("Object Poolの初期化が不足しています。プールリストを設定してください。");
                 return;
+            }
+
+            Debug.Log($"[ObjectPool] poolItems 詳細:");
+            foreach (var poolItem in poolItems)
+            {
+                Debug.Log($"  - Name: {poolItem?.name ?? "null"}, Prefab: {poolItem?.prefab?.name ?? "null"}");
             }
 
             foreach (var poolItem in poolItems)
@@ -136,20 +145,27 @@ namespace MoreHit.Pool
         /// <returns>アクティブ化されたGameObject</returns>
         public GameObject GetObject(GameObject prefab)
         {
+            Debug.Log($"[ObjectPool] GetObject 開始: prefab={prefab?.name ?? "null"}");
+            
             if (prefab == null)
             {
-                Debug.LogError("nullのプレハブからオブジェクトを取得できません。");
+                Debug.LogError("❌ [ObjectPool] nullのプレハブからオブジェクトを取得できません。");
                 return null;
             }
+
+            Debug.Log($"[ObjectPool] プール内のプレハブを検索: {prefab.name}");
+            Debug.Log($"[ObjectPool] 登録済みプレハブ一覧: {string.Join(", ", System.Linq.Enumerable.Select(poolItems, item => item.prefab?.name ?? "null"))}");
 
             // プールが存在し、オブジェクトがある場合
             if (objectPools.TryGetValue(prefab, out Queue<GameObject> pool) && pool.Count > 0)
             {
+                Debug.Log($"[ObjectPool] プールからオブジェクト取得: {prefab.name}, pool count={pool.Count}");
                 GameObject pooledObject = pool.Dequeue();
 
                 // nullチェック（破棄されたオブジェクトの対応）
                 if (pooledObject == null)
                 {
+                    Debug.LogWarning($"[ObjectPool] プールオブジェクトがnull、新しいインスタンスを作成: {prefab.name}");
                     // nullの場合は新しいインスタンスを作成
                     ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == prefab);
                     if (poolItem != null)
@@ -164,22 +180,27 @@ namespace MoreHit.Pool
                 var poolable = pooledObject.GetComponent<IPoolable>();
                 poolable?.OnPoolGet();
                 
+                Debug.Log($"✅ [ObjectPool] オブジェクト取得成功: {pooledObject.name}");
                 return pooledObject;
             }
             else
             {
+                Debug.Log($"[ObjectPool] プールが空または存在しない: {prefab.name}");
                 // 初期リストに含まれるプレハブか確認
                 ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == prefab);
                 if (poolItem != null)
                 {
+                    Debug.Log($"[ObjectPool] PoolItemが見つかった、autoExpand={autoExpand}");
                     if (autoExpand)
                     {
+                        Debug.Log($"[ObjectPool] プール自動拡張中: {prefab.name}");
                         // プールの自動拡張
                         ExpandPool(poolItem, expandSize);
 
                         // 拡張後に再度オブジェクトを取得
                         if (objectPools[prefab].Count > 0)
                         {
+                            Debug.Log($"[ObjectPool] 拡張後のプールからオブジェクト取得: {prefab.name}");
                             GameObject pooledObject = objectPools[prefab].Dequeue();
                             pooledObject.SetActive(true);
                             
@@ -187,18 +208,21 @@ namespace MoreHit.Pool
                             var poolable = pooledObject.GetComponent<IPoolable>();
                             poolable?.OnPoolGet();
                             
+                            Debug.Log($"✅ [ObjectPool] 拡張後オブジェクト取得成功: {pooledObject.name}");
                             return pooledObject;
                         }
                     }
 
                     // 拡張しない場合または拡張後もプールが空の場合は新しいインスタンスを作成
+                    Debug.Log($"[ObjectPool] 新しいインスタンスを作成: {prefab.name}");
                     GameObject newObject = CreateNewInstance(poolItem);
                     newObject.SetActive(true);
+                    Debug.Log($"✅ [ObjectPool] 新インスタンス作成成功: {newObject?.name ?? "null"}");
                     return newObject;
                 }
                 else
                 {
-                    Debug.LogWarning($"要求されたプレハブ '{prefab.name}' は ObjectPool に登録されていません。");
+                    Debug.LogError($"❌ [ObjectPool] 要求されたプレハブ '{prefab.name}' は ObjectPool に登録されていません。");
                     return null;
                 }
             }
@@ -388,6 +412,40 @@ namespace MoreHit.Pool
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// このObjectPoolが指定したプレハブ名をサポートしているかチェック
+        /// </summary>
+        /// <param name="prefabName">チェックしたいプレハブ名</param>
+        /// <returns>サポートしている場合はtrue</returns>
+        public bool HasPrefabWithName(string prefabName)
+        {
+            return poolItems.Exists(item => item.prefab != null && item.prefab.name == prefabName);
+        }
+
+        /// <summary>
+        /// このObjectPoolがエフェクト系のオブジェクトをサポートしているかチェック
+        /// </summary>
+        /// <returns>エフェクト系のオブジェクトをサポートしている場合はtrue</returns>
+        public bool IsEffectPool()
+        {
+            return poolItems.Exists(item => 
+                item.name.Contains("Effect") || 
+                (item.prefab != null && item.prefab.name.Contains("Effect"))
+            );
+        }
+
+        /// <summary>
+        /// このObjectPoolがプロジェクタイル系のオブジェクトをサポートしているかチェック
+        /// </summary>
+        /// <returns>プロジェクタイル系のオブジェクトをサポートしている場合はtrue</returns>
+        public bool IsProjectilePool()
+        {
+            return poolItems.Exists(item => 
+                item.name.Contains("Projectile") || 
+                (item.prefab != null && item.prefab.name.Contains("Projectile"))
+            );
         }
 
     }

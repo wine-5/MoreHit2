@@ -1,6 +1,7 @@
 using UnityEngine;
 using MoreHit.Events;
 using MoreHit.Scene;
+using MoreHit.Effect;
 
 namespace MoreHit.InGame
 {
@@ -38,8 +39,28 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnStockFull(GameObject enemy)
         {
-            Debug.Log($"敵 {enemy.name} のストックが満タンになりました！敵が無効化されます。");
-            // 必要に応じて追加の処理（エフェクト、スコア加算など）をここに追加
+            Debug.Log($"[EventsHandler] 敵 {enemy.name} のストックが満タンになりました！FullStockEffectを表示します。");
+            
+            // FullStockEffectを表示
+            if (EffectFactory.I != null)
+            {
+                var effect = EffectFactory.I.CreateEffect(MoreHit.Effect.EffectType.FullStockEffect, enemy.transform.position);
+                if (effect != null)
+                {
+                    Debug.Log($"✅ [EventsHandler] FullStockEffect表示成功: {enemy.name}");
+                    
+                    // 3秒後にエフェクトを非表示にする
+                    EffectFactory.I.ReturnEffectDelayed(effect, 3f);
+                }
+                else
+                {
+                    Debug.LogWarning($"❌ [EventsHandler] FullStockEffect生成失敗: {enemy.name}");
+                }
+            }
+            else
+            {
+                Debug.LogError("[EventsHandler] EffectFactory が見つかりません!");
+            }
         }
     }
 }

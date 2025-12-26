@@ -3,6 +3,7 @@ using UnityEngine;
 using MoreHit.Attack;
 using MoreHit.Player;
 using MoreHit.Events;
+using MoreHit.Effect;
 using TMPro;
 
 namespace MoreHit.Enemy
@@ -66,6 +67,9 @@ namespace MoreHit.Enemy
 
         protected bool canMove = true;
         protected bool isSmash = false;
+
+        // FullStockEffectの管理用
+        private GameObject currentFullStockEffect = null;
 
         public void StopMovement(float duration)
         {
@@ -136,15 +140,35 @@ namespace MoreHit.Enemy
             
             Debug.Log($"OnStockReachedRequired: {gameObject.name} の移動を停止");
             
-            // エフェクトを表示
-            if (readyToLaunchEffect != null)
+            // イベント駆動でストック満タンを通知
+            Debug.Log($"[DEBUG] GameEvents.TriggerStockFull イベントを発火: {gameObject.name}");
+            GameEvents.TriggerStockFull(gameObject);
+            
+            // デバッグ: EffectFactoryの状態を詳細チェック
+            Debug.Log($"[DEBUG] EffectFactory.I is null?: {EffectFactory.I == null}");
+            
+            // EffectFactoryを使ってFullStockEffectを表示
+            if (EffectFactory.I != null)
             {
-                readyToLaunchEffect.SetActive(true);
+                Debug.Log($"[DEBUG] EffectFactory found, attempting to create FullStockEffect at {transform.position}");
+                
+                currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
+                if (currentFullStockEffect != null)
+                {
+                    Debug.Log($"✅ FullStockEffectを表示成功: {gameObject.name}");
+                }
+                else
+                {
+                    Debug.LogWarning($"❌ FullStockEffect の生成に失敗: {gameObject.name}");
+                    Debug.LogWarning($"[DEBUG] EffectFactory.IsEffectAvailable(FullStockEffect): {EffectFactory.I.IsEffectAvailable(EffectType.FullStockEffect)}");
+                }
             }
             else
             {
-                Debug.LogWarning($"OnStockReachedRequired: {gameObject.name} のreadyToLaunchEffectが設定されていません");
+                Debug.LogError("❌ EffectFactory が見つかりません! Singletonが初期化されていない可能性があります");
             }
+            
+
             
             OnStateChanged(currentState);
         }
@@ -179,7 +203,15 @@ namespace MoreHit.Enemy
             
             Debug.Log($"TriggerBounceEffect: {gameObject.name} を速度 {finalLaunchSpeed} で発射！（余剰ストック: {extraStocks}）");
             
-            // エフェクトを非表示
+            // FullStockEffectを非表示
+            if (currentFullStockEffect != null)
+            {
+                EffectFactory.I?.ReturnEffect(currentFullStockEffect);
+                currentFullStockEffect = null;
+                Debug.Log($"FullStockEffectを非表示: {gameObject.name}");
+            }
+            
+            // 既存のreadyToLaunchEffectも非表示（後方互換性のため）
             if (readyToLaunchEffect != null)
             {
                 readyToLaunchEffect.SetActive(false);
