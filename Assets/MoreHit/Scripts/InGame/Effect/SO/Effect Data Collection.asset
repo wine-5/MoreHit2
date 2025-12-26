@@ -15,7 +15,10 @@ MonoBehaviour:
   effectList:
   - effectType: 0
     effectPrefab: {fileID: 1192326235886297752, guid: 18d0c1cb96d99904f91e3689258b8f09, type: 3}
+    duration: 2
   - effectType: 1
     effectPrefab: {fileID: 1192326235886297752, guid: 18d0c1cb96d99904f91e3689258b8f09, type: 3}
+    duration: 2
   - effectType: 2
     effectPrefab: {fileID: 1192326235886297752, guid: 18d0c1cb96d99904f91e3689258b8f09, type: 3}
+    duration: 2
