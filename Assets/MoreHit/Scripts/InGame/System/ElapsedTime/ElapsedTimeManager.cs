@@ -9,7 +9,7 @@ namespace MoreHit.ElapsedTime
     public class ElapsedTimeManager : Singleton<ElapsedTimeManager>
     {
         // プロジェクト全体で使う「時間の定数」はここに集約する
-        public const int SecondsPerMinute = 60;
+        public const int SECONDS_PER_MINUTE = 60;
 
         // DontDestroyOnLoadを有効にする（Singleton親クラスの機能を利用）
         protected override bool UseDontDestroyOnLoad => true;
@@ -42,8 +42,8 @@ namespace MoreHit.ElapsedTime
         public string GetFormattedTime()
         {
             int totalSeconds = (int)CurrentTime;
-            int minutes = totalSeconds / SecondsPerMinute;
-            int seconds = totalSeconds % SecondsPerMinute;
+            int minutes = totalSeconds / SECONDS_PER_MINUTE;
+            int seconds = totalSeconds % SECONDS_PER_MINUTE;
 
             return string.Format("{0}:{1:00}", minutes, seconds);
         }
