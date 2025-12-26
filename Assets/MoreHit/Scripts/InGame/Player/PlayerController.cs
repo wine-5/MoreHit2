@@ -13,6 +13,11 @@ namespace MoreHit.Player
         private PlayerMovement movement;
         private PlayerHealth health;
         private AttackManager attackManager;
+        public Transform groundCheck;
+        public float checkRadius = 0.2f;
+        public LayerMask groundLayer;
+
+        [HideInInspector] public bool isGrounded;
 
         private void Awake()
         {
@@ -89,5 +94,10 @@ namespace MoreHit.Player
             
             attackManager?.ExecuteChargedAttack();
         }
+
+         void Update()
+         {
+             isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+         }
     }
 }
