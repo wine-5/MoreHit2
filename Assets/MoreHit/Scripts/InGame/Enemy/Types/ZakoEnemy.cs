@@ -70,7 +70,7 @@ namespace MoreHit.Enemy
             else if (direction < 0 && currentX <= leftLimit) direction = 1;
 
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
-            spriteRenderer.flipX = (direction < 0);
+            spriteRenderer.flipX = direction < 0;
         }
 
        

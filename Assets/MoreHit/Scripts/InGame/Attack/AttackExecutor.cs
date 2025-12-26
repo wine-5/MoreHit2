@@ -5,7 +5,6 @@ namespace MoreHit.Attack
 {
     public class AttackExecutor : Singleton<AttackExecutor>
     {
-        private const float EFFECT_LIFETIME = 2f;
         protected override bool UseDontDestroyOnLoad => true;
     
         [Header("デバッグ表示")]
@@ -62,11 +61,14 @@ namespace MoreHit.Attack
                     hitCount++;
 
                 // EffectFactoryでヒットエフェクトを生成
-                if (EffectFactory.Instance != null)
+                if (EffectFactory.I != null)
                 {
-                    var effect = EffectFactory.Instance.CreateEffect(EffectType.HitEffect, hit.transform.position);
+                    var effect = EffectFactory.I.CreateEffect(EffectType.HitEffect, hit.transform.position);
                     if (effect != null)
-                        EffectFactory.Instance.ReturnEffectDelayed(effect, EFFECT_LIFETIME);
+                    {
+                        float duration = EffectFactory.I.GetEffectDuration(EffectType.HitEffect);
+                        EffectFactory.I.ReturnEffectDelayed(effect, duration);
+                    }
                 }
             }
 

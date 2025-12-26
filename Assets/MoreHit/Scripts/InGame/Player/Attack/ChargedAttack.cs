@@ -11,11 +11,14 @@ namespace MoreHit.Attack
         protected override void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
         {
             // EffectFactoryでチャージ攻撃エフェクトを生成
-            if (EffectFactory.Instance != null)
+            if (EffectFactory.I != null)
             {
-                var effect = EffectFactory.Instance.CreateEffect(EffectType.ChargeAttackEffect, position);
+                var effect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, position);
                 if (effect != null)
-                    EffectFactory.Instance.ReturnEffectDelayed(effect, 2f);
+                {
+                    float duration = EffectFactory.I.GetEffectDuration(EffectType.ChargeAttackEffect);
+                    EffectFactory.I.ReturnEffectDelayed(effect, duration);
+                }
             }
         }
     }
