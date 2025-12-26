@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using MoreHit.Events;
 
-namespace MoreHit.Effects
+namespace MoreHit.Effect
 {
     /// <summary>
     /// プレイヤーダメージ時のVignette演出を管理するクラス

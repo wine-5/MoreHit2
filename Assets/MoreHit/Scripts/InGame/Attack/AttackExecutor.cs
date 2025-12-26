@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Effect;
 
 namespace MoreHit.Attack
 {
@@ -60,7 +61,13 @@ namespace MoreHit.Attack
                 if (ApplyDamage(hit, data.Damage))
                     hitCount++;
 
-                SpawnHitEffect(hit.transform.position, data.HitEffectPrefab);
+                // EffectFactoryでヒットエフェクトを生成
+                if (EffectFactory.Instance != null)
+                {
+                    var effect = EffectFactory.Instance.CreateEffect(EffectType.HitEffect, hit.transform.position);
+                    if (effect != null)
+                        EffectFactory.Instance.ReturnEffectDelayed(effect, EFFECT_LIFETIME);
+                }
             }
 
             return hitCount;
@@ -108,14 +115,6 @@ namespace MoreHit.Attack
             {
                 enemyBase.TriggerBounceEffect();
             }
-        }
-
-        private void SpawnHitEffect(Vector3 position, GameObject effectPrefab)
-        {
-            if (effectPrefab == null) return;
-
-            GameObject effect = Instantiate(effectPrefab, position, Quaternion.identity);
-            Destroy(effect, EFFECT_LIFETIME);
         }
         
 #if UNITY_EDITOR

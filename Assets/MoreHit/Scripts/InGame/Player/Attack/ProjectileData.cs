@@ -9,11 +9,9 @@ namespace MoreHit.Attack
         [SerializeField] private float speed = 15f;
         [SerializeField] private float maxDistance = 20f;
         [SerializeField] private float lifeTime = 5f;
-        [SerializeField] private GameObject destroyEffectPrefab;
         
         public float Speed => speed;
         public float MaxDistance => maxDistance;
         public float LifeTime => lifeTime;
-        public GameObject DestroyEffectPrefab => destroyEffectPrefab;
     }
 }

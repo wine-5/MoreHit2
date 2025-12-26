@@ -34,6 +34,8 @@ namespace MoreHit.Player
 
         private int jumpCount = 0;
         private bool isGrounded;
+        public bool IsGrounded => isGrounded;
+
         private float defaultGravityScale;
 
         private void Awake()
@@ -159,7 +161,5 @@ namespace MoreHit.Player
             moveInput = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
         }
-
-        public bool IsGrounded => isGrounded;
     }
 }
