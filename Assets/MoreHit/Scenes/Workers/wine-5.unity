@@ -127,6 +127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 3568795517321926131, guid: 56ffdabe517aa3043ad6ee8e9024b5f2, type: 3}
+    - target: {fileID: 1540952279342932342, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: effectDataCollection
+      value: 
+      objectReference: {fileID: 11400000, guid: 7791a535aed54414d9e5cf1b11144adb, type: 2}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2755.2136
