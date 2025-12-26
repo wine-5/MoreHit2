@@ -31,6 +31,7 @@ namespace MoreHit.Player
 
         public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
         public bool IsFacingRight => isFacingRight;
+        public bool IsWalking => Mathf.Abs(moveInput.x) > 0.1f;
 
         private int jumpCount = 0;
         private bool isGrounded;

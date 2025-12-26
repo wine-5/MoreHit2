@@ -20,7 +20,6 @@ namespace MoreHit.Enemy
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
         [Header("エフェクト設定")]
-        [SerializeField] protected GameObject readyToLaunchEffect; // 準備完了時のエフェクト
         [SerializeField] protected float bounceEffectDuration = 3f; // 反射効果の時間
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
@@ -104,9 +103,9 @@ namespace MoreHit.Enemy
         public void AddStock(int amount)
         {
             currentStockCount += amount;
-            
+
             UpdateStockText(); // TMPテキストを更新
-            
+
             StopMovement(hitStopDuration);
 
             stockResetTimer = stockResetDuration;
@@ -118,7 +117,7 @@ namespace MoreHit.Enemy
                 OnStockReachedRequired();
             }
         }
-        
+
         /// <summary>
         /// ストックをクリア（IStockableインターフェース実装）
         /// </summary>
@@ -127,7 +126,7 @@ namespace MoreHit.Enemy
             currentStockCount = 0;
             UpdateStockText();
         }
-        
+
         /// <summary>
         /// ストックが必要数に達したときの処理（準備状態に移行）
         /// </summary>
@@ -135,10 +134,10 @@ namespace MoreHit.Enemy
         {
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
-            
+
             // イベント駆動でストック満タンを通知
             GameEvents.TriggerStockFull(gameObject);
-            
+
             // EffectFactoryを使ってFullStockEffectを表示
             if (EffectFactory.I != null)
             {
@@ -148,20 +147,20 @@ namespace MoreHit.Enemy
             {
                 Debug.LogError("❌ EffectFactory が見つかりません! Singletonが初期化されていない可能性があります");
             }
-            
+
             OnStateChanged(currentState);
         }
-        
+
         /// <summary>
         /// ReadyToLaunch状態で攻撃を受けた時の処理
         /// </summary>
         public void TriggerBounceEffect()
         {
-            if (currentState != EnemyState.ReadyToLaunch) 
+            if (currentState != EnemyState.ReadyToLaunch)
             {
                 return;
             }
-            
+
             // 必要数を超えた分のストックを計算（ボーナス威力の算出用）
             int extraStocks = currentStockCount - enemyData.Needstock;
             // 基本時間に、余剰ストックに応じた追加時間を加算
@@ -179,20 +178,14 @@ namespace MoreHit.Enemy
 
             currentConstantSpeed = finalLaunchSpeed;
             rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
-            
+
             // FullStockEffectを非表示
             if (currentFullStockEffect != null)
             {
                 EffectFactory.I?.ReturnEffect(currentFullStockEffect);
                 currentFullStockEffect = null;
             }
-            
-            // 既存のreadyToLaunchEffectも非表示（後方互換性のため）
-            if (readyToLaunchEffect != null)
-            {
-                readyToLaunchEffect.SetActive(false);
-            }
-            
+
             OnStateChanged(currentState);
         }
 
@@ -208,7 +201,7 @@ namespace MoreHit.Enemy
         {
             // 吹っ飛び状態の時はプレイヤーにダメージを与えない
             if (IsInLaunchState()) return;
-            
+
             if (AttackExecutor.I == null || enemyAttackData == null) return;
 
             // プレイヤー方向を取得
@@ -351,7 +344,7 @@ namespace MoreHit.Enemy
         public virtual void TakeDamage(int damage)
         {
             if (isDead) return; // 既に死んでいる場合は何もしない
-            
+
             // ReadyToLaunch状態では無敵（反射効果用）
             if (currentState == EnemyState.ReadyToLaunch) return;
 
@@ -375,6 +368,9 @@ namespace MoreHit.Enemy
             }
         }
 
+        /// <summary>
+        /// 死亡処理
+        /// </summary>
         public virtual void Die()
         {
             if (isDead) return;
@@ -391,10 +387,6 @@ namespace MoreHit.Enemy
         {
             // 子クラスでオーバーライド
         }
-
-        /// <summary>
-        /// 死亡処理
-        /// </summary>
 
 
         /// <summary>
