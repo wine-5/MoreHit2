@@ -197,10 +197,18 @@ namespace MoreHit.Enemy
         }
 
         /// <summary>
+        /// 吹っ飛び状態かどうかを確認
+        /// </summary>
+        public bool IsInLaunchState() => currentState == EnemyState.ReadyToLaunch || currentState == EnemyState.Launch;
+
+        /// <summary>
         /// プレイヤーに攻撃を実行（AttackExecutor経由）
         /// </summary>
         public virtual void AttackPlayer()
         {
+            // 吹っ飛び状態の時はプレイヤーにダメージを与えない
+            if (IsInLaunchState()) return;
+            
             if (AttackExecutor.I == null || enemyAttackData == null) return;
 
             // プレイヤー方向を取得

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7828012760253446485}
   - component: {fileID: 3546067750798211202}
   - component: {fileID: 176521708161786785}
+  - component: {fileID: 1947791796544306455}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -317,6 +318,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a184190e20010624ab2c63b2b86b6ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerController
+--- !u!114 &1947791796544306455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4231705497029412974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475f7b00e0fce0947b6b34f97f25b671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerDamageFlash
+  playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
+  flashInterval: 0.1
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &5672871783251214348
 GameObject:
   m_ObjectHideFlags: 0

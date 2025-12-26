@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 namespace MoreHit.Enemy
 {
     /// <summary>
@@ -11,8 +9,6 @@ namespace MoreHit.Enemy
         /// <summary>
         /// 雑魚敵の移動処理
         /// </summary>
-        /// 
-
         [Header("ジャンプ設定")]
         [SerializeField] private float jumpForce = 8f;
         [SerializeField] private float jumpInterval = 3f;
@@ -70,7 +66,7 @@ namespace MoreHit.Enemy
             else if (direction < 0 && currentX <= leftLimit) direction = 1;
 
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
-            spriteRenderer.flipX = (direction < 0);
+            spriteRenderer.flipX = direction > 0;
         }
 
        

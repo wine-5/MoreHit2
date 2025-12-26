@@ -176,5 +176,21 @@ namespace MoreHit
         {
             return effectDataDictionary != null && effectDataDictionary.ContainsKey(effectType);
         }
+        
+        /// <summary>
+        /// 指定したエフェクトタイプの継続時間を取得
+        /// </summary>
+        /// <param name="effectType">取得するエフェクトタイプ</param>
+        /// <returns>継続時間、エフェクトが見つからない場合は0f</returns>
+        public float GetEffectDuration(EffectType effectType)
+        {
+            if (effectDataDictionary.TryGetValue(effectType, out EffectData data))
+            {
+                return data.duration;
+            }
+            
+            Debug.LogWarning($"⚠️ EffectFactory: EffectType '{effectType}' のデータが見つかりません！継続時間0を返します");
+            return 0f;
+        }
     }
 }

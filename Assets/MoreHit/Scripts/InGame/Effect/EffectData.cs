@@ -9,9 +9,13 @@ namespace MoreHit.Effect
     [System.Serializable]
     public class EffectData
     {
-        [Header("Basic Settings")]
+        [Header("基本設定")]
         public EffectType effectType;
         public GameObject effectPrefab;
+        
+        [Header("継続時間設定")]
+        [Tooltip("エフェクトの継続時間（秒）")]
+        public float duration = 2f;
     }
     
     /// <summary>

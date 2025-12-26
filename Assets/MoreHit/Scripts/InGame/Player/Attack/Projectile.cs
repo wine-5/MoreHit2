@@ -32,6 +32,11 @@ namespace MoreHit.Attack
         
         public void Initialize(ProjectileData projectileData, Vector3 dir, GameObject owner)
         {
+            if (projectileData == null)
+            {
+                return;
+            }
+            
             data = projectileData;
             direction = dir.normalized;
             shooter = owner;
@@ -54,6 +59,9 @@ namespace MoreHit.Attack
         
         private void CheckMaxDistance()
         {
+            if (data == null)
+                return;
+            
             float traveledDistance = Vector3.Distance(startPosition, transform.position);
             
             if (traveledDistance >= data.MaxDistance)
@@ -62,6 +70,9 @@ namespace MoreHit.Attack
         
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other == null || data == null)
+                return;
+            
             if (ShouldIgnoreCollision(other)) return;
             
             // ヒット処理とエフェクト生成
@@ -71,11 +82,14 @@ namespace MoreHit.Attack
             ApplyStock(other);
             
             // ヒットエフェクト
-            if (EffectFactory.Instance != null)
+            if (EffectFactory.I != null)
             {
-                var effect = EffectFactory.Instance.CreateEffect(EffectType.HitEffect, transform.position);
+                var effect = EffectFactory.I.CreateEffect(EffectType.HitEffect, transform.position);
                 if (effect != null)
-                    EffectFactory.Instance.ReturnEffectDelayed(effect, 2f);
+                {
+                    float duration = EffectFactory.I.GetEffectDuration(EffectType.HitEffect);
+                    EffectFactory.I.ReturnEffectDelayed(effect, duration);
+                }
             }
             
             DestroyProjectile(true);
@@ -83,7 +97,10 @@ namespace MoreHit.Attack
         
         private bool ShouldIgnoreCollision(Collider2D other)
         {
-            if (other.gameObject == shooter)
+            if (other == null)
+                return true;
+                
+            if (shooter != null && other.gameObject == shooter)
                 return true;
             
             return !HasValidTag(other);
@@ -91,11 +108,15 @@ namespace MoreHit.Attack
         
         private bool HasValidTag(Collider2D other)
         {
+            if (data == null || data.TargetTags == null)
+                return false;
+                
             foreach (string tag in data.TargetTags)
             {
                 if (other.CompareTag(tag))
                     return true;
             }
+            
             return false;
         }
         
@@ -134,6 +155,11 @@ namespace MoreHit.Attack
         /// </summary>
         public void OnPoolGet()
         {
+            // Colliderを有効化
+            var collider = GetComponent<Collider2D>();
+            if (collider != null)
+                collider.enabled = true;
+            
             // 元のスケールを復元
             if (hasOriginalScale)
             {
@@ -156,6 +182,11 @@ namespace MoreHit.Attack
         /// </summary>
         public void OnPoolReturn()
         {
+            // Colliderを無効化して衝突を停止
+            var collider = GetComponent<Collider2D>();
+            if (collider != null)
+                collider.enabled = false;
+            
             // データをクリア
             data = null;
             direction = Vector3.zero;
