@@ -26,9 +26,7 @@ namespace MoreHit
                     Debug.LogError("ProjectileFactory: ObjectPoolが見つかりません。プールなしでは動作できません！");
                     return;
                 }
-            }
-            
-            Debug.Log("ProjectileFactory: ObjectPoolが正常にセットアップされました");
+            } 
         }
         
         /// <summary>

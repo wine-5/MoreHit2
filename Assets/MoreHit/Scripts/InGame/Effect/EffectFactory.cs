@@ -32,10 +32,7 @@ namespace MoreHit
         
         private void FindEffectObjectPool()
         {
-            Debug.Log("[EffectFactory] エフェクト用ObjectPool検索開始");
-            
             var allObjectPools = FindObjectsByType<ObjectPool>(FindObjectsSortMode.None);
-            Debug.Log($"[EffectFactory] 見つかったObjectPool数: {allObjectPools.Length}");
             
             // エフェクト用ObjectPoolを優先的に検索
             foreach (var pool in allObjectPools)
@@ -43,7 +40,6 @@ namespace MoreHit
                 if (pool.IsEffectPool())
                 {
                     objectPool = pool;
-                    Debug.Log($"✅ [EffectFactory] エフェクト用ObjectPoolを発見！");
                     return;
                 }
             }
@@ -55,15 +51,11 @@ namespace MoreHit
                 Debug.LogError("❌ EffectFactory: ObjectPool が見つかりません！プールなしでは動作できません");
                 return;
             }
-            
-            Debug.LogWarning("⚠️ [EffectFactory] エフェクト専用ObjectPoolが見つからない、汎用ObjectPoolを使用");
         }
         
         private void InitializeEffectDataDictionary()
         {
             effectDataDictionary = new Dictionary<EffectType, EffectData>();
-            
-            Debug.Log($"[EffectFactory] InitializeEffectDataDictionary 開始");
             
             if (effectDataCollection == null)
             {
@@ -71,29 +63,15 @@ namespace MoreHit
                 return;
             }
             
-            Debug.Log($"[EffectFactory] EffectDataSO found: {effectDataCollection.name}");
-            
             var allEffects = effectDataCollection.GetAllEffects();
-            Debug.Log($"[EffectFactory] Total effects count: {allEffects?.Count ?? 0}");
             
             foreach (var data in allEffects)
             {
                 if (data != null && data.effectPrefab != null)
                 {
                     effectDataDictionary[data.effectType] = data;
-                    Debug.Log($"[EffectFactory] ✅ Registered: {data.effectType} -> {data.effectPrefab.name}");
-                }
-                else if (data != null)
-                {
-                    Debug.LogWarning($"[EffectFactory] ⚠️ Skipped {data.effectType}: prefab is null");
-                }
-                else
-                {
-                    Debug.LogWarning($"[EffectFactory] ⚠️ Null effect data found");
                 }
             }
-            
-            Debug.Log($"[EffectFactory] 初期化完了: {effectDataDictionary.Count} effects registered");
         }
         
         /// <summary>
@@ -104,18 +82,12 @@ namespace MoreHit
         /// <returns>生成されたエフェクトオブジェクト</returns>
         public GameObject CreateEffect(EffectType effectType, Vector3 position)
         {
-            Debug.Log($"[EffectFactory] CreateEffect 開始: effectType={effectType}, position={position}");
-            Debug.Log($"[EffectFactory] effectDataDictionary count: {effectDataDictionary?.Count ?? 0}");
-            Debug.Log($"[EffectFactory] effectDataDictionary keys: {string.Join(", ", effectDataDictionary?.Keys?.ToArray() ?? new EffectType[0])}");
-            
             if (!effectDataDictionary.TryGetValue(effectType, out EffectData data))
             {
                 Debug.LogError($"❌ EffectFactory: EffectType '{effectType}' のデータが見つかりません！");
                 Debug.LogError($"❌ 利用可能なエフェクトタイプ: {string.Join(", ", effectDataDictionary.Keys)}");
                 return null;
             }
-            
-            Debug.Log($"[EffectFactory] EffectData found: {data.effectType}, prefab={data.effectPrefab?.name ?? "null"}");
             
             if (objectPool == null)
             {
@@ -130,9 +102,7 @@ namespace MoreHit
             }
             
             // プールからエフェクトオブジェクトを取得
-            Debug.Log($"[EffectFactory] ObjectPool.GetObject 呼び出し中...");
             var result = objectPool.GetObject(data.effectPrefab, position, Quaternion.identity);
-            Debug.Log($"[EffectFactory] 結果: {(result != null ? "✅ 成功" : "❌ 失敗")} - {result?.name ?? "null"}");
             
             return result;
         }

@@ -39,22 +39,14 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnStockFull(GameObject enemy)
         {
-            Debug.Log($"[EventsHandler] 敵 {enemy.name} のストックが満タンになりました！FullStockEffectを表示します。");
-            
             // FullStockEffectを表示
             if (EffectFactory.I != null)
             {
                 var effect = EffectFactory.I.CreateEffect(MoreHit.Effect.EffectType.FullStockEffect, enemy.transform.position);
                 if (effect != null)
                 {
-                    Debug.Log($"✅ [EventsHandler] FullStockEffect表示成功: {enemy.name}");
-                    
                     // 3秒後にエフェクトを非表示にする
                     EffectFactory.I.ReturnEffectDelayed(effect, 3f);
-                }
-                else
-                {
-                    Debug.LogWarning($"❌ [EventsHandler] FullStockEffect生成失敗: {enemy.name}");
                 }
             }
             else

@@ -133,42 +133,21 @@ namespace MoreHit.Enemy
         /// </summary>
         private void OnStockReachedRequired()
         {
-            Debug.Log($"OnStockReachedRequired: {gameObject.name} がReadyToLaunch状態に移行中");
-            
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
             
-            Debug.Log($"OnStockReachedRequired: {gameObject.name} の移動を停止");
-            
             // イベント駆動でストック満タンを通知
-            Debug.Log($"[DEBUG] GameEvents.TriggerStockFull イベントを発火: {gameObject.name}");
             GameEvents.TriggerStockFull(gameObject);
-            
-            // デバッグ: EffectFactoryの状態を詳細チェック
-            Debug.Log($"[DEBUG] EffectFactory.I is null?: {EffectFactory.I == null}");
             
             // EffectFactoryを使ってFullStockEffectを表示
             if (EffectFactory.I != null)
             {
-                Debug.Log($"[DEBUG] EffectFactory found, attempting to create FullStockEffect at {transform.position}");
-                
                 currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
-                if (currentFullStockEffect != null)
-                {
-                    Debug.Log($"✅ FullStockEffectを表示成功: {gameObject.name}");
-                }
-                else
-                {
-                    Debug.LogWarning($"❌ FullStockEffect の生成に失敗: {gameObject.name}");
-                    Debug.LogWarning($"[DEBUG] EffectFactory.IsEffectAvailable(FullStockEffect): {EffectFactory.I.IsEffectAvailable(EffectType.FullStockEffect)}");
-                }
             }
             else
             {
                 Debug.LogError("❌ EffectFactory が見つかりません! Singletonが初期化されていない可能性があります");
             }
-            
-
             
             OnStateChanged(currentState);
         }
@@ -201,14 +180,11 @@ namespace MoreHit.Enemy
             currentConstantSpeed = finalLaunchSpeed;
             rb.linearVelocity = launchVector.normalized * finalLaunchSpeed;
             
-            Debug.Log($"TriggerBounceEffect: {gameObject.name} を速度 {finalLaunchSpeed} で発射！（余剰ストック: {extraStocks}）");
-            
             // FullStockEffectを非表示
             if (currentFullStockEffect != null)
             {
                 EffectFactory.I?.ReturnEffect(currentFullStockEffect);
                 currentFullStockEffect = null;
-                Debug.Log($"FullStockEffectを非表示: {gameObject.name}");
             }
             
             // 既存のreadyToLaunchEffectも非表示（後方互換性のため）
