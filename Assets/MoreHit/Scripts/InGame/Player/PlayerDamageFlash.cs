@@ -23,9 +23,7 @@ namespace MoreHit.Player
             originalColor = spriteRenderer.color;
             
             if (playerData == null)
-            {
                 Debug.LogError($"PlayerDamageFlash: PlayerDataが設定されていません！ {gameObject.name}");
-            }
         }
         
         private void OnEnable()

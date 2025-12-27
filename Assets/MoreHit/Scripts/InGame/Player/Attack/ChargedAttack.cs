@@ -10,7 +10,6 @@ namespace MoreHit.Attack
     {
         protected override void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
         {
-            // EffectFactoryでチャージ攻撃エフェクトを生成
             if (EffectFactory.I != null)
             {
                 var effect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, position);

@@ -46,8 +46,7 @@ namespace MoreHit.Player
         /// </summary>
         public void TakeDamage(int damage)
         {
-            if (isInvincible || !isAlive)
-                return;
+            if (isInvincible || !isAlive) return;
 
             currentHealth = Mathf.Max(0, currentHealth - damage);
             
@@ -73,8 +72,7 @@ namespace MoreHit.Player
         /// </summary>
         private void UpdateInvincibleState()
         {
-            if (!isInvincible)
-                return;
+            if (!isInvincible) return;
             
             invincibleTimer -= Time.deltaTime;
             if (invincibleTimer <= 0f)
@@ -89,8 +87,7 @@ namespace MoreHit.Player
         /// </summary>
         private void Die()
         {
-            if (!isAlive)
-                return;
+            if (!isAlive) return;
 
             isAlive = false;
             GameEvents.TriggerPlayerDeath();

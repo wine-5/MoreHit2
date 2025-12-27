@@ -9,8 +9,10 @@ namespace MoreHit.Attack
     /// </summary>
     public class NormalAttack : MonoBehaviour, IAttack
     {
+        private const int COMBO_COUNT = 3;
+        
         [Header("コンボ攻撃設定")]
-        [SerializeField] private AttackData[] comboAttacks = new AttackData[3];
+        [SerializeField] private AttackData[] comboAttacks = new AttackData[COMBO_COUNT];
         [SerializeField, Min(0)] private float comboResetTime = 1f;
         [SerializeField, Min(0)] private float attackDuration = 0.3f;
         
@@ -33,8 +35,7 @@ namespace MoreHit.Attack
         
         public void Execute()
         {
-            if (!CanExecute())
-                return;
+            if (!CanExecute()) return;
             
             StartCoroutine(AttackRoutine());
         }
@@ -68,8 +69,7 @@ namespace MoreHit.Attack
         
         private AttackData GetCurrentAttackData()
         {
-            if (comboAttacks == null || comboAttacks.Length == 0)
-                return null;
+            if (comboAttacks == null || comboAttacks.Length == 0) return null;
                 
             int index = Mathf.Clamp(comboIndex, 0, comboAttacks.Length - 1);
             return comboAttacks[index];
@@ -78,13 +78,23 @@ namespace MoreHit.Attack
         private void ExecuteCurrentAttack(AttackData attackData)
         {
             Vector2 direction = GetAttackDirection();
+            Vector3 playerPosition = GetPlayerPosition();
             
             AttackExecutor.I.Execute(
                 attackData,
-                transform.position,
+                playerPosition,
                 direction,
                 gameObject
             );
+        }
+        
+        private Vector3 GetPlayerPosition()
+        {
+            if (playerMovement != null)
+                return playerMovement.transform.position;
+            
+            // フォールバック: 親オブジェクトの位置を使用
+            return transform.parent != null ? transform.parent.position : transform.position;
         }
         
         private Vector2 GetAttackDirection()
@@ -106,27 +116,23 @@ namespace MoreHit.Attack
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if (!showHitBox)
-                return;
+            if (!showHitBox) return;
             
             AttackData currentAttack = GetCurrentAttackData();
-            if (currentAttack == null)
-                return;
+            if (currentAttack == null) return;
             
             DrawHitBox(currentAttack, hitBoxColor);
         }
         
         private void OnDrawGizmosSelected()
         {
-            if (!showHitBox)
-                return;
+            if (!showHitBox) return;
             
             if (comboAttacks != null)
             {
                 for (int i = 0; i < comboAttacks.Length; i++)
                 {
-                    if (comboAttacks[i] == null)
-                        continue;
+                    if (comboAttacks[i] == null) continue;
                     
                     Color gizmoColor = Color.Lerp(Color.yellow, Color.red, (float)i / (comboAttacks.Length - 1));
                     gizmoColor.a = 0.3f;
@@ -138,7 +144,8 @@ namespace MoreHit.Attack
         private void DrawHitBox(AttackData attackData, Color color)
         {
             Vector2 direction = GetAttackDirection();
-            Vector3 hitPosition = transform.position + (Vector3)direction * attackData.Range;
+            Vector3 playerPosition = GetPlayerPosition();
+            Vector3 hitPosition = playerPosition + (Vector3)direction * attackData.Range;
             
             Gizmos.color = color;
             Gizmos.DrawWireCube(hitPosition, attackData.HitboxSize);
@@ -148,7 +155,7 @@ namespace MoreHit.Attack
             Gizmos.DrawCube(hitPosition, attackData.HitboxSize);
             
             Gizmos.color = Color.white;
-            Gizmos.DrawLine(transform.position, hitPosition);
+            Gizmos.DrawLine(playerPosition, hitPosition);
         }
 #endif
     }
