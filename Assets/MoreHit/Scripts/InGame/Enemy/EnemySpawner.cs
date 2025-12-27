@@ -16,7 +16,9 @@ namespace MoreHit.Enemy
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spawnInterval = 2f;
         [SerializeField] private int maxEnemyCount = 10;
+#if UNITY_EDITOR
         [SerializeField] private bool autoSpawn = true;
+#endif
 
         private List<EnemyBase> spawnedEnemies = new List<EnemyBase>();
         private float lastSpawnTime;

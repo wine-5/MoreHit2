@@ -180,18 +180,16 @@ namespace MoreHit.Pool
                     {
                         // プールの自動拡張
                         ExpandPool(poolItem, expandSize);
-                        
-                        // 拡張後に再度オブジェクトを取得
-                        if (objectPools[prefab].Count > 0)
-                        {
-                            GameObject pooledObject = objectPools[prefab].Dequeue();
-                            pooledObject.SetActive(true);
-                            
-                            // IPoolable インターフェースをサポート
-                            var poolable = pooledObject.GetComponent<IPoolable>();
+                    }
+                    else
+                    {
+                        // 拡張しない場合は5個で拡張
+                        ExpandPool(poolItem, 5);
+                    }
 #else
                     // プール自動拡張（リリースビルド用固定設定）
                     ExpandPool(poolItem, 5);
+#endif
                     
                     // 拡張後に再度オブジェクトを取得
                     if (objectPools[prefab].Count > 0)
@@ -201,11 +199,9 @@ namespace MoreHit.Pool
                         
                         // IPoolable インターフェースをサポート
                         var poolable = pooledObject.GetComponent<IPoolable>();
-#endif
-                            poolable?.OnPoolGet();
-                            
-                            return pooledObject;
-                        }
+                        poolable?.OnPoolGet();
+                        
+                        return pooledObject;
                     }
 
                     // 拡張しない場合または拡張後もプールが空の場合は新しいインスタンスを作成

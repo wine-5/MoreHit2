@@ -22,7 +22,9 @@ namespace MoreHit.UI
         
         [Header("設定")]
         [SerializeField] private string bossName = "Boss";
+#if UNITY_EDITOR
         [SerializeField] private float hpAnimationSpeed = 2f; // HPバーアニメーション速度
+#endif
         
         private BossEnemy currentBoss;
         private Coroutine hpBarAnimationCoroutine; // アニメーション制御用
@@ -201,7 +203,11 @@ namespace MoreHit.UI
         {
             float startRatio = hpForegroundImage.fillAmount;
             float elapsedTime = 0f;
+#if UNITY_EDITOR
             float animationDuration = Mathf.Abs(startRatio - targetRatio) / hpAnimationSpeed;
+#else
+            float animationDuration = Mathf.Abs(startRatio - targetRatio) / 2f; // リリースビルド用固定値
+#endif
             
             while (elapsedTime < animationDuration)
             {

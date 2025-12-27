@@ -18,8 +18,13 @@ namespace MoreHit
         
         private void Start()
         {
+#if UNITY_EDITOR
             if (autoInitialize)
                 InitializeFactory();
+#else
+            // リリースビルドでは常に初期化
+            InitializeFactory();
+#endif
         }
         
         public void InitializeFactory()
@@ -32,8 +37,14 @@ namespace MoreHit
                 return;
             }
             
+#if UNITY_EDITOR
             if (projectilePool == null && autoInitialize)
                 projectilePool = FindFirstObjectByType<ObjectPool>();
+#else
+            // リリースビルドでは常にプールを自動検索
+            if (projectilePool == null)
+                projectilePool = FindFirstObjectByType<ObjectPool>();
+#endif
         }
         
         public void SetObjectPool(ObjectPool pool)
