@@ -29,22 +29,18 @@ namespace MoreHit.UI
                 
         private void OnEnable()
         {
-            Debug.Log("[BossHPBar] イベント登録開始");
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
             GameEvents.OnBossDamaged += OnBossDamaged;
             GameEvents.OnStockFull += OnStockFull;
-            Debug.Log("[BossHPBar] イベント登録完了");
         }
         
         private void OnDisable()
         {
-            Debug.Log("[BossHPBar] イベント登録解除");
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
             GameEvents.OnStockFull -= OnStockFull;
-            
         }
         
         private void Update()
@@ -58,14 +54,11 @@ namespace MoreHit.UI
         /// </summary>
         private void OnBossAppear()
         {
-            Debug.Log($"[BossHPBar] OnBossAppear呼び出し - bossEnemy: {bossEnemy?.name}");
-            
             // アタッチされたBossEnemyを使用
             currentBoss = bossEnemy;
             
             if (currentBoss != null)
             {
-                Debug.Log($"[BossHPBar] Boss設定完了: {currentBoss.name}");
                 // HPバーを表示
                 ShowBossHPBar();
                 UpdateHPBar();
@@ -151,22 +144,14 @@ namespace MoreHit.UI
             int maxHP = currentBoss.GetMaxHP();
             float targetHpRatio = currentBoss.GetHPRatio();
             
-            Debug.Log($"[BossHPBar] HPバー更新 - {currentHP}/{maxHP} (目標比率: {targetHpRatio:F2})");
-            
             // Image の fillAmount でHPバーを更新
             if (hpForegroundImage != null)
             {
                 float currentFillAmount = hpForegroundImage.fillAmount;
                 
-                // 詳細なデバッグ情報を追加
-                Debug.Log($"[BossHPBar] fillAmount更新開始: {currentFillAmount:F2} -> {targetHpRatio:F2}");
-                Debug.Log($"[BossHPBar] Image設定 - Type: {hpForegroundImage.type}, enabled: {hpForegroundImage.enabled}, color: {hpForegroundImage.color}");
-                
                 // Filled タイプの詳細設定も確認
                 if (hpForegroundImage.type == Image.Type.Filled)
                 {
-                    Debug.Log($"[BossHPBar] Fill設定 - Method: {hpForegroundImage.fillMethod}, Origin: {hpForegroundImage.fillOrigin}, Amount: {hpForegroundImage.fillAmount}");
-                    
                     // 右から左に減るかチェック
                     if (hpForegroundImage.fillMethod != Image.FillMethod.Horizontal)
                     {
@@ -218,8 +203,6 @@ namespace MoreHit.UI
             float elapsedTime = 0f;
             float animationDuration = Mathf.Abs(startRatio - targetRatio) / hpAnimationSpeed;
             
-            Debug.Log($"[BossHPBar] HPバーアニメーション開始: {startRatio:F2} -> {targetRatio:F2}, 時間: {animationDuration:F2}秒");
-            
             while (elapsedTime < animationDuration)
             {
                 elapsedTime += Time.deltaTime;
@@ -236,7 +219,6 @@ namespace MoreHit.UI
             
             // 最終値を確実に設定
             hpForegroundImage.fillAmount = targetRatio;
-            Debug.Log($"[BossHPBar] HPバーアニメーション完了: {targetRatio:F2}");
             
             hpBarAnimationCoroutine = null;
         }

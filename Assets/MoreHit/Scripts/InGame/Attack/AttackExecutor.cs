@@ -32,11 +32,6 @@ namespace MoreHit.Attack
             Vector3 hitPosition = CalculateHitPosition(origin, direction, data.Range);
             Collider2D[] hits = DetectHits(hitPosition, data.HitboxSize);
 
-            // デバッグ情報を詳細出力
-            Debug.Log($"[AttackExecutor] 攻撃実行 - 攻撃者: {attacker.name}");
-            Debug.Log($"[AttackExecutor] 攻撃元: {origin}, 方向: {direction}, 範囲: {data.Range}");
-            Debug.Log($"[AttackExecutor] 攻撃位置: {hitPosition}, ヒットボックスサイズ: {data.HitboxSize}");
-
             // デバッグ情報を記録
             lastAttackData = data;
             lastHitPosition = hitPosition;
@@ -50,13 +45,11 @@ namespace MoreHit.Attack
             // 接触攻撃の場合（rangeが小さい場合）は攻撃者の位置を基準にする
             if (range <= CONTACT_ATTACK_RANGE_THRESHOLD)
             {
-                Debug.Log($"[AttackExecutor] 接触攻撃判定 - 攻撃者位置基準: {origin}");
                 return origin; // 攻撃者の位置を攻撃判定の中心にする
             }
             else
             {
                 Vector3 hitPos = origin + (Vector3)direction * range;
-                Debug.Log($"[AttackExecutor] 遠距離攻撃判定 - 計算位置: {hitPos}");
                 return hitPos;
             }
         }
@@ -87,20 +80,13 @@ namespace MoreHit.Attack
                     continue;
                 }
 
-                Debug.Log($"[AttackExecutor] ヒット対象: {hit.name}, ストック適用: {data.StockAmount}, ダメージ: {data.Damage}");
-
                 // 先にストックを適用（敵が生き残るため）
                 ApplyStock(hit, data.StockAmount);
 
                 // その後でダメージを適用
                 if (ApplyDamage(hit, data.Damage))
                 {
-                    Debug.Log($"[AttackExecutor] ダメージ適用成功: {hit.name}");
                     hitCount++;
-                }
-                else
-                {
-                    Debug.Log($"[AttackExecutor] ダメージ適用失敗: {hit.name}（IDamageableなし）");
                 }
 
                 // EffectFactoryでヒットエフェクトを生成
@@ -115,7 +101,6 @@ namespace MoreHit.Attack
                 }
             }
 
-            Debug.Log($"[AttackExecutor] ProcessHits完了 - ヒット数: {hitCount}");
             return hitCount;
         }
 

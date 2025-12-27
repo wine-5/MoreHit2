@@ -229,28 +229,13 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void AttackPlayer()
         {
-            Debug.Log($"[EnemyBase] AttackPlayer呼び出し - IsInLaunchState: {IsInLaunchState()}");
-            
             // 吹っ飛び状態の時はプレイヤーにダメージを与えない
-            if (IsInLaunchState()) 
-            {
-                Debug.Log("[EnemyBase] Launch状態のため攻撃をスキップ");
-                return;
-            }
-
-            Debug.Log($"[EnemyBase] AttackExecutor: {AttackExecutor.I}, enemyAttackData: {enemyAttackData}");
-            
-            if (AttackExecutor.I == null || enemyAttackData == null) 
-            {
-                Debug.LogWarning("[EnemyBase] AttackExecutorまたはenemyAttackDataがnullです");
-                return;
-            }
+            if (IsInLaunchState()) return;
+            if (AttackExecutor.I == null || enemyAttackData == null) return;
 
             // プレイヤー方向を取得
             Vector2 direction = GetDirectionToPlayer();
-            Debug.Log($"[EnemyBase] プレイヤーへの方向: {direction}");
 
-            Debug.Log("[EnemyBase] AttackExecutor.Execute実行");
             AttackExecutor.I.Execute(
                 enemyAttackData,
                 transform.position,
