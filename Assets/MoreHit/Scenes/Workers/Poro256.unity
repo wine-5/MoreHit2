@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -410,7 +410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &410087040
 Light:
   m_ObjectHideFlags: 0
@@ -539,7 +539,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &466115645
 Rigidbody2D:
   serializedVersion: 5
@@ -702,7 +702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &494444816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -991,7 +991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &813860883
 Transform:
   m_ObjectHideFlags: 0
@@ -1023,7 +1023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &832575518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1222,7 +1222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &910617584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1293,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &931701922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,7 +1394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1069367782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1460,7 +1460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1179678481
 Transform:
   m_ObjectHideFlags: 0
@@ -1627,7 +1627,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
   stockText: {fileID: 0}
-  readyToLaunchEffect: {fileID: 0}
   bounceEffectDuration: 3
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 0
@@ -1715,6 +1714,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.EnemySpawnSettings
   leftRange: 3
   rightRange: 3
+--- !u!1001 &1552127046
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 586.55133
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1582.9215
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9171662998556677254, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_Name
+      value: Title
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
 --- !u!1 &1800073607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,7 +1821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1844031771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2035,7 +2091,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
   stockText: {fileID: 0}
-  readyToLaunchEffect: {fileID: 0}
   bounceEffectDuration: 3
   enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
   enemyType: 1
@@ -2276,7 +2331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2068528575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2290,8 +2345,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.RulePanelManager
   rulePanel: {fileID: 585653473}
-  openButton: {fileID: 1988527020}
   closeButton: {fileID: 887990058}
+  objectsToHide: []
 --- !u!4 &2068528576
 Transform:
   m_ObjectHideFlags: 0
@@ -2324,3 +2379,4 @@ SceneRoots:
   - {fileID: 466115648}
   - {fileID: 1844031772}
   - {fileID: 2068528576}
+  - {fileID: 1552127046}
