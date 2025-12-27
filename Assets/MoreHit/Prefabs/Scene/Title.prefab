@@ -1507,6 +1507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2235031418707141124}
   - component: {fileID: 3646782005929066392}
+  - component: {fileID: 3225202082455844187}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1547,6 +1548,24 @@ MonoBehaviour:
   - {fileID: 2128451534210121643}
   - {fileID: 5314052586309202386}
   - {fileID: 8514023038810774703}
+--- !u!114 &3225202082455844187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3367065065257372894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49458f0c6d843a48941bf520515c9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Audio.AudioManager
+  audioDataArray:
+  - {fileID: 11400000, guid: ca101ea4f0e0b1f409e7cd12401e3450, type: 2}
+  maxAudioSources: 10
+  masterVolume: 1
+  bgmVolume: 1
+  seVolume: 1
 --- !u!1 &3416156524921735382
 GameObject:
   m_ObjectHideFlags: 0
@@ -4369,6 +4388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2936706385670079279}
+  - component: {fileID: 5185364582202023715}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -4398,6 +4418,18 @@ Transform:
   - {fileID: 2235031418707141124}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5185364582202023715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9171662998556677254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c45152322f51b749aab2955bf4b3155, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.TitleAudioManager
 --- !u!1 &9173039126113381431
 GameObject:
   m_ObjectHideFlags: 0

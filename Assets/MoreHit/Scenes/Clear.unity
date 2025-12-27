@@ -256,6 +256,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847315331}
   m_CullTransparentMesh: 1
+--- !u!1 &1494142525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1494142526}
+  - component: {fileID: 1494142527}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1494142526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494142525}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1038.1433, y: -150.70058, z: -2947.679}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1954388066}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1494142527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494142525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49458f0c6d843a48941bf520515c9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Audio.AudioManager
+  audioDataArray:
+  - {fileID: 11400000, guid: ca101ea4f0e0b1f409e7cd12401e3450, type: 2}
+  maxAudioSources: 1
+  masterVolume: 1
+  bgmVolume: 1
+  seVolume: 1
 --- !u!1001 &1954388062
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,14 +361,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5843086146545755223, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1494142526}
     - targetCorrespondingSourceObject: {fileID: 5861922528782019357, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 847315332}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2251388525693358532, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1954388065}
   m_SourcePrefab: {fileID: 100100000, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
 --- !u!224 &1954388063 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5861922528782019357, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+  m_PrefabInstance: {fileID: 1954388062}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1954388064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2251388525693358532, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+  m_PrefabInstance: {fileID: 1954388062}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1954388065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954388064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f97dcea62f7a1d498869d92dc7c1cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.GameClearAudioManager
+--- !u!4 &1954388066 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5843086146545755223, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
   m_PrefabInstance: {fileID: 1954388062}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
