@@ -7,7 +7,9 @@ namespace MoreHit.Enemy
     /// </summary>
     public enum EnemyType
     {
-        Zako = 0,
-        Boss = 1,
+        Normal = 0,
+        Middle = 1,
+        Large = 2,
+        Boss = 3,
     }
 }
