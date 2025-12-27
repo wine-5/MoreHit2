@@ -34,7 +34,7 @@ namespace MoreHit.Enemy
         protected float stockResetTimer = 0f;
         protected bool isStockTimerActive = false;
         [Header("システム定数")]
-        [SerializeField] private float baseLaunchDuration = 5f;
+        [SerializeField] private float baseLaunchDuration = 1f; // 5fから1fに短縮
         [SerializeField] private float stockBonusThreshold = 5f;
         [SerializeField] private float collisionBounceMultiplier = 0.2f;
         [SerializeField] private float hitStopDuration = 1.0f;
@@ -104,6 +104,8 @@ namespace MoreHit.Enemy
         {
             currentStockCount += amount;
 
+            Debug.Log($"[EnemyBase] AddStock - 追加: {amount}, 現在: {currentStockCount}, 必要数: {enemyData?.Needstock}, 現在状態: {currentState}");
+
             UpdateStockText(); // TMPテキストを更新
 
             StopMovement(hitStopDuration);
@@ -112,9 +114,14 @@ namespace MoreHit.Enemy
             isStockTimerActive = true;
 
             // ストックが必要数に達したかチェック
-            if (currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
+            if (enemyData != null && currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
             {
+                Debug.Log($"[EnemyBase] ストック満タン！OnStockReachedRequired実行 - {currentStockCount}/{enemyData.Needstock}");
                 OnStockReachedRequired();
+            }
+            else
+            {
+                Debug.Log($"[EnemyBase] ストック満タン判定失敗 - enemyData: {enemyData}, 条件: {currentStockCount}>={enemyData?.Needstock}, 状態チェック: {currentState}!={EnemyState.ReadyToLaunch}&&{currentState}!={EnemyState.Launch}");
             }
         }
 
@@ -130,10 +137,17 @@ namespace MoreHit.Enemy
         /// <summary>
         /// ストックが必要数に達したときの処理（準備状態に移行）
         /// </summary>
+        /// <summary>
+        /// ストックが必要数に達したときの処理（準備状態に移行）
+        /// </summary>
         protected virtual void OnStockReachedRequired()
         {
+            Debug.Log($"[EnemyBase] OnStockReachedRequired実行開始 - 現在状態: {currentState}");
+            
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
+
+            Debug.Log($"[EnemyBase] 状態をReadyToLaunchに変更、移動停止");
 
             // イベント駆動でストック満タンを通知
             GameEvents.TriggerStockFull(gameObject);
@@ -142,6 +156,7 @@ namespace MoreHit.Enemy
             if (EffectFactory.I != null)
             {
                 currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
+                Debug.Log("[EnemyBase] FullStockEffect生成");
             }
             else
             {
@@ -149,6 +164,7 @@ namespace MoreHit.Enemy
             }
 
             OnStateChanged(currentState);
+            Debug.Log("[EnemyBase] OnStockReachedRequired実行完了");
         }
 
         /// <summary>
@@ -199,14 +215,28 @@ namespace MoreHit.Enemy
         /// </summary>
         public virtual void AttackPlayer()
         {
+            Debug.Log($"[EnemyBase] AttackPlayer呼び出し - IsInLaunchState: {IsInLaunchState()}");
+            
             // 吹っ飛び状態の時はプレイヤーにダメージを与えない
-            if (IsInLaunchState()) return;
+            if (IsInLaunchState()) 
+            {
+                Debug.Log("[EnemyBase] Launch状態のため攻撃をスキップ");
+                return;
+            }
 
-            if (AttackExecutor.I == null || enemyAttackData == null) return;
+            Debug.Log($"[EnemyBase] AttackExecutor: {AttackExecutor.I}, enemyAttackData: {enemyAttackData}");
+            
+            if (AttackExecutor.I == null || enemyAttackData == null) 
+            {
+                Debug.LogWarning("[EnemyBase] AttackExecutorまたはenemyAttackDataがnullです");
+                return;
+            }
 
             // プレイヤー方向を取得
             Vector2 direction = GetDirectionToPlayer();
+            Debug.Log($"[EnemyBase] プレイヤーへの方向: {direction}");
 
+            Debug.Log("[EnemyBase] AttackExecutor.Execute実行");
             AttackExecutor.I.Execute(
                 enemyAttackData,
                 transform.position,
@@ -231,15 +261,60 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            int enemyIndex = (int)enemyType;
-
-            if (enemyDataSO != null && enemyDataSO.EnemyDataList != null &&
-                enemyIndex >= 0 && enemyIndex < enemyDataSO.EnemyDataList.Length)
+            Debug.Log($"[EnemyBase] LoadEnemyData開始 - 検索するenemyType: {enemyType}");
+            Debug.Log($"[EnemyBase] enemyDataSO: {enemyDataSO}");
+            
+            if (enemyDataSO == null)
             {
-
-                enemyData = enemyDataSO.EnemyDataList[enemyIndex];
+                Debug.LogError("[EnemyBase] enemyDataSOがnullです！");
+                return;
+            }
+            
+            Debug.Log($"[EnemyBase] EnemyDataList: {enemyDataSO.EnemyDataList}");
+            
+            if (enemyDataSO.EnemyDataList == null)
+            {
+                Debug.LogError("[EnemyBase] EnemyDataListがnullです！");
+                return;
+            }
+            
+            Debug.Log($"[EnemyBase] EnemyDataListの長さ: {enemyDataSO.EnemyDataList.Length}");
+            
+            // EnemyTypeで検索
+            foreach (var data in enemyDataSO.EnemyDataList)
+            {
+                if (data != null && data.EnemyType == enemyType)
+                {
+                    enemyData = data;
+                    Debug.Log($"[EnemyBase] enemyData取得成功: {enemyData}, タイプ: {data.EnemyType}");
+                    break;
+                }
+            }
+            
+            if (enemyData != null)
+            {
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
+                Debug.Log($"[EnemyBase] HP設定: {currentHP}, Stock設定: {currentStockCount}");
+            }
+            else
+            {
+                Debug.LogError($"[EnemyBase] EnemyType '{enemyType}' に対応するデータが見つかりませんでした！");
+                
+                // デバッグ用：配列の全内容を表示
+                Debug.Log("[EnemyBase] 配列の内容:");
+                for (int i = 0; i < enemyDataSO.EnemyDataList.Length; i++)
+                {
+                    var data = enemyDataSO.EnemyDataList[i];
+                    if (data != null)
+                    {
+                        Debug.Log($"  [{i}] EnemyType: {data.EnemyType}");
+                    }
+                    else
+                    {
+                        Debug.Log($"  [{i}] null");
+                    }
+                }
             }
         }
 

@@ -7,6 +7,16 @@ using MoreHit.Player;
 namespace MoreHit.Enemy
 {
     /// <summary>
+    /// ボスの攻撃パターン
+    /// </summary>
+    public enum BossAttackPattern
+    {
+        RotatingAttack,  // くるくる回転攻撃
+        SpawnMinions,    // 雑魚敵生成
+        FireballBarrage  // ファイヤーボール連射
+    }
+
+    /// <summary>
     /// ボス敵の実装クラス
     /// ストックを上限まで溜めて攻撃することで初めてHPを減らせる特殊な敵
     /// </summary>
@@ -17,8 +27,15 @@ namespace MoreHit.Enemy
         [SerializeField] private float attackRange = 5f;
         [SerializeField] private int maxHP = 300;
         
+        [Header("攻撃パターン設定")]
+        [SerializeField] private AttackData fireballAttackData; // ファイヤーボール用の攻撃データ
+        [SerializeField] private int fireballCount = 3; // ファイヤーボールの発射数
+        [SerializeField] private float fireballInterval = 0.5f; // ファイヤーボール間隔
+        [SerializeField] private int minionSpawnCount = 2; // 生成する雑魚敵の数
+        
         private float lastAttackTime = 0f;
         private bool canTakeDamage = false; // ストック満タン時のみtrue
+        private bool isAttacking = false; // 攻撃実行中フラグ
         
         protected override void Awake()
         {
@@ -31,6 +48,28 @@ namespace MoreHit.Enemy
             base.Awake();
             
             Debug.Log("[BossEnemy] Awake完了");
+        }
+        
+        /// <summary>
+        /// テスト用：Startでボスを強制的に動作状態にする
+        /// </summary>
+        private void Start()
+        {
+            Debug.Log("[BossEnemy] Start開始 - テスト用の強制動作設定");
+            
+            // 強制的に動作可能状態にする
+            canMove = true;
+            isDead = false;
+            currentState = EnemyState.Move;
+            
+            // HPを設定
+            currentHP = maxHP;
+            
+            // ボス出現イベントを発火（テスト用）
+            Debug.Log("[BossEnemy] テスト用ボス出現イベント発火");
+            GameEvents.TriggerBossAppear();
+            
+            Debug.Log($"[BossEnemy] Start完了 - canMove: {canMove}, isDead: {isDead}, currentState: {currentState}, HP: {currentHP}/{maxHP}");
         }
         
         /// <summary>
@@ -59,19 +98,7 @@ namespace MoreHit.Enemy
         
         protected override void Update()
         {
-            if (isDead)
-            {
-                Debug.Log("[BossEnemy] 死亡状態でUpdate処理をスキップ");
-                return;
-            }
-            
-            if (!canMove)
-            {
-                Debug.Log("[BossEnemy] 移動不可状態でUpdate処理をスキップ");
-                return;
-            }
-            
-            Debug.Log($"[BossEnemy] Update処理 - isDead: {isDead}, canMove: {canMove}, currentState: {currentState}");
+            if (isDead || !canMove) return;
             
             // ストックタイマー更新
             UpdateStockTimer();
@@ -123,9 +150,8 @@ namespace MoreHit.Enemy
             }
             
             Vector3 targetPosition = PlayerDataProvider.I.Position;
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            
-            Debug.Log($"[BossEnemy] 移動処理 - Target: {targetPosition}, Current: {transform.position}, Direction: {direction}");
+            Vector3 currentPosition = transform.position;
+            Vector3 direction = (targetPosition - currentPosition).normalized;
             
             // X方向のみ移動（2Dゲーム用）
             if (Mathf.Abs(direction.x) > 0.1f)
@@ -133,30 +159,25 @@ namespace MoreHit.Enemy
                 Vector2 newVelocity = new Vector2(direction.x * enemyData.MoveSpeed, rb.linearVelocity.y);
                 rb.linearVelocity = newVelocity;
                 
-                Debug.Log($"[BossEnemy] 新しいvelocity: {newVelocity}, MoveSpeed: {enemyData.MoveSpeed}");
-                
                 // スプライトの向きを調整
                 if (spriteRenderer != null)
                 {
                     spriteRenderer.flipX = direction.x < 0;
                 }
-            }
-            else
-            {
-                Debug.Log("[BossEnemy] 方向の差が小さいため移動しません");
+                else
+                {
+                    Debug.LogWarning("[BossEnemy] spriteRendererがnullです");
+                }
             }
         }
 
         /// <summary>
-        /// ボス敵の攻撃処理
+        /// ボス敵の攻撃処理（ランダムパターン選択）
         /// </summary>
         protected override void Attack()
         {
-            if (Time.time - lastAttackTime < attackCooldown)
-            {
-                Debug.Log($"[BossEnemy] 攻撃クールダウン中 - 残り時間: {attackCooldown - (Time.time - lastAttackTime)}秒");
-                return;
-            }
+            if (Time.time - lastAttackTime < attackCooldown) return;
+            if (isAttacking) return; // 攻撃実行中は新しい攻撃をしない
             
             if (PlayerDataProvider.I == null)
             {
@@ -165,55 +186,139 @@ namespace MoreHit.Enemy
             }
             
             float distanceToPlayer = Vector3.Distance(transform.position, PlayerDataProvider.I.Position);
-            Debug.Log($"[BossEnemy] プレイヤーとの距離: {distanceToPlayer}, 攻撃範囲: {attackRange}");
             
             if (distanceToPlayer <= attackRange)
             {
-                Debug.Log("[BossEnemy] プレイヤーを攻撃！");
-                AttackPlayer();
+                // ランダムに攻撃パターンを選択
+                BossAttackPattern selectedPattern = (BossAttackPattern)Random.Range(0, System.Enum.GetValues(typeof(BossAttackPattern)).Length);
+                Debug.Log($"[BossEnemy] 攻撃パターン選択: {selectedPattern}");
+                
+                StartCoroutine(ExecuteAttackPattern(selectedPattern));
                 lastAttackTime = Time.time;
             }
-            else
+        }
+        
+        /// <summary>
+        /// 選択された攻撃パターンを実行
+        /// </summary>
+        private IEnumerator ExecuteAttackPattern(BossAttackPattern pattern)
+        {
+            isAttacking = true;
+            
+            switch (pattern)
             {
-                Debug.Log("[BossEnemy] プレイヤーが攻撃範囲外");
+                case BossAttackPattern.RotatingAttack:
+                    yield return StartCoroutine(ExecuteRotatingAttack());
+                    break;
+                    
+                case BossAttackPattern.SpawnMinions:
+                    yield return StartCoroutine(ExecuteSpawnMinions());
+                    break;
+                    
+                case BossAttackPattern.FireballBarrage:
+                    yield return StartCoroutine(ExecuteFireballBarrage());
+                    break;
+            }
+            
+            isAttacking = false;
+        }
+        
+        /// <summary>
+        /// パターン1: くるくる回転攻撃（位置固定版）
+        /// </summary>
+        private IEnumerator ExecuteRotatingAttack()
+        {
+            Debug.Log("[BossEnemy] 回転攻撃実行");
+            
+            // プレイヤーの現在位置を一回だけ取得（固定ターゲット）
+            Vector3 targetPosition = PlayerDataProvider.I.Position;
+            Vector2 direction = (targetPosition - transform.position).normalized;
+            
+            Debug.Log($"[BossEnemy] 固定ターゲット位置: {targetPosition}, 方向: {direction}");
+            
+            if (AttackExecutor.I != null && enemyAttackData != null)
+            {
+                AttackExecutor.I.Execute(
+                    enemyAttackData,
+                    transform.position,
+                    direction, // 固定された方向
+                    gameObject
+                );
+            }
+            
+            yield return new WaitForSeconds(1f); // 攻撃のクールダウン
+        }
+        
+        /// <summary>
+        /// パターン2: 雑魚敵生成
+        /// </summary>
+        private IEnumerator ExecuteSpawnMinions()
+        {
+            Debug.Log("[BossEnemy] 雑魚敵生成攻撃実行");
+            
+            // TODO: EnemyFactoryとPoolの連携実装
+            // 現在は仮実装
+            for (int i = 0; i < minionSpawnCount; i++)
+            {
+                Debug.Log($"[BossEnemy] 雑魚敵 {i + 1} 生成");
+                // ここでEnemyFactory.I.SpawnEnemy()などを呼び出す予定
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+        
+        /// <summary>
+        /// パターン3: ファイヤーボール連射
+        /// </summary>
+        private IEnumerator ExecuteFireballBarrage()
+        {
+            Debug.Log("[BossEnemy] ファイヤーボール攻撃実行");
+            
+            if (fireballAttackData == null)
+            {
+                Debug.LogWarning("[BossEnemy] fireballAttackDataがnullです");
+                yield break;
+            }
+            
+            for (int i = 0; i < fireballCount; i++)
+            {
+                // 各ファイヤーボールごとにプレイヤーの現在位置に向ける
+                Vector3 currentTargetPosition = PlayerDataProvider.I.Position;
+                Vector2 fireballDirection = (currentTargetPosition - transform.position).normalized;
+                
+                Debug.Log($"[BossEnemy] ファイヤーボール {i + 1} 発射 - 方向: {fireballDirection}");
+                
+                if (AttackExecutor.I != null)
+                {
+                    AttackExecutor.I.Execute(
+                        fireballAttackData,
+                        transform.position,
+                        fireballDirection,
+                        gameObject
+                    );
+                }
+                
+                yield return new WaitForSeconds(fireballInterval);
             }
         }
 
         /// <summary>
         /// ボス専用ダメージ処理
-        /// ストック満タン状態でのみHPが減る
+        /// 通常はストックのみ増加、ストック満タンで自動的にHPが減る
         /// </summary>
         public override void TakeDamage(int damage)
         {
-            if (isDead) return;
+            Debug.Log($"[BossEnemy] TakeDamage呼び出し - damage: {damage}, isDead: {isDead}, currentState: {currentState}");
             
-            // 通常の攻撃ではストックのみ増加
-            if (currentState != EnemyState.ReadyToLaunch)
+            if (isDead) 
             {
-                // 通常状態：ストックのみ増加、HPは減らない
-                AddStock(1); // 攻撃を受ける度にストック+1
+                Debug.Log("[BossEnemy] 死亡状態のためダメージ処理をスキップ");
                 return;
             }
             
-            // ReadyToLaunch状態（ストック満タン）：HPを減らす
-            if (canTakeDamage)
-            {
-                currentHP -= damage;
-                
-                // ダメージエフェクト
-                GameEvents.TriggerEnemyDamaged(gameObject, damage);
-                
-                // ストッククリア
-                ClearStock();
-                canTakeDamage = false;
-                currentState = EnemyState.Move;
-                
-                // 死亡判定
-                if (currentHP <= 0)
-                {
-                    Die();
-                }
-            }
+            // 通常の攻撃ではストックのみ増加
+            // ストックが満タンになったら自動的にOnStockReachedRequiredが呼ばれてHPが減る
+            Debug.Log($"[BossEnemy] 通常状態でダメージ受信 - ストック追加: +1 (現在: {currentStockCount})");
+            AddStock(1); // 攻撃を受ける度にストック+1
         }
         
         /// <summary>
@@ -221,10 +326,35 @@ namespace MoreHit.Enemy
         /// </summary>
         protected override void OnStockReachedRequired()
         {
+            Debug.Log("[BossEnemy] ストック満タン！HP減少処理開始");
+            
             base.OnStockReachedRequired();
             
             // Boss専用：ダメージを受けられる状態に
             canTakeDamage = true;
+            
+            // ストック満タン時に自動的にHPを25減らす
+            const int autoDamage = 25;
+            currentHP -= autoDamage;
+            
+            Debug.Log($"[BossEnemy] ストック満タンによるHP減少 - -{autoDamage}, 残りHP: {currentHP}/{maxHP}");
+            
+            // ダメージエフェクト発火
+            GameEvents.TriggerEnemyDamaged(gameObject, autoDamage);
+            
+            // ストッククリア
+            ClearStock();
+            canTakeDamage = false;
+            currentState = EnemyState.Move;
+            
+            Debug.Log($"[BossEnemy] ストック処理完了 - HP: {currentHP}, ストック: {currentStockCount}, 状態: {currentState}");
+            
+            // 死亡判定
+            if (currentHP <= 0)
+            {
+                Debug.Log("[BossEnemy] HP0以下で死亡処理実行");
+                Die();
+            }
         }
 
         /// <summary>

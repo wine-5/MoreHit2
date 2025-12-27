@@ -847,7 +847,7 @@ GameObject:
   - component: {fileID: 1828748022}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -919,14 +919,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828748016}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.4902344, y: 1.5279999, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 300945405}
   m_Father: {fileID: 302954948}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1828748020
 Rigidbody2D:
   serializedVersion: 5
@@ -1028,6 +1028,10 @@ MonoBehaviour:
   attackCooldown: 3
   attackRange: 5
   maxHP: 300
+  fireballAttackData: {fileID: 11400000, guid: cd7f441e3696a1c4f8a48d50055662fc, type: 2}
+  fireballCount: 3
+  fireballInterval: 0.5
+  minionSpawnCount: 2
 --- !u!1001 &1883267849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1067,6 +1071,18 @@ PrefabInstance:
     - target: {fileID: 3328684463408404368, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689181533518886250, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: flashColor.b
+      value: 0.3537736
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689181533518886250, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: flashColor.g
+      value: 0.3537736
+      objectReference: {fileID: 0}
+    - target: {fileID: 3689181533518886250, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: flashColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
