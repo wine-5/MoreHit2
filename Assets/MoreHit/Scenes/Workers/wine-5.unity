@@ -326,11 +326,33 @@ MonoBehaviour:
   fireBallPrefab: {fileID: 6627324069209426517, guid: 315c3ad04974afb4d930e69053559fec, type: 3}
   fireBallSpeed: 8
   fireBallLifeTime: 5
+--- !u!114 &970138101 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1027085864 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7853232616500384663, guid: 197a9669a8231f24eb19e0c6062ce4af, type: 3}
   m_PrefabInstance: {fileID: 514956582}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1027085865 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8149705935719008472, guid: 197a9669a8231f24eb19e0c6062ce4af, type: 3}
+  m_PrefabInstance: {fileID: 514956582}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027085864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde85e77e4137a948a9b467ccf3c223e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossEnemy
 --- !u!114 &1027085869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,6 +581,18 @@ PrefabInstance:
       propertyPath: poolItems.Array.data[0].prefab
       value: 
       objectReference: {fileID: 355549986818305060, guid: a29e659c2b06dd34a9038aafefa1cd52, type: 3}
+    - target: {fileID: 3909105702400102042, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909105702400102042, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_FillMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3909105702400102042, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_FillOrigin
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -599,6 +633,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: bossEnemy
+      value: 
+      objectReference: {fileID: 1027085865}
+    - target: {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: hpBackgroundImage
+      value: 
+      objectReference: {fileID: 970138101}
+    - target: {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: hpForegroundImage
+      value: 
+      objectReference: {fileID: 1902507330}
     - target: {fileID: 5340684146586732651, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -606,6 +652,18 @@ PrefabInstance:
     - target: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_Name
       value: InGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_FillMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_FillOrigin
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -679,6 +737,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4127346afcd1744a231bf3676aed48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.ElapsedTime
+--- !u!114 &1902507330 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3909105702400102042, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &2074680868 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6398706177042928890, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}

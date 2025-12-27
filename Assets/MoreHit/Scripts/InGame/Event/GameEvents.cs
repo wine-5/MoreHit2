@@ -40,6 +40,11 @@ namespace MoreHit.Events
         public static event Action OnBossDefeated;
         
         /// <summary>
+        /// ボスがダメージを受けた時
+        /// </summary>
+        public static event Action<int> OnBossDamaged;
+        
+        /// <summary>
         /// 敵がダメージを受けた時
         /// </summary>
         public static event Action<GameObject, int> OnEnemyDamaged;
@@ -79,6 +84,11 @@ namespace MoreHit.Events
             OnBossDefeated?.Invoke();
         }
         
+        public static void TriggerBossDamaged(int damage)
+        {
+            OnBossDamaged?.Invoke(damage);
+        }
+        
         public static void TriggerEnemyDamaged(GameObject enemy, int damage)
         {
             OnEnemyDamaged?.Invoke(enemy, damage);
@@ -100,6 +110,7 @@ namespace MoreHit.Events
             OnStockChanged = null;
             OnBossAppear = null;
             OnBossDefeated = null;
+            OnBossDamaged = null;
             OnEnemyDamaged = null;
             OnEnemyDefeated = null;
         }

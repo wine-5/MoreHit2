@@ -275,16 +275,11 @@ namespace MoreHit.Enemy
         /// </summary>
         private void LoadEnemyData()
         {
-            Debug.Log($"[EnemyBase] LoadEnemyData開始 - 検索するenemyType: {enemyType}");
-            Debug.Log($"[EnemyBase] enemyDataSO: {enemyDataSO}");
-            
             if (enemyDataSO == null)
             {
                 Debug.LogError("[EnemyBase] enemyDataSOがnullです！");
                 return;
             }
-            
-            Debug.Log($"[EnemyBase] EnemyDataList: {enemyDataSO.EnemyDataList}");
             
             if (enemyDataSO.EnemyDataList == null)
             {
@@ -292,15 +287,12 @@ namespace MoreHit.Enemy
                 return;
             }
             
-            Debug.Log($"[EnemyBase] EnemyDataListの長さ: {enemyDataSO.EnemyDataList.Length}");
-            
             // EnemyTypeで検索
             foreach (var data in enemyDataSO.EnemyDataList)
             {
                 if (data != null && data.EnemyType == enemyType)
                 {
                     enemyData = data;
-                    Debug.Log($"[EnemyBase] enemyData取得成功: {enemyData}, タイプ: {data.EnemyType}");
                     break;
                 }
             }
@@ -309,7 +301,6 @@ namespace MoreHit.Enemy
             {
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
-                Debug.Log($"[EnemyBase] HP設定: {currentHP}, Stock設定: {currentStockCount}");
             }
             else
             {

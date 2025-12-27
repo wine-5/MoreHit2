@@ -68,7 +68,6 @@ namespace MoreHit.Attack
             if (size.x <= SMALL_HITBOX_THRESHOLD && size.y <= SMALL_HITBOX_THRESHOLD)
             {
                 adjustedSize = new Vector2(CONTACT_ATTACK_HITBOX_SIZE, CONTACT_ATTACK_HITBOX_SIZE); // 接触攻撃用に拡張
-                Debug.Log($"[AttackExecutor] 接触攻撃用にヒットボックス調整: {size} -> {adjustedSize}");
             }
             
             return Physics2D.OverlapBoxAll(position, adjustedSize, 0f);
@@ -78,25 +77,13 @@ namespace MoreHit.Attack
         {
             int hitCount = 0;
             
-            Debug.Log($"[AttackExecutor] ProcessHits開始 - 検出されたコライダー数: {hits.Length}, 攻撃者: {attacker.name}");
-            
-            // 検出された全オブジェクトの詳細をログ出力
-            for (int i = 0; i < hits.Length; i++)
-            {
-                Debug.Log($"[AttackExecutor] 検出オブジェクト[{i}]: {hits[i].name}, タグ: {hits[i].tag}, 位置: {hits[i].transform.position}");
-            }
-            
             // TargetTagsの内容を確認
             string targetTagsStr = data.TargetTags != null ? string.Join(", ", data.TargetTags) : "null";
-            Debug.Log($"[AttackExecutor] TargetTags: [{targetTagsStr}]");
 
             foreach (var hit in hits)
             {
-                Debug.Log($"[AttackExecutor] コライダー検査: {hit.name}, タグ: {hit.tag}");
-                
                 if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
                 {
-                    Debug.Log($"[AttackExecutor] ヒット無視: {hit.name}");
                     continue;
                 }
 
@@ -136,15 +123,10 @@ namespace MoreHit.Attack
         {
             if (hit.gameObject == attacker)
             {
-                Debug.Log($"[AttackExecutor] 攻撃者自身のため無視: {hit.name}");
                 return true;
             }
 
-            bool hasValidTag = HasValidTag(hit, targetTags);
-            Debug.Log($"[AttackExecutor] タグ検証: {hit.name} (タグ: {hit.tag}) - 有効: {hasValidTag}");
-            Debug.Log($"[AttackExecutor] ターゲットタグ一覧: [{string.Join(", ", targetTags)}]");
-            
-            return !hasValidTag;
+            return !HasValidTag(hit, targetTags);
         }
 
         private bool HasValidTag(Collider2D hit, string[] targetTags)
@@ -160,11 +142,9 @@ namespace MoreHit.Attack
         private bool ApplyDamage(Collider2D hit, int damage)
         {
             var damageable = hit.GetComponent<IDamageable>();
-            Debug.Log($"[AttackExecutor] ApplyDamage: {hit.name}, IDamageable有無: {damageable != null}, ダメージ: {damage}");
             
             if (damageable != null)
             {
-                Debug.Log($"[AttackExecutor] TakeDamage実行: {hit.name} に {damage} ダメージ");
                 damageable.TakeDamage(damage);
                 return true;
             }

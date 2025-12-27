@@ -84,6 +84,10 @@ namespace MoreHit.Enemy
                 Debug.LogError("[BossEnemy] enemyDataがnullです！HPをデフォルト値に設定します。");
                 currentHP = 300; // フォールバック値
             }
+            
+            // ボス出現イベントを発火
+            GameEvents.TriggerBossAppear();
+            Debug.Log("[BossEnemy] TriggerBossAppear実行");
         }
         
         protected override void Update()
@@ -140,7 +144,8 @@ namespace MoreHit.Enemy
             float previousHP = currentHP;
             currentHP = Mathf.Max(0, currentHP - AUTO_DAMAGE);
             
-            GameEvents.TriggerEnemyDamaged(gameObject, Mathf.FloorToInt(AUTO_DAMAGE));
+            Debug.Log($"[BossEnemy] ストック満タンでHP減少: {previousHP} -> {currentHP}, イベント発火");
+            GameEvents.TriggerBossDamaged(Mathf.FloorToInt(AUTO_DAMAGE));
             
             ClearStock();
             canTakeDamage = false;

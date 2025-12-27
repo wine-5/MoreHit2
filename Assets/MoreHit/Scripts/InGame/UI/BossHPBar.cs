@@ -17,31 +17,40 @@ namespace MoreHit.UI
         [SerializeField] private Image hpForegroundImage; // 前景（現在のHP表示）
         [SerializeField] private TextMeshProUGUI bossNameText;
         
+        [Header("Boss参照")]
+        [SerializeField] private BossEnemy bossEnemy; // Editorでアタッチ
+        
         [Header("設定")]
         [SerializeField] private string bossName = "Boss";
+        [SerializeField] private float hpAnimationSpeed = 2f; // HPバーアニメーション速度
         
         private BossEnemy currentBoss;
+        private Coroutine hpBarAnimationCoroutine; // アニメーション制御用
                 
         private void OnEnable()
         {
+            Debug.Log("[BossHPBar] イベント登録開始");
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
+            GameEvents.OnBossDamaged += OnBossDamaged;
             GameEvents.OnStockFull += OnStockFull;
+            Debug.Log("[BossHPBar] イベント登録完了");
         }
         
         private void OnDisable()
         {
+            Debug.Log("[BossHPBar] イベント登録解除");
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
+            GameEvents.OnBossDamaged -= OnBossDamaged;
             GameEvents.OnStockFull -= OnStockFull;
+            
         }
         
         private void Update()
         {
-            if (currentBoss != null && bossHPPanel.activeInHierarchy)
-            {
-                UpdateHPBar();
-            }
+            // Updateでの定期更新は削除（イベント駆動に変更）
+            // HPバーはOnBossDamagedイベント時のみアニメーション更新
         }
         
         /// <summary>
@@ -49,14 +58,21 @@ namespace MoreHit.UI
         /// </summary>
         private void OnBossAppear()
         {
-            // シーン内のBossEnemyを検索
-            currentBoss = FindFirstObjectByType<BossEnemy>();
+            Debug.Log($"[BossHPBar] OnBossAppear呼び出し - bossEnemy: {bossEnemy?.name}");
+            
+            // アタッチされたBossEnemyを使用
+            currentBoss = bossEnemy;
             
             if (currentBoss != null)
             {
+                Debug.Log($"[BossHPBar] Boss設定完了: {currentBoss.name}");
                 // HPバーを表示
                 ShowBossHPBar();
                 UpdateHPBar();
+            }
+            else
+            {
+                Debug.LogError("[BossHPBar] BossEnemyがアタッチされていません！EditorでbossEnemyフィールドにアタッチしてください。");
             }
         }
         
@@ -67,6 +83,24 @@ namespace MoreHit.UI
         {
             HideBossHPBar();
             currentBoss = null;
+        }
+        
+        /// <summary>
+        /// ボスダメージ時の処理
+        /// </summary>
+        private void OnBossDamaged(int damage)
+        {
+            Debug.Log($"[BossHPBar] OnBossDamaged呼び出し - damage: {damage}");
+            
+            if (currentBoss != null)
+            {
+                Debug.Log($"[BossHPBar] ボスダメージ検出 - 即座にHPバー更新");
+                UpdateHPBar();
+            }
+            else
+            {
+                Debug.Log($"[BossHPBar] currentBossがnull - HPバー更新スキップ");
+            }
         }
         
         /// <summary>
@@ -107,17 +141,104 @@ namespace MoreHit.UI
         /// </summary>
         private void UpdateHPBar()
         {
-            if (currentBoss == null) return;
+            if (currentBoss == null) 
+            {
+                Debug.Log("[BossHPBar] UpdateHPBar - currentBossがnull");
+                return;
+            }
             
             int currentHP = currentBoss.GetCurrentHP();
             int maxHP = currentBoss.GetMaxHP();
-            float hpRatio = currentBoss.GetHPRatio();
+            float targetHpRatio = currentBoss.GetHPRatio();
+            
+            Debug.Log($"[BossHPBar] HPバー更新 - {currentHP}/{maxHP} (目標比率: {targetHpRatio:F2})");
             
             // Image の fillAmount でHPバーを更新
             if (hpForegroundImage != null)
             {
-                hpForegroundImage.fillAmount = hpRatio;
+                float currentFillAmount = hpForegroundImage.fillAmount;
+                
+                // 詳細なデバッグ情報を追加
+                Debug.Log($"[BossHPBar] fillAmount更新開始: {currentFillAmount:F2} -> {targetHpRatio:F2}");
+                Debug.Log($"[BossHPBar] Image設定 - Type: {hpForegroundImage.type}, enabled: {hpForegroundImage.enabled}, color: {hpForegroundImage.color}");
+                
+                // Filled タイプの詳細設定も確認
+                if (hpForegroundImage.type == Image.Type.Filled)
+                {
+                    Debug.Log($"[BossHPBar] Fill設定 - Method: {hpForegroundImage.fillMethod}, Origin: {hpForegroundImage.fillOrigin}, Amount: {hpForegroundImage.fillAmount}");
+                    
+                    // 右から左に減るかチェック
+                    if (hpForegroundImage.fillMethod != Image.FillMethod.Horizontal)
+                    {
+                        Debug.LogWarning("[BossHPBar] 横向きHPバーにするには、UnityEditorでFill Methodを'Horizontal'に設定してください！");
+                    }
+                    else if (hpForegroundImage.fillOrigin != 1)
+                    {
+                        Debug.LogWarning("[BossHPBar] 右から左に減らすには、UnityEditorでFill Originを'Right(1)'に設定してください！");
+                    }
+                    
+                    // アニメーション開始
+                    StartHPBarAnimation(targetHpRatio);
+                }
+                else
+                {
+                    Debug.LogWarning($"[BossHPBar] 警告: Image TypeがSimpleです！fillAmountは無効です。UnityEditorでFilledに変更してください。");
+                }
+                
+                // 強制的にUIを更新
+                Canvas.ForceUpdateCanvases();
             }
+            else
+            {
+                Debug.LogError("[BossHPBar] hpForegroundImageがnull");
+            }
+        }
+        
+        /// <summary>
+        /// HPバーのアニメーション開始
+        /// </summary>
+        private void StartHPBarAnimation(float targetRatio)
+        {
+            // 既存のアニメーションを停止
+            if (hpBarAnimationCoroutine != null)
+            {
+                StopCoroutine(hpBarAnimationCoroutine);
+            }
+            
+            // 新しいアニメーション開始
+            hpBarAnimationCoroutine = StartCoroutine(AnimateHPBar(targetRatio));
+        }
+        
+        /// <summary>
+        /// HPバーアニメーション実行
+        /// </summary>
+        private System.Collections.IEnumerator AnimateHPBar(float targetRatio)
+        {
+            float startRatio = hpForegroundImage.fillAmount;
+            float elapsedTime = 0f;
+            float animationDuration = Mathf.Abs(startRatio - targetRatio) / hpAnimationSpeed;
+            
+            Debug.Log($"[BossHPBar] HPバーアニメーション開始: {startRatio:F2} -> {targetRatio:F2}, 時間: {animationDuration:F2}秒");
+            
+            while (elapsedTime < animationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float progress = elapsedTime / animationDuration;
+                
+                // スムーズなアニメーション（EaseOut）
+                float easedProgress = 1f - Mathf.Pow(1f - progress, 2f);
+                float currentRatio = Mathf.Lerp(startRatio, targetRatio, easedProgress);
+                
+                hpForegroundImage.fillAmount = currentRatio;
+                
+                yield return null;
+            }
+            
+            // 最終値を確実に設定
+            hpForegroundImage.fillAmount = targetRatio;
+            Debug.Log($"[BossHPBar] HPバーアニメーション完了: {targetRatio:F2}");
+            
+            hpBarAnimationCoroutine = null;
         }
         
         /// <summary>
