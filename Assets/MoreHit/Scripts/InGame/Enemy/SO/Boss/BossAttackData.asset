@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BossAttackData
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Attack.AttackData
   damage: 20
-  range: 1.5
-  hitboxSize: {x: 1, y: 1}
+  range: 0.5
+  hitboxSize: {x: 3, y: 3}
   targetTags:
   - Player
   stockAmount: 0

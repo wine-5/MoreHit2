@@ -5,6 +5,12 @@ namespace MoreHit.Attack
 {
     public class AttackExecutor : Singleton<AttackExecutor>
     {
+        
+        private const float CONTACT_ATTACK_RANGE_THRESHOLD = 2.0f; // 接触攻撃判定の閾値
+        private const float SMALL_HITBOX_THRESHOLD = 3f; // 小さなヒットボックスの判定閾値
+        private const float CONTACT_ATTACK_HITBOX_SIZE = 5f; // 接触攻撃用の拡張ヒットボックスサイズ
+        
+        
         protected override bool UseDontDestroyOnLoad => false;
     
         [Header("デバッグ表示")]
@@ -26,6 +32,11 @@ namespace MoreHit.Attack
             Vector3 hitPosition = CalculateHitPosition(origin, direction, data.Range);
             Collider2D[] hits = DetectHits(hitPosition, data.HitboxSize);
 
+            // デバッグ情報を詳細出力
+            Debug.Log($"[AttackExecutor] 攻撃実行 - 攻撃者: {attacker.name}");
+            Debug.Log($"[AttackExecutor] 攻撃元: {origin}, 方向: {direction}, 範囲: {data.Range}");
+            Debug.Log($"[AttackExecutor] 攻撃位置: {hitPosition}, ヒットボックスサイズ: {data.HitboxSize}");
+
             // デバッグ情報を記録
             lastAttackData = data;
             lastHitPosition = hitPosition;
@@ -36,29 +47,74 @@ namespace MoreHit.Attack
 
         private Vector3 CalculateHitPosition(Vector3 origin, Vector2 direction, float range)
         {
-            return origin + (Vector3)direction * range;
+            // 接触攻撃の場合（rangeが小さい場合）は攻撃者の位置を基準にする
+            if (range <= CONTACT_ATTACK_RANGE_THRESHOLD)
+            {
+                Debug.Log($"[AttackExecutor] 接触攻撃判定 - 攻撃者位置基準: {origin}");
+                return origin; // 攻撃者の位置を攻撃判定の中心にする
+            }
+            else
+            {
+                Vector3 hitPos = origin + (Vector3)direction * range;
+                Debug.Log($"[AttackExecutor] 遠距離攻撃判定 - 計算位置: {hitPos}");
+                return hitPos;
+            }
         }
 
         private Collider2D[] DetectHits(Vector3 position, Vector2 size)
         {
-            return Physics2D.OverlapBoxAll(position, size, 0f);
+            // 接触攻撃の場合はヒットボックスサイズを適切に調整
+            Vector2 adjustedSize = size;
+            if (size.x <= SMALL_HITBOX_THRESHOLD && size.y <= SMALL_HITBOX_THRESHOLD)
+            {
+                adjustedSize = new Vector2(CONTACT_ATTACK_HITBOX_SIZE, CONTACT_ATTACK_HITBOX_SIZE); // 接触攻撃用に拡張
+                Debug.Log($"[AttackExecutor] 接触攻撃用にヒットボックス調整: {size} -> {adjustedSize}");
+            }
+            
+            return Physics2D.OverlapBoxAll(position, adjustedSize, 0f);
         }
 
         private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
         {
             int hitCount = 0;
+            
+            Debug.Log($"[AttackExecutor] ProcessHits開始 - 検出されたコライダー数: {hits.Length}, 攻撃者: {attacker.name}");
+            
+            // 検出された全オブジェクトの詳細をログ出力
+            for (int i = 0; i < hits.Length; i++)
+            {
+                Debug.Log($"[AttackExecutor] 検出オブジェクト[{i}]: {hits[i].name}, タグ: {hits[i].tag}, 位置: {hits[i].transform.position}");
+            }
+            
+            // TargetTagsの内容を確認
+            string targetTagsStr = data.TargetTags != null ? string.Join(", ", data.TargetTags) : "null";
+            Debug.Log($"[AttackExecutor] TargetTags: [{targetTagsStr}]");
 
             foreach (var hit in hits)
             {
+                Debug.Log($"[AttackExecutor] コライダー検査: {hit.name}, タグ: {hit.tag}");
+                
                 if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
+                {
+                    Debug.Log($"[AttackExecutor] ヒット無視: {hit.name}");
                     continue;
+                }
+
+                Debug.Log($"[AttackExecutor] ヒット対象: {hit.name}, ストック適用: {data.StockAmount}, ダメージ: {data.Damage}");
 
                 // 先にストックを適用（敵が生き残るため）
                 ApplyStock(hit, data.StockAmount);
 
                 // その後でダメージを適用
                 if (ApplyDamage(hit, data.Damage))
+                {
+                    Debug.Log($"[AttackExecutor] ダメージ適用成功: {hit.name}");
                     hitCount++;
+                }
+                else
+                {
+                    Debug.Log($"[AttackExecutor] ダメージ適用失敗: {hit.name}（IDamageableなし）");
+                }
 
                 // EffectFactoryでヒットエフェクトを生成
                 if (EffectFactory.I != null)
@@ -72,15 +128,23 @@ namespace MoreHit.Attack
                 }
             }
 
+            Debug.Log($"[AttackExecutor] ProcessHits完了 - ヒット数: {hitCount}");
             return hitCount;
         }
 
         private bool ShouldIgnoreHit(Collider2D hit, GameObject attacker, string[] targetTags)
         {
             if (hit.gameObject == attacker)
+            {
+                Debug.Log($"[AttackExecutor] 攻撃者自身のため無視: {hit.name}");
                 return true;
+            }
 
-            return !HasValidTag(hit, targetTags);
+            bool hasValidTag = HasValidTag(hit, targetTags);
+            Debug.Log($"[AttackExecutor] タグ検証: {hit.name} (タグ: {hit.tag}) - 有効: {hasValidTag}");
+            Debug.Log($"[AttackExecutor] ターゲットタグ一覧: [{string.Join(", ", targetTags)}]");
+            
+            return !hasValidTag;
         }
 
         private bool HasValidTag(Collider2D hit, string[] targetTags)
@@ -96,8 +160,11 @@ namespace MoreHit.Attack
         private bool ApplyDamage(Collider2D hit, int damage)
         {
             var damageable = hit.GetComponent<IDamageable>();
+            Debug.Log($"[AttackExecutor] ApplyDamage: {hit.name}, IDamageable有無: {damageable != null}, ダメージ: {damage}");
+            
             if (damageable != null)
             {
+                Debug.Log($"[AttackExecutor] TakeDamage実行: {hit.name} に {damage} ダメージ");
                 damageable.TakeDamage(damage);
                 return true;
             }

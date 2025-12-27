@@ -32,4 +32,4 @@ MonoBehaviour:
     maxHP: 200
     moveSpeed: 6
     stockCount: 0
-    needstock: 20
+    needstock: 2
