@@ -5,6 +5,12 @@ namespace MoreHit.Attack
 {
     public class AttackExecutor : Singleton<AttackExecutor>
     {
+        
+        private const float CONTACT_ATTACK_RANGE_THRESHOLD = 2.0f; // 接触攻撃判定の閾値
+        private const float SMALL_HITBOX_THRESHOLD = 3f; // 小さなヒットボックスの判定閾値
+        private const float CONTACT_ATTACK_HITBOX_SIZE = 5f; // 接触攻撃用の拡張ヒットボックスサイズ
+        
+        
         protected override bool UseDontDestroyOnLoad => false;
     
         [Header("デバッグ表示")]
@@ -36,29 +42,52 @@ namespace MoreHit.Attack
 
         private Vector3 CalculateHitPosition(Vector3 origin, Vector2 direction, float range)
         {
-            return origin + (Vector3)direction * range;
+            // 接触攻撃の場合（rangeが小さい場合）は攻撃者の位置を基準にする
+            if (range <= CONTACT_ATTACK_RANGE_THRESHOLD)
+            {
+                return origin; // 攻撃者の位置を攻撃判定の中心にする
+            }
+            else
+            {
+                Vector3 hitPos = origin + (Vector3)direction * range;
+                return hitPos;
+            }
         }
 
         private Collider2D[] DetectHits(Vector3 position, Vector2 size)
         {
-            return Physics2D.OverlapBoxAll(position, size, 0f);
+            // 接触攻撃の場合はヒットボックスサイズを適切に調整
+            Vector2 adjustedSize = size;
+            if (size.x <= SMALL_HITBOX_THRESHOLD && size.y <= SMALL_HITBOX_THRESHOLD)
+            {
+                adjustedSize = new Vector2(CONTACT_ATTACK_HITBOX_SIZE, CONTACT_ATTACK_HITBOX_SIZE); // 接触攻撃用に拡張
+            }
+            
+            return Physics2D.OverlapBoxAll(position, adjustedSize, 0f);
         }
 
         private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
         {
             int hitCount = 0;
+            
+            // TargetTagsの内容を確認
+            string targetTagsStr = data.TargetTags != null ? string.Join(", ", data.TargetTags) : "null";
 
             foreach (var hit in hits)
             {
                 if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
+                {
                     continue;
+                }
 
                 // 先にストックを適用（敵が生き残るため）
                 ApplyStock(hit, data.StockAmount);
 
                 // その後でダメージを適用
                 if (ApplyDamage(hit, data.Damage))
+                {
                     hitCount++;
+                }
 
                 // EffectFactoryでヒットエフェクトを生成
                 if (EffectFactory.I != null)
@@ -78,7 +107,9 @@ namespace MoreHit.Attack
         private bool ShouldIgnoreHit(Collider2D hit, GameObject attacker, string[] targetTags)
         {
             if (hit.gameObject == attacker)
+            {
                 return true;
+            }
 
             return !HasValidTag(hit, targetTags);
         }
@@ -96,6 +127,7 @@ namespace MoreHit.Attack
         private bool ApplyDamage(Collider2D hit, int damage)
         {
             var damageable = hit.GetComponent<IDamageable>();
+            
             if (damageable != null)
             {
                 damageable.TakeDamage(damage);

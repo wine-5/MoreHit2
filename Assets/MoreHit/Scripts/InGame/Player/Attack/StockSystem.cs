@@ -22,8 +22,7 @@ namespace MoreHit.Player
         
         public void AddStock(int amount)
         {
-            if (amount <= 0)
-                return;
+            if (amount <= 0) return;
             
             int previousStock = currentStock;
             currentStock = Mathf.Min(currentStock + amount, MaxStock);
@@ -39,8 +38,7 @@ namespace MoreHit.Player
         
         public void ClearStock()
         {
-            if (currentStock == 0)
-                return;
+            if (currentStock == 0) return;
             
             currentStock = 0;
             GameEvents.TriggerStockChanged(currentStock, MaxStock);

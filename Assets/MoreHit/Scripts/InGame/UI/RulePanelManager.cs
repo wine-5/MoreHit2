@@ -3,29 +3,29 @@ using UnityEngine;
 namespace MoreHit.UI
 {
     /// <summary>
-    /// ƒ‹[ƒ‹ƒpƒlƒ‹‚Ì•\¦§Œä‚ÆA•¡”‚ÌUI—v‘f‚Ì•\¦E”ñ•\¦‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+    /// ãƒ«ãƒ¼ãƒ«ãƒ‘ãƒãƒ«ã®è¡¨ç¤ºç®¡ç†ã¨ã€ä»–ã®UIè¦ç´ ã®è¡¨ç¤ºãƒ»éè¡¨ç¤ºã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class RulePanelManager : MonoBehaviour
     {
-        [Header("ƒpƒlƒ‹İ’è")]
+        [Header("ãƒ‘ãƒãƒ«è¨­å®š")]
         [SerializeField]
         private GameObject rulePanel; 
 
         [SerializeField]
-        private GameObject closeButton; // ƒpƒlƒ‹‚ğ•Â‚¶‚éƒ{ƒ^ƒ“
+        private GameObject closeButton; // ãƒ‘ãƒãƒ«é–‰ã˜ã‚‹ãƒœã‚¿ãƒ³
 
-        [Header("•\¦E”ñ•\¦‚ğØ‚è‘Ö‚¦‚éƒIƒuƒWƒFƒNƒg")]
+        [Header("è¡¨ç¤ºãƒ»éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
         [SerializeField]
-        private GameObject[] objectsToHide; // ƒpƒlƒ‹‚ªŠJ‚¢‚Ä‚¢‚é‚É‰B‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚ÌƒŠƒXƒg
+        private GameObject[] objectsToHide; // ãƒ‘ãƒãƒ«ãŒé–‹ã„ã¦ã„ã‚‹æ™‚ã«éš ã™ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªã‚¹ãƒˆ
 
         private void Start()
         {
-            // ‰Šúó‘Ô‚Íƒpƒlƒ‹‚ğ•Â‚¶‚é
+            // åˆæœŸçŠ¶æ…‹ã¯ãƒ‘ãƒãƒ«éè¡¨ç¤º
             ClosePanel();
         }
 
         /// <summary>
-        /// ƒpƒlƒ‹‚ğ•\¦‚µAw’è‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä‰B‚·
+        /// ãƒ‘ãƒãƒ«ã‚’è¡¨ç¤ºã—ã€æŒ‡å®šã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦éš ã™
         /// </summary>
         public void OpenPanel()
         {
@@ -34,12 +34,12 @@ namespace MoreHit.UI
             rulePanel.SetActive(true);
             if (closeButton != null) closeButton.SetActive(true);
 
-            // ƒŠƒXƒg‚É“o˜^‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä”ñ•\¦‚É‚·‚é
+            // ãƒªã‚¹ãƒˆã«ç™»éŒ²ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦éè¡¨ç¤ºã«ã™ã‚‹
             ToggleObjects(false);
         }
 
         /// <summary>
-        /// ƒpƒlƒ‹‚ğ‰B‚µAw’è‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚ÄÄ•\¦‚·‚é
+        /// ãƒ‘ãƒãƒ«ã‚’é–‰ã˜ã€æŒ‡å®šã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦å†è¡¨ç¤ºã™ã‚‹
         /// </summary>
         public void ClosePanel()
         {
@@ -48,12 +48,12 @@ namespace MoreHit.UI
             rulePanel.SetActive(false);
             if (closeButton != null) closeButton.SetActive(false);
 
-            // ƒŠƒXƒg‚É“o˜^‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä•\¦‚É‚·‚é
+            // ãƒªã‚¹ãƒˆã«ç™»éŒ²ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦è¡¨ç¤ºã«ã™ã‚‹
             ToggleObjects(true);
         }
 
         /// <summary>
-        /// ”z—ñ“à‚ÌƒIƒuƒWƒFƒNƒg‚Ì•\¦ó‘Ô‚ğˆêŠ‡‚ÅØ‚è‘Ö‚¦‚é
+        /// é…åˆ—å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¡¨ç¤ºçŠ¶æ…‹ã‚’ä¸€æ‹¬ã§åˆ‡ã‚Šæ›¿ãˆã‚‹
         /// </summary>
         private void ToggleObjects(bool state)
         {

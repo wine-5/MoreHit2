@@ -3,15 +3,15 @@ using UnityEngine;
 namespace MoreHit.ElapsedTime
 {
     /// <summary>
-    /// �Q�[�����̌o�ߎ��Ԃ��Ǘ�����}�l�[�W���[
+    /// ゲーム内の経過時間を管理するマネージャー
     /// </summary>
-    // SceneController�Ɠ��������ʂ�Singleton�e�N���X���p��������
+    // SceneControllerと同じ機能のSingleton基クラスを利用する
     public class ElapsedTimeManager : Singleton<ElapsedTimeManager>
     {
-        // �v���W�F�N�g�S�̂Ŏg���u���Ԃ̒萔�v�͂����ɏW�񂷂�
+        // プロジェクト全体で使う「時間の定数」はここに集約する
         public const int SECONDS_PER_MINUTE = 60;
 
-        // DontDestroyOnLoad��L���ɂ���iSingleton�e�N���X�̋@�\�𗘗p�j
+        // DontDestroyOnLoadを無効にする（Singleton基クラスの機能を利用）
         protected override bool UseDontDestroyOnLoad => true;
 
         public float CurrentTime { get; private set; }
@@ -19,7 +19,7 @@ namespace MoreHit.ElapsedTime
 
         private void Start()
         {
-            StartTimer(); // �����̊J�n���\�b�h�������ŌĂ�
+            StartTimer(); // タイマーの開始メソッドをここで呼ぶ
         }
         private void Update()
         {
@@ -41,7 +41,7 @@ namespace MoreHit.ElapsedTime
         }
 
         /// <summary>
-        /// ���݂̎��Ԃ� "0:00" �`���̕�����Ŏ擾����
+        /// 現在の時間を "0:00" 形式の文字列で取得する
         /// </summary>
         public string GetFormattedTime()
         {

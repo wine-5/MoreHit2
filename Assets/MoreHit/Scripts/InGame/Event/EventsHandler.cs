@@ -14,12 +14,14 @@ namespace MoreHit.InGame
         {
             GameEvents.OnPlayerDeath += OnPlayerDeath;
             GameEvents.OnStockFull += OnStockFull;
+            GameEvents.OnBossDefeated += OnBossDefeated;
         }
 
         private void OnDisable()
         {
             GameEvents.OnPlayerDeath -= OnPlayerDeath;
             GameEvents.OnStockFull -= OnStockFull;
+            GameEvents.OnBossDefeated -= OnBossDefeated;
         }
 
         /// <summary>
@@ -29,6 +31,19 @@ namespace MoreHit.InGame
         {
             if (SceneController.I != null)
                 SceneController.I.ChangeToGameOverScene();
+            else
+                Debug.LogError("EventsHandler: SceneController instance not found!");
+        }
+        
+        /// <summary>
+        /// ボス撃破時の処理
+        /// </summary>
+        private void OnBossDefeated()
+        {
+            Debug.Log("[EventsHandler] ボス撃破イベント受信 - クリアシーンに遷移中...");
+            
+            if (SceneController.I != null)
+                SceneController.I.LoadScene(SceneName.Clear);
             else
                 Debug.LogError("EventsHandler: SceneController instance not found!");
         }

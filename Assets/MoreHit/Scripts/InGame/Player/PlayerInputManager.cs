@@ -17,6 +17,7 @@ namespace MoreHit.Player
         public UnityEvent onRangedAttack;
         public UnityEvent onChargeRangedAttack;
         public UnityEvent<bool> onChargeStateChanged;
+        public UnityEvent onChargeStarted;  // チャージ開始イベント（即座に発火）
 
         private PlayerInput playerInput;
         private InputAction moveAction;
@@ -27,7 +28,11 @@ namespace MoreHit.Player
 
         private float chargeHoldTime = 0f;
         private bool isChargeReady = false;
-        private const float CHARGE_READY_THRESHOLD = 1.0f;
+        private const float CHARGE_READY_THRESHOLD = 0.8f;
+        private const float CHARGE_COOLDOWN = 0.01f;
+        private bool wasChargingLastFrame = false; // Wキー押下状態の前フレーム記録
+        private float chargeCooldownRemaining = 0f; // チャージショットクールタイム
+
 
         private void Awake()
         {
@@ -51,8 +56,6 @@ namespace MoreHit.Player
             normalAttackAction.performed += OnNormalAttack;
 
             rangedAttackAction.performed += OnRangedAttack;
-            
-            chargeButtonAction.canceled += OnChargeButtonCanceled;
         }
 
         private void OnDisable()
@@ -66,13 +69,12 @@ namespace MoreHit.Player
             normalAttackAction.performed -= OnNormalAttack;
 
             rangedAttackAction.performed -= OnRangedAttack;
-            
-            chargeButtonAction.canceled -= OnChargeButtonCanceled;
         }
 
         private void Update()
         {
             UpdateChargeAttacks();
+            UpdateChargeCooldown();
         }
 
         /// <summary>
@@ -80,16 +82,49 @@ namespace MoreHit.Player
         /// </summary>
         private void UpdateChargeAttacks()
         {
-            if (chargeButtonAction.IsPressed() && !isChargeReady)
+            bool isChargeButtonPressed = chargeButtonAction.IsPressed();
+            
+            // Wキー押下開始時：即座にエフェクトを開始
+            if (isChargeButtonPressed && !wasChargingLastFrame)
             {
+                chargeHoldTime = 0f;
+                isChargeReady = false;
+                onChargeStarted?.Invoke(); // 即座にエフェクト開始
+            }
+            
+            if (isChargeButtonPressed)
+            {
+                // Wキーを押している間、時間を積算
                 chargeHoldTime += Time.deltaTime;
-
-                if (chargeHoldTime >= CHARGE_READY_THRESHOLD)
+                
+                // 0.8秒以上押していればチャージ準備完了
+                if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
                 {
                     isChargeReady = true;
                     onChargeStateChanged?.Invoke(true);
                 }
             }
+            else
+            {
+                // Wキーを離したらチャージ状態をリセット
+                if (chargeHoldTime > 0f || isChargeReady)
+                {
+                    chargeHoldTime = 0f;
+                    isChargeReady = false;
+                    onChargeStateChanged?.Invoke(false);
+                }
+            }
+            
+            wasChargingLastFrame = isChargeButtonPressed;
+        }
+
+        /// <summary>
+        /// チャージショットのクールタイム管理
+        /// </summary>
+        private void UpdateChargeCooldown()
+        {
+            if (chargeCooldownRemaining > 0f)
+                chargeCooldownRemaining -= Time.deltaTime;
         }
 
         private void OnMove(InputAction.CallbackContext context)
@@ -114,24 +149,21 @@ namespace MoreHit.Player
 
         private void OnRangedAttack(InputAction.CallbackContext context)
         {
-            if (isChargeReady)
+            // 現在Wキーを押しているかつチャージ準備が完了している場合は溜め射撃
+            if (chargeButtonAction.IsPressed() && isChargeReady && chargeCooldownRemaining <= 0f)
             {
                 onChargeRangedAttack?.Invoke();
-                ResetChargeState();
+                chargeCooldownRemaining = CHARGE_COOLDOWN; // クールタイム設定
             }
             else
-                onRangedAttack?.Invoke();
-        }
-        
-        private void OnChargeButtonCanceled(InputAction.CallbackContext context)
-        {
-            ResetChargeState();
+                onRangedAttack?.Invoke(); // それ以外は通常射撃
         }
         
         private void ResetChargeState()
         {
             chargeHoldTime = 0f;
             isChargeReady = false;
+            chargeCooldownRemaining = 0f;
             onChargeStateChanged?.Invoke(false);
         }
     }

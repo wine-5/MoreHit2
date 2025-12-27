@@ -29,7 +29,7 @@ MonoBehaviour:
     stockCount: 0
     needstock: 8
   - enemyType: 3
-    maxHP: 300
-    moveSpeed: 7
+    maxHP: 200
+    moveSpeed: 6
     stockCount: 0
-    needstock: 18
+    needstock: 2
