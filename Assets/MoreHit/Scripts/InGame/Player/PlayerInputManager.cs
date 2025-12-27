@@ -17,6 +17,8 @@ namespace MoreHit.Player
         public UnityEvent onRangedAttack;
         public UnityEvent onChargeRangedAttack;
         public UnityEvent<bool> onChargeStateChanged;
+        public UnityEvent onChargeStarted;  // チャージ開始イベント
+        public UnityEvent onChargeCanceled; // チャージキャンセルイベント
 
         private PlayerInput playerInput;
         private InputAction moveAction;
@@ -28,6 +30,9 @@ namespace MoreHit.Player
         private float chargeHoldTime = 0f;
         private bool isChargeReady = false;
         private const float CHARGE_READY_THRESHOLD = 1.0f;
+        
+        // チャージ状態管理
+        private bool wasChargingLastFrame = false;
 
         private void Awake()
         {
@@ -80,7 +85,15 @@ namespace MoreHit.Player
         /// </summary>
         private void UpdateChargeAttacks()
         {
-            if (chargeButtonAction.IsPressed() && !isChargeReady)
+            bool isChargeButtonPressed = chargeButtonAction.IsPressed();
+            
+            // チャージ開始の検知
+            if (isChargeButtonPressed && !wasChargingLastFrame)
+            {
+                onChargeStarted?.Invoke();
+            }
+            
+            if (isChargeButtonPressed && !isChargeReady)
             {
                 chargeHoldTime += Time.deltaTime;
 
@@ -90,6 +103,14 @@ namespace MoreHit.Player
                     onChargeStateChanged?.Invoke(true);
                 }
             }
+            
+            // チャージキャンセルの検知
+            if (!isChargeButtonPressed && wasChargingLastFrame)
+            {
+                onChargeCanceled?.Invoke();
+            }
+            
+            wasChargingLastFrame = isChargeButtonPressed;
         }
 
         private void OnMove(InputAction.CallbackContext context)
@@ -131,6 +152,7 @@ namespace MoreHit.Player
         {
             chargeHoldTime = 0f;
             isChargeReady = false;
+            wasChargingLastFrame = false;
             onChargeStateChanged?.Invoke(false);
         }
     }
