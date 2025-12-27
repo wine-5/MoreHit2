@@ -29,10 +29,8 @@ namespace MoreHit.Player
 
         private float chargeHoldTime = 0f;
         private bool isChargeReady = false;
-        private const float CHARGE_READY_THRESHOLD = 1.0f;
-        
-        // チャージ状態管理
-        private bool wasChargingLastFrame = false;
+        private const float CHARGE_READY_THRESHOLD = 0.8f;
+
 
         private void Awake()
         {
@@ -56,8 +54,6 @@ namespace MoreHit.Player
             normalAttackAction.performed += OnNormalAttack;
 
             rangedAttackAction.performed += OnRangedAttack;
-            
-            chargeButtonAction.canceled += OnChargeButtonCanceled;
         }
 
         private void OnDisable()
@@ -71,8 +67,6 @@ namespace MoreHit.Player
             normalAttackAction.performed -= OnNormalAttack;
 
             rangedAttackAction.performed -= OnRangedAttack;
-            
-            chargeButtonAction.canceled -= OnChargeButtonCanceled;
         }
 
         private void Update()
@@ -87,30 +81,28 @@ namespace MoreHit.Player
         {
             bool isChargeButtonPressed = chargeButtonAction.IsPressed();
             
-            // チャージ開始の検知
-            if (isChargeButtonPressed && !wasChargingLastFrame)
+            if (isChargeButtonPressed)
             {
-                onChargeStarted?.Invoke();
-            }
-            
-            if (isChargeButtonPressed && !isChargeReady)
-            {
+                // Wキーを押している間、時間を積算
                 chargeHoldTime += Time.deltaTime;
-
-                if (chargeHoldTime >= CHARGE_READY_THRESHOLD)
+                
+                // 0.8秒以上押していればチャージ準備完了
+                if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
                 {
                     isChargeReady = true;
                     onChargeStateChanged?.Invoke(true);
                 }
             }
-            
-            // チャージキャンセルの検知
-            if (!isChargeButtonPressed && wasChargingLastFrame)
+            else
             {
-                onChargeCanceled?.Invoke();
+                // Wキーを離したらチャージ状態をリセット
+                if (chargeHoldTime > 0f || isChargeReady)
+                {
+                    chargeHoldTime = 0f;
+                    isChargeReady = false;
+                    onChargeStateChanged?.Invoke(false);
+                }
             }
-            
-            wasChargingLastFrame = isChargeButtonPressed;
         }
 
         private void OnMove(InputAction.CallbackContext context)
@@ -135,24 +127,22 @@ namespace MoreHit.Player
 
         private void OnRangedAttack(InputAction.CallbackContext context)
         {
-            if (isChargeReady)
+            // 現在Wキーを押しているかつチャージ準備が完了している場合は溜め射撃
+            if (chargeButtonAction.IsPressed() && isChargeReady)
             {
                 onChargeRangedAttack?.Invoke();
-                ResetChargeState();
             }
-            else onRangedAttack?.Invoke();
-        }
-        
-        private void OnChargeButtonCanceled(InputAction.CallbackContext context)
-        {
-            ResetChargeState();
+            else
+            {
+                // それ以外は通常射撃
+                onRangedAttack?.Invoke();
+            }
         }
         
         private void ResetChargeState()
         {
             chargeHoldTime = 0f;
             isChargeReady = false;
-            wasChargingLastFrame = false;
             onChargeStateChanged?.Invoke(false);
         }
     }
