@@ -23,7 +23,7 @@ namespace MoreHit.Enemy
         [SerializeField] protected float bounceEffectDuration = 3f; // 反射効果の時間
         [Header("敵設定")]
         [SerializeField] protected EnemyDataSO enemyDataSO;
-        [SerializeField] protected EnemyType enemyType = EnemyType.Zako;
+        [SerializeField] protected EnemyType enemyType = EnemyType.Normal;
         [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);

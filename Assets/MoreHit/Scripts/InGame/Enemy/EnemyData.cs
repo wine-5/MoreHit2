@@ -6,7 +6,7 @@ namespace MoreHit.Enemy
     public class EnemyData
     {
         [Header("基本情報")]
-        [SerializeField] private EnemyType enemyType = EnemyType.Zako;
+        [SerializeField] private EnemyType enemyType = EnemyType.Normal;
         
         [Header("ステータス")]
         [SerializeField] private float maxHP = 100f;
