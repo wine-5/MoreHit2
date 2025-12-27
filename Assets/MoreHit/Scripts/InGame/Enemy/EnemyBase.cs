@@ -111,14 +111,9 @@ namespace MoreHit.Enemy
         {
             // 死亡状態または非アクティブの場合はストック追加を無視
             if (isDead || !gameObject.activeInHierarchy)
-            {
-                Debug.Log("[EnemyBase] 死亡状態または非アクティブのためAddStockをスキップ");
                 return;
-            }
             
             currentStockCount += amount;
-
-            Debug.Log($"[EnemyBase] AddStock - 追加: {amount}, 現在: {currentStockCount}, 必要数: {enemyData?.Needstock}, 現在状態: {currentState}");
 
             UpdateStockText(); // TMPテキストを更新
 
@@ -130,12 +125,7 @@ namespace MoreHit.Enemy
             // ストックが必要数に達したかチェック
             if (enemyData != null && currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
             {
-                Debug.Log($"[EnemyBase] ストック満タン！OnStockReachedRequired実行 - {currentStockCount}/{enemyData.Needstock}");
                 OnStockReachedRequired();
-            }
-            else
-            {
-                Debug.Log($"[EnemyBase] ストック満タン判定失敗 - enemyData: {enemyData}, 条件: {currentStockCount}>={enemyData?.Needstock}, 状態チェック: {currentState}!={EnemyState.ReadyToLaunch}&&{currentState}!={EnemyState.Launch}");
             }
         }
 

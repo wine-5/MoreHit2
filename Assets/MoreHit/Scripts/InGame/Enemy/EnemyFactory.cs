@@ -109,7 +109,6 @@ namespace MoreHit.Enemy
                 return null;
             }
 
-            Debug.Log($"[EnemyFactory] 敵生成成功: {enemy.name} at {position}");
             return enemy;
         }
     }

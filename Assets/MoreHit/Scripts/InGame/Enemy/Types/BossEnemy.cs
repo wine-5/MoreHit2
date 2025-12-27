@@ -264,8 +264,6 @@ namespace MoreHit.Enemy
                 
                 if (minion != null)
                 {
-                    Debug.Log($"[BossEnemy] 雑魚敵をボスの目の前に生成: {spawnPosition}");
-                    
                     // 通常の敵として動作させる（投げる処理は削除）
                     Rigidbody2D minionRb = minion.GetComponent<Rigidbody2D>();
                     if (minionRb != null)
