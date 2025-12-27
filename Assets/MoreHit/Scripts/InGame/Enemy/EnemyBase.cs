@@ -156,12 +156,8 @@ namespace MoreHit.Enemy
         /// </summary>
         protected virtual void OnStockReachedRequired()
         {
-            Debug.Log($"[EnemyBase] OnStockReachedRequired実行開始 - 現在状態: {currentState}");
-            
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
-
-            Debug.Log($"[EnemyBase] 状態をReadyToLaunchに変更、移動停止");
 
             // イベント駆動でストック満タンを通知
             GameEvents.TriggerStockFull(gameObject);
@@ -170,15 +166,9 @@ namespace MoreHit.Enemy
             if (EffectFactory.I != null)
             {
                 currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
-                Debug.Log("[EnemyBase] FullStockEffect生成");
-            }
-            else
-            {
-                Debug.LogError("❌ EffectFactory が見つかりません! Singletonが初期化されていない可能性があります");
             }
 
             OnStateChanged(currentState);
-            Debug.Log("[EnemyBase] OnStockReachedRequired実行完了");
         }
 
         /// <summary>

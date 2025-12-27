@@ -365,16 +365,10 @@ namespace MoreHit.Enemy
         public override void TakeDamage(int damage)
         {
             if (isDead) 
-            {
-                Debug.Log("[BossEnemy] 死亡状態のためダメージ処理をスキップ");
                 return;
-            }
-            
-            Debug.Log($"[BossEnemy] TakeDamage呼び出し - damage: {damage}, isDead: {isDead}, currentState: {currentState}");
             
             // 実際のダメージ処理を追加
             currentHP = Mathf.Max(0, currentHP - damage);
-            Debug.Log($"[BossEnemy] ダメージ {damage} 適用後 HP: {currentHP}/{GetMaxHP()}");
             
             // 死亡判定
             if (currentHP <= 0)
@@ -385,7 +379,6 @@ namespace MoreHit.Enemy
             
             // 注意：ストックの追加はAttackExecutorで既に行われているため、ここでは行わない
             // ストックが満タンになったら自動的にOnStockReachedRequiredが呼ばれてHPが減る
-            Debug.Log($"[BossEnemy] ダメージ受信処理完了 - ストック追加はAttackExecutorで処理済み (現在: {currentStockCount})");
         }
         
         /// <summary>
