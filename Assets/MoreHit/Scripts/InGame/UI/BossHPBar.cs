@@ -1,26 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using MoreHit.Events;
 using MoreHit.Enemy;
 
 namespace MoreHit.UI
 {
     /// <summary>
-    /// ボスのHPバー表示システム
+    /// ボスのHPバー表示システム（二つのImage重ね合わせ方式）
     /// </summary>
     public class BossHPBar : MonoBehaviour
     {
         [Header("UI参照")]
         [SerializeField] private GameObject bossHPPanel;
-        [SerializeField] private Slider hpSlider;
-        [SerializeField] private Text bossNameText;
-        [SerializeField] private Text hpValueText;
+        [SerializeField] private Image hpBackgroundImage; // 背景（空のHPバー）
+        [SerializeField] private Image hpForegroundImage; // 前景（現在のHP表示）
+        [SerializeField] private TextMeshProUGUI bossNameText;
         
         [Header("設定")]
         [SerializeField] private string bossName = "Boss";
         
-        private Boss currentBoss;
-        
+        private BossEnemy currentBoss;
+                
         private void OnEnable()
         {
             GameEvents.OnBossAppear += OnBossAppear;
@@ -46,8 +47,8 @@ namespace MoreHit.UI
         /// </summary>
         private void OnBossAppear()
         {
-            // シーン内のBossを検索
-            currentBoss = FindFirstObjectByType<Boss>();
+            // シーン内のBossEnemyを検索
+            currentBoss = FindFirstObjectByType<BossEnemy>();
             
             if (currentBoss != null)
             {
@@ -79,6 +80,12 @@ namespace MoreHit.UI
                 {
                     bossNameText.text = bossName;
                 }
+                
+                // HPバーを満タンの状態で初期化
+                if (hpForegroundImage != null)
+                {
+                    hpForegroundImage.fillAmount = 1.0f;
+                }
             }
         }
         
@@ -104,16 +111,10 @@ namespace MoreHit.UI
             int maxHP = currentBoss.GetMaxHP();
             float hpRatio = currentBoss.GetHPRatio();
             
-            // スライダー更新
-            if (hpSlider != null)
+            // Image の fillAmount でHPバーを更新
+            if (hpForegroundImage != null)
             {
-                hpSlider.value = hpRatio;
-            }
-            
-            // HP数値表示
-            if (hpValueText != null)
-            {
-                hpValueText.text = $"{currentHP} / {maxHP}";
+                hpForegroundImage.fillAmount = hpRatio;
             }
         }
     }
