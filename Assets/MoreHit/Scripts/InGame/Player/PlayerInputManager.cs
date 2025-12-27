@@ -119,8 +119,7 @@ namespace MoreHit.Player
                 onChargeRangedAttack?.Invoke();
                 ResetChargeState();
             }
-            else
-                onRangedAttack?.Invoke();
+            else onRangedAttack?.Invoke();
         }
         
         private void OnChargeButtonCanceled(InputAction.CallbackContext context)
