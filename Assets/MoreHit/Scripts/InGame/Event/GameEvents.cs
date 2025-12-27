@@ -28,6 +28,26 @@ namespace MoreHit.Events
         /// ストック数が変更された時
         /// </summary>
         public static event Action<int, int> OnStockChanged;
+        
+        /// <summary>
+        /// ボスが出現した時
+        /// </summary>
+        public static event Action OnBossAppear;
+        
+        /// <summary>
+        /// ボスが敗北した時
+        /// </summary>
+        public static event Action OnBossDefeated;
+        
+        /// <summary>
+        /// 敵がダメージを受けた時
+        /// </summary>
+        public static event Action<GameObject, int> OnEnemyDamaged;
+        
+        /// <summary>
+        /// 敵が倒された時
+        /// </summary>
+        public static event Action<GameObject> OnEnemyDefeated;
 
         public static void TriggerPlayerDeath()
         {
@@ -48,6 +68,26 @@ namespace MoreHit.Events
         {
             OnStockChanged?.Invoke(currentStock, maxStock);
         }
+        
+        public static void TriggerBossAppear()
+        {
+            OnBossAppear?.Invoke();
+        }
+        
+        public static void TriggerBossDefeated()
+        {
+            OnBossDefeated?.Invoke();
+        }
+        
+        public static void TriggerEnemyDamaged(GameObject enemy, int damage)
+        {
+            OnEnemyDamaged?.Invoke(enemy, damage);
+        }
+        
+        public static void TriggerEnemyDefeated(GameObject enemy)
+        {
+            OnEnemyDefeated?.Invoke(enemy);
+        }
 
         /// <summary>
         /// 全てのイベントリスナーをクリアする（シーン切り替え時などに使用）
@@ -58,6 +98,10 @@ namespace MoreHit.Events
             OnPlayerDamage = null;
             OnStockFull = null;
             OnStockChanged = null;
+            OnBossAppear = null;
+            OnBossDefeated = null;
+            OnEnemyDamaged = null;
+            OnEnemyDefeated = null;
         }
     }
 }

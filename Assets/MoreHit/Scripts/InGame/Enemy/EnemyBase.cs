@@ -31,8 +31,8 @@ namespace MoreHit.Enemy
         [SerializeField] protected float stockMultiplier = 0.2f; // 倍率も少し強化
         [Header("ストックリセット設定")]
         [SerializeField] private float stockResetDuration = 5f;
-        private float stockResetTimer = 0f;
-        private bool isStockTimerActive = false;
+        protected float stockResetTimer = 0f;
+        protected bool isStockTimerActive = false;
         [Header("システム定数")]
         [SerializeField] private float baseLaunchDuration = 5f;
         [SerializeField] private float stockBonusThreshold = 5f;
@@ -49,7 +49,7 @@ namespace MoreHit.Enemy
 
         protected EnemyData enemyData;
         protected float currentHP;
-        private bool isDead = false;
+        protected bool isDead = false;
         public bool IsDead => isDead;
         protected float currentLaunchTimer = 0f;
         // 吹っ飛ばし中の固定速度を保持
@@ -130,7 +130,7 @@ namespace MoreHit.Enemy
         /// <summary>
         /// ストックが必要数に達したときの処理（準備状態に移行）
         /// </summary>
-        private void OnStockReachedRequired()
+        protected virtual void OnStockReachedRequired()
         {
             currentState = EnemyState.ReadyToLaunch;
             canMove = false; // 移動停止
