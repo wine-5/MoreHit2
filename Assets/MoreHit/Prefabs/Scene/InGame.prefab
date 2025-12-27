@@ -7544,6 +7544,56 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 10, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &5602689951628717925
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7435531336521094234}
+  - component: {fileID: 2705941904632233468}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7435531336521094234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5602689951628717925}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2491.8984, y: -150.70059, z: -3699.6897}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4321082223152016835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2705941904632233468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5602689951628717925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49458f0c6d843a48941bf520515c9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Audio.AudioManager
+  audioDataArray:
+  - {fileID: 11400000, guid: ca101ea4f0e0b1f409e7cd12401e3450, type: 2}
+  maxAudioSources: 1
+  masterVolume: 1
+  bgmVolume: 1
+  seVolume: 1
 --- !u!1 &5603621815963152571
 GameObject:
   m_ObjectHideFlags: 0
@@ -8236,6 +8286,7 @@ GameObject:
   - component: {fileID: 767424792633262915}
   - component: {fileID: 7764270899322181296}
   - component: {fileID: 5123224493724679155}
+  - component: {fileID: 4429786455744322296}
   m_Layer: 0
   m_Name: InGame
   m_TagString: Untagged
@@ -8259,6 +8310,7 @@ Transform:
   - {fileID: 7991734131679116372}
   - {fileID: 7312581754720451848}
   - {fileID: 4533523508548092587}
+  - {fileID: 7435531336521094234}
   - {fileID: 4367840958707760522}
   - {fileID: 8891416506330376459}
   - {fileID: 5343432583506618600}
@@ -8332,6 +8384,18 @@ MonoBehaviour:
   playerMovement: {fileID: 8916340882307923028}
   playerController: {fileID: 3046202257730399196}
   playerTransform: {fileID: 3572186304188018835}
+--- !u!114 &4429786455744322296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6513215529504962838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf3e8dd0e860bd140852a1853e735210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.InGameAudioManager
 --- !u!1 &6572009338468886343
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,5 +36,41 @@ namespace MoreHit.Scene
             string sceneNameStr = sceneName.ToString();
             SceneManager.LoadScene(sceneNameStr);
         }
+
+        /// <summary>
+        /// タイトルシーンに遷移
+        /// </summary>
+        public void ChangeToTitleScene()
+        {
+            Audio.AudioManager.I?.PlayBGM("TitleBGM");
+            LoadScene(SceneName.Title);
+        }
+
+        /// <summary>
+        /// インゲームシーンに遷移
+        /// </summary>
+        public void ChangeToInGameScene()
+        {
+            Audio.AudioManager.I?.PlayBGM("InGameBGM");
+            LoadScene(SceneName.InGame);
+        }
+
+        /// <summary>
+        /// ゲームクリアシーンに遷移
+        /// </summary>
+        public void ChangeToGameClearScene()
+        {
+            Audio.AudioManager.I?.PlayBGM("GameClearBGM");
+            LoadScene(SceneName.Clear);
+        }
+
+        /// <summary>
+        /// ゲームオーバーシーンに遷移
+        /// </summary>
+        public void ChangeToGameOverScene()
+        {
+            Audio.AudioManager.I?.PlayBGM("GameOverBGM");
+            LoadScene(SceneName.GameOver);
+        }
     }
 }

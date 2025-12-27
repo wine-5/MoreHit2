@@ -30,7 +30,7 @@ namespace MoreHit.InGame
         private void OnPlayerDeath()
         {
             if (SceneController.I != null)
-                SceneController.I.LoadScene(SceneName.GameOver);
+                SceneController.I.ChangeToGameOverScene();
             else
                 Debug.LogError("EventsHandler: SceneController instance not found!");
         }
