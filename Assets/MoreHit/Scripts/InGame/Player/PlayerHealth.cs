@@ -79,6 +79,7 @@ namespace MoreHit.Player
             {
                 isInvincible = false;
                 invincibleTimer = 0f;
+                GameEvents.TriggerPlayerInvincibilityEnded();
             }
         }
 

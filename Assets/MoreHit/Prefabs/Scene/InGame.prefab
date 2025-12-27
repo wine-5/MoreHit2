@@ -762,15 +762,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640602495902987419}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3810.5403}
+  m_LocalPosition: {x: 0, y: 0, z: -41081.965}
   m_LocalScale: {x: 4, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5720997154559892497}
+  m_Father: {fileID: 5568934379662539368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 243, y: 1289}
+  m_AnchoredPosition: {x: 66319.57, y: 1289.0004}
   m_SizeDelta: {x: 160, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7968441769726629047
@@ -1598,7 +1598,9 @@ Transform:
   m_LocalPosition: {x: -66076.57, y: -0.00036621094, z: 37271.426}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1662893894724189390}
+  - {fileID: 2219573668938585925}
   m_Father: {fileID: 5720997154559892497}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1547038866163312975
@@ -2410,15 +2412,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842473929029402609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3810.5403}
+  m_LocalPosition: {x: 0, y: 0, z: -41081.965}
   m_LocalScale: {x: 4, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5720997154559892497}
+  m_Father: {fileID: 5568934379662539368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 243, y: 1289}
+  m_AnchoredPosition: {x: 66319.57, y: 1289.0004}
   m_SizeDelta: {x: 160, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4753353378875681486
@@ -3733,8 +3735,6 @@ Transform:
   m_Children:
   - {fileID: 5568934379662539368}
   - {fileID: 3678081309991008965}
-  - {fileID: 1662893894724189390}
-  - {fileID: 2219573668938585925}
   m_Father: {fileID: 4367840958707760522}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8549462926159244997

@@ -20,6 +20,11 @@ namespace MoreHit.Events
         public static event Action<int, int> OnPlayerDamage;
         
         /// <summary>
+        /// プレイヤーの無敵時間が終了した時
+        /// </summary>
+        public static event Action OnPlayerInvincibilityEnded;
+        
+        /// <summary>
         /// ストックが満タンになった時
         /// </summary>
         public static event Action<GameObject> OnStockFull;
@@ -62,6 +67,11 @@ namespace MoreHit.Events
         public static void TriggerPlayerDamage(int damage, int currentHealth)
         {
             OnPlayerDamage?.Invoke(damage, currentHealth);
+        }
+        
+        public static void TriggerPlayerInvincibilityEnded()
+        {
+            OnPlayerInvincibilityEnded?.Invoke();
         }
 
         public static void TriggerStockFull(GameObject target)
@@ -106,6 +116,7 @@ namespace MoreHit.Events
         {
             OnPlayerDeath = null;
             OnPlayerDamage = null;
+            OnPlayerInvincibilityEnded = null;
             OnStockFull = null;
             OnStockChanged = null;
             OnBossAppear = null;
