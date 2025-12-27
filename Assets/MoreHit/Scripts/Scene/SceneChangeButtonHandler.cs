@@ -17,9 +17,31 @@ namespace MoreHit.Scene
         public void ChangeScene()
         {
             if (SceneController.I != null)
-                SceneController.I.LoadScene(targetScene);
+            {
+                // targetSceneに応じて適切なメソッドを呼び出す
+                switch (targetScene)
+                {
+                    case SceneName.Title:
+                        SceneController.I.ChangeToTitleScene();
+                        break;
+                    case SceneName.InGame:
+                        SceneController.I.ChangeToInGameScene();
+                        break;
+                    case SceneName.Clear:
+                        SceneController.I.ChangeToGameClearScene();
+                        break;
+                    case SceneName.GameOver:
+                        SceneController.I.ChangeToGameOverScene();
+                        break;
+                    default:
+                        SceneController.I.LoadScene(targetScene);
+                        break;
+                }
+            }
             else
+            {
                 Debug.LogWarning("SceneController instance not found!");
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using MoreHit.ElapsedTime;
 using MoreHit.Scene;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ÌƒS[ƒ‹“’B‚ğŒŸ’m‚µAŠÔŒv‘ª‚Ì’â~‚¨‚æ‚ÑƒV[ƒ“‘JˆÚ‚ÌÀs‚ğ§Œä‚·‚éƒNƒ‰ƒX
+/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒSï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÔŒvï¿½ï¿½ï¿½Ì’ï¿½~ï¿½ï¿½ï¿½ï¿½ÑƒVï¿½[ï¿½ï¿½ï¿½Jï¿½Ú‚Ìï¿½ï¿½sï¿½ğ§Œä‚·ï¿½ï¿½Nï¿½ï¿½ï¿½X
 /// </summary>
 
     public class GoalTrigger : MonoBehaviour
@@ -15,7 +15,7 @@ using MoreHit.Scene;
         {
             if (collision.CompareTag("Player"))
             {
-                // Œv‘ª’â~
+                // ï¿½vï¿½ï¿½ï¿½ï¿½~
                 if (ElapsedTimeManager.Instance != null)
                 {
                     ElapsedTimeManager.Instance.StopTimer();
@@ -23,12 +23,30 @@ using MoreHit.Scene;
 
                 if (SceneController.I != null)
                 {
-                    SceneController.I.LoadScene(nextScene);
+                    // nextSceneã«å¿œã˜ã¦é©åˆ‡ãªãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™
+                    switch (nextScene)
+                    {
+                        case SceneName.Clear:
+                            SceneController.I.ChangeToGameClearScene();
+                            break;
+                        case SceneName.GameOver:
+                            SceneController.I.ChangeToGameOverScene();
+                            break;
+                        case SceneName.Title:
+                            SceneController.I.ChangeToTitleScene();
+                            break;
+                        case SceneName.InGame:
+                            SceneController.I.ChangeToInGameScene();
+                            break;
+                        default:
+                            SceneController.I.LoadScene(nextScene);
+                            break;
+                    }
                 }
                 else
                 {
 
-                    Debug.LogError("SceneController‚ª‘¶İ‚µ‚Ü‚¹‚ñB");
+                    Debug.LogError("SceneControllerï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B");
                 }
             }
         }
