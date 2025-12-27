@@ -26,12 +26,14 @@ namespace MoreHit.UI
         {
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
+            GameEvents.OnStockFull += OnStockFull;
         }
         
         private void OnDisable()
         {
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
+            GameEvents.OnStockFull -= OnStockFull;
         }
         
         private void Update()
@@ -115,6 +117,38 @@ namespace MoreHit.UI
             if (hpForegroundImage != null)
             {
                 hpForegroundImage.fillAmount = hpRatio;
+            }
+        }
+        
+        /// <summary>
+        /// ストック満タン時の処理
+        /// </summary>
+        private void OnStockFull(GameObject target)
+        {
+            // ボスのストックが満タンになった場合のみ演出
+            if (target != null && target.GetComponent<BossEnemy>() != null)
+            {
+                StartCoroutine(StockFullEffect());
+            }
+        }
+        
+        /// <summary>
+        /// ストック満タン演出（HPバーの点滅）
+        /// </summary>
+        private System.Collections.IEnumerator StockFullEffect()
+        {
+            if (hpForegroundImage == null) yield break;
+            
+            Color originalColor = hpForegroundImage.color;
+            Color flashColor = Color.red;
+            
+            // 3回点滅
+            for (int i = 0; i < 3; i++)
+            {
+                hpForegroundImage.color = flashColor;
+                yield return new WaitForSeconds(0.2f);
+                hpForegroundImage.color = originalColor;
+                yield return new WaitForSeconds(0.2f);
             }
         }
     }

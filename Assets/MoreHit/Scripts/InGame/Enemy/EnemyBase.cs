@@ -72,6 +72,13 @@ namespace MoreHit.Enemy
 
         public void StopMovement(float duration)
         {
+            // ゲームオブジェクトがアクティブでない場合はコルーチンを開始しない
+            if (!gameObject.activeInHierarchy || isDead)
+            {
+                Debug.Log("[EnemyBase] ゲームオブジェクトが非アクティブまたは死亡状態のためStopMovementをスキップ");
+                return;
+            }
+            
             StartCoroutine(StopRoutine(duration));
         }
 
@@ -102,6 +109,13 @@ namespace MoreHit.Enemy
 
         public void AddStock(int amount)
         {
+            // 死亡状態または非アクティブの場合はストック追加を無視
+            if (isDead || !gameObject.activeInHierarchy)
+            {
+                Debug.Log("[EnemyBase] 死亡状態または非アクティブのためAddStockをスキップ");
+                return;
+            }
+            
             currentStockCount += amount;
 
             Debug.Log($"[EnemyBase] AddStock - 追加: {amount}, 現在: {currentStockCount}, 必要数: {enemyData?.Needstock}, 現在状態: {currentState}");

@@ -406,7 +406,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8149705935719008472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,7 +422,7 @@ MonoBehaviour:
   stockText: {fileID: 1666335651865885044}
   bounceEffectDuration: 3
   enemyDataSO: {fileID: 11400000, guid: 51e7996db5481f64a88bddaf8ed01905, type: 2}
-  enemyType: 1
+  enemyType: 3
   enemyAttackData: {fileID: 11400000, guid: 67b5e02c3a9d7d84cb202431ac067b84, type: 2}
   launchVector: {x: 1, y: 1}
   launchPower: 70
@@ -436,6 +436,8 @@ MonoBehaviour:
   attackRange: 5
   maxHP: 300
   fireballAttackData: {fileID: 11400000, guid: cd7f441e3696a1c4f8a48d50055662fc, type: 2}
+  fireballPrefab: {fileID: 0}
+  fireballSpawnPoint: {fileID: 0}
   fireballCount: 3
   fireballInterval: 0.5
   minionSpawnCount: 2
