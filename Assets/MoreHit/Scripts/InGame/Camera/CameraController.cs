@@ -13,7 +13,9 @@ namespace MoreHit.Camera
         [SerializeField] private float groundOffset = 1.5f; // 地面からの最低オフセット
         
         [Header("カメラ制限")]
+#if UNITY_EDITOR
         [SerializeField] private bool useBounds = false; // カメラの移動範囲を制限するか
+#endif
         [SerializeField] private Vector2 minBounds = new Vector2(-10f, -5f);
         [SerializeField] private Vector2 maxBounds = new Vector2(10f, 5f);
         
@@ -61,11 +63,13 @@ namespace MoreHit.Camera
             float targetY = target.position.y + groundOffset + offset.y;
             
             // カメラの範囲制限
+#if UNITY_EDITOR
             if (useBounds)
             {
                 targetX = Mathf.Clamp(targetX, minBounds.x, maxBounds.x);
                 targetY = Mathf.Clamp(targetY, minBounds.y, maxBounds.y);
             }
+#endif
             
             // X軸とY軸を滑らかに追従
             Vector3 basePosition = new Vector3(
@@ -130,6 +134,7 @@ namespace MoreHit.Camera
             offset = newOffset;
         }
         
+#if UNITY_EDITOR
         // エディタでのデバッグ用
         void OnDrawGizmosSelected()
         {
@@ -141,5 +146,6 @@ namespace MoreHit.Camera
                 Gizmos.DrawWireCube(center, size);
             }
         }
+#endif
     }
 }

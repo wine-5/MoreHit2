@@ -16,9 +16,11 @@ namespace MoreHit.Attack
         [SerializeField, Min(0)] private float comboResetTime = 1f;
         [SerializeField, Min(0)] private float attackDuration = 0.3f;
         
+#if UNITY_EDITOR
         [Header("デバッグ表示")]
         [SerializeField] private bool showHitBox = true;
         [SerializeField] private Color hitBoxColor = Color.red;
+#endif
         
         private PlayerMovement playerMovement;
         

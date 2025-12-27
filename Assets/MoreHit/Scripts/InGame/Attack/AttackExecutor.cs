@@ -13,9 +13,11 @@ namespace MoreHit.Attack
         
         protected override bool UseDontDestroyOnLoad => false;
     
+#if UNITY_EDITOR
         [Header("デバッグ表示")]
         [SerializeField] private bool showAttackGizmos = true;
         [SerializeField] private Color attackGizmosColor = Color.cyan;
+#endif
         
         // デバッグ用の最後の攻撃データ
         private AttackData lastAttackData;

@@ -28,6 +28,57 @@ namespace MoreHit
             
             // エフェクトデータを辞書化
             InitializeEffectDataDictionary();
+            
+            // もしEffectDataSOがnullの場合はResourcesフォルダから読み込みを試行
+            if (effectDataCollection == null)
+            {
+                TryLoadEffectDataFromResources();
+            }
+            
+            // WebGL環境での遅延読み込み対応
+            if (effectDataCollection == null)
+            {
+                StartCoroutine(DelayedResourceLoad());
+            }
+        }
+        
+        private System.Collections.IEnumerator DelayedResourceLoad()
+        {
+            yield return new WaitForSeconds(1f); // 1秒待機
+            
+            if (effectDataCollection == null)
+            {
+                Debug.Log("🔄 EffectFactory: 遅延読み込みを試行します");
+                TryLoadEffectDataFromResources();
+            }
+        }
+        
+        private void TryLoadEffectDataFromResources()
+        {
+            // WebGL対応: Assets/MoreHit/Prefabs/Effect/Effect Data Collection.asset を
+            // Resourcesフォルダにコピーした EffectDataCollection.asset を読み込み
+            try 
+            {
+                var resourceEffectData = Resources.Load<EffectDataSO>("EffectDataCollection");
+                if (resourceEffectData != null)
+                {
+                    Debug.Log("✅ EffectFactory: ResourcesフォルダからEffectDataCollectionを読み込みました");
+                    effectDataCollection = resourceEffectData;
+                    InitializeEffectDataDictionary();
+                    return;
+                }
+                else
+                {
+                    Debug.LogError("❌ EffectFactory: Resources.Loadはnullを返しました - EffectDataCollection.assetがResourcesフォルダに存在しない可能性があります");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"❌ EffectFactory: Resources.Load エラー: {e.Message}");
+            }
+            
+            Debug.LogWarning("⚠️ EffectFactory: ResourcesフォルダからEffectDataCollectionの読み込みに失敗");
+            Debug.LogWarning("⚠️ 'Assets/MoreHit/Prefabs/Effect/Effect Data Collection.asset' を 'Assets/Resources/EffectDataCollection.asset' にコピーしてください");
         }
         
         private void FindEffectObjectPool()
@@ -59,19 +110,33 @@ namespace MoreHit
             
             if (effectDataCollection == null)
             {
-                Debug.LogError("❌ EffectFactory: EffectDataSOが設定されていません！");
+                Debug.LogError("❌ EffectFactory: EffectDataSOが設定されていません！Unityエディタでインスペクタを確認してください。");
+                Debug.LogError("❌ EffectFactory: WebGL版では一部のアセットが正しく読み込まれない場合があります。");
                 return;
             }
             
             var allEffects = effectDataCollection.GetAllEffects();
+            
+            if (allEffects == null || allEffects.Count == 0)
+            {
+                Debug.LogWarning("⚠️ EffectFactory: EffectDataSOにエフェクトデータが登録されていません！");
+                return;
+            }
             
             foreach (var data in allEffects)
             {
                 if (data != null && data.effectPrefab != null)
                 {
                     effectDataDictionary[data.effectType] = data;
+                    Debug.Log($"✅ EffectFactory: {data.effectType} エフェクトを登録しました");
+                }
+                else if (data != null)
+                {
+                    Debug.LogWarning($"⚠️ EffectFactory: {data.effectType} のプレハブが設定されていません");
                 }
             }
+            
+            Debug.Log($"✅ EffectFactory: 合計{effectDataDictionary.Count}個のエフェクトを登録しました");
         }
         
         /// <summary>
@@ -82,6 +147,24 @@ namespace MoreHit
         /// <returns>生成されたエフェクトオブジェクト</returns>
         public GameObject CreateEffect(EffectType effectType, Vector3 position)
         {
+            // EffectDataSOが設定されていない場合の警告
+            if (effectDataCollection == null)
+            {
+                Debug.LogError($"❌ EffectFactory: EffectDataSOが設定されていません！エフェクト '{effectType}' を生成できません");
+                return null;
+            }
+            
+            // エフェクトデータ辞書がnullまたは空の場合
+            if (effectDataDictionary == null || effectDataDictionary.Count == 0)
+            {
+                Debug.LogError("❌ EffectFactory: エフェクトデータ辞書が初期化されていません！InitializeEffectDataDictionary()を実行してください");
+                InitializeEffectDataDictionary(); // 再初期化を試行
+                if (effectDataDictionary == null || effectDataDictionary.Count == 0)
+                {
+                    return null;
+                }
+            }
+            
             if (!effectDataDictionary.TryGetValue(effectType, out EffectData data))
             {
                 Debug.LogError($"❌ EffectFactory: EffectType '{effectType}' のデータが見つかりません！");

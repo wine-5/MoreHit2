@@ -242,7 +242,13 @@ namespace MoreHit.Enemy
         {
             if (enemyDataSO == null)
             {
-                Debug.LogError("[EnemyBase] enemyDataSOがnullです！");
+                Debug.LogError("[EnemyBase] enemyDataSOがnullです！Resources代替読み込みを試行します");
+                TryLoadEnemyDataFromResources();
+            }
+            
+            if (enemyDataSO == null)
+            {
+                Debug.LogError("[EnemyBase] Resources代替読み込みも失敗しました");
                 return;
             }
             
@@ -286,6 +292,36 @@ namespace MoreHit.Enemy
                     }
                 }
             }
+        }
+        
+        /// <summary>
+        /// ResourcesからEnemyDataSOを読み込む試行
+        /// </summary>
+        private void TryLoadEnemyDataFromResources()
+        {
+            // WebGL対応: Assets/MoreHit/Scripts/InGame/Enemy/SO/EnemyData.asset を
+            // Resourcesフォルダにコピーした EnemyData.asset を読み込み
+            try 
+            {
+                var resourceEnemyData = Resources.Load<EnemyDataSO>("EnemyData");
+                if (resourceEnemyData != null)
+                {
+                    Debug.Log("✅ EnemyBase: ResourcesフォルダからEnemyDataを読み込みました");
+                    enemyDataSO = resourceEnemyData;
+                    return;
+                }
+                else
+                {
+                    Debug.LogError("❌ EnemyBase: Resources.Loadはnullを返しました - EnemyData.assetがResourcesフォルダに存在しない可能性があります");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"❌ EnemyBase: Resources.Load エラー: {e.Message}");
+            }
+            
+            Debug.LogWarning("⚠️ EnemyBase: ResourcesフォルダからEnemyDataの読み込みに失敗");
+            Debug.LogWarning("⚠️ 'Assets/MoreHit/Scripts/InGame/Enemy/SO/EnemyData.asset' を 'Assets/Resources/EnemyData.asset' にコピーしてください");
         }
 
         protected virtual void InitializeEnemy()

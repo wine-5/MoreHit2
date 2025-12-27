@@ -13,8 +13,10 @@ namespace MoreHit.UI
         [Header("UI設定")]
         [SerializeField] private Image backgroundImage; // 白色（減った部分）
         [SerializeField] private Image healthImage;     // 緑色（現在のHP）
+#if UNITY_EDITOR
         [SerializeField] private bool animateChanges = true;
         [SerializeField] private float animationSpeed = 2f;
+#endif
         
         private int maxHealth;
         private int currentHealth;
@@ -39,10 +41,17 @@ namespace MoreHit.UI
         
         private void Update()
         {
+#if UNITY_EDITOR
             if (needsAnimation && animateChanges)
             {
                 AnimateHealthImage();
             }
+#else
+            if (needsAnimation)
+            {
+                AnimateHealthImage();
+            }
+#endif
         }
         
         /// <summary>
@@ -144,6 +153,7 @@ namespace MoreHit.UI
             float fillRatio = maxHealth > 0 ? (float)currentHealth / maxHealth : 0f;
             targetFillAmount = Mathf.Clamp01(fillRatio); // 0-1の範囲にクランプ
             
+#if UNITY_EDITOR
             if (animateChanges)
             {
                 needsAnimation = true;
@@ -152,6 +162,9 @@ namespace MoreHit.UI
             {
                 UpdateImageImmediately();
             }
+#else
+            needsAnimation = true;
+#endif
 
         }
         
@@ -182,7 +195,11 @@ namespace MoreHit.UI
             }
             else
             {
+#if UNITY_EDITOR
                 healthImage.fillAmount = Mathf.Lerp(healthImage.fillAmount, targetFillAmount, animationSpeed * Time.deltaTime);
+#else
+                healthImage.fillAmount = Mathf.Lerp(healthImage.fillAmount, targetFillAmount, 2f * Time.deltaTime);
+#endif
             }
         }
     }

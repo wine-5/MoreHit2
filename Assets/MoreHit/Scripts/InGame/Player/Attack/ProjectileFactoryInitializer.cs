@@ -9,7 +9,9 @@ namespace MoreHit
     public class ProjectileFactoryInitializer : MonoBehaviour
     {
         [Header("自動セットアップ")]
+#if UNITY_EDITOR
         [SerializeField] private bool autoInitialize = true;
+#endif
         
         [Header("手動設定")]
         [SerializeField] private ObjectPool projectilePool;

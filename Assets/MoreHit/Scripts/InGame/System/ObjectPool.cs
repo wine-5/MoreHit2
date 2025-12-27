@@ -11,8 +11,10 @@ namespace MoreHit.Pool
     {
         [Header("Object Pool Settings")]
         [SerializeField] private List<ObjectPoolItem> poolItems = new List<ObjectPoolItem>(); // プールする項目のリスト
+#if UNITY_EDITOR
         [SerializeField] private bool autoExpand = true; // プールが空の場合に自動的に拡張するかどうか
         [SerializeField] private int expandSize = 5; // 自動拡張時のサイズ
+#endif
 
         // 各プレハブごとのオブジェクトプール
         private Dictionary<GameObject, Queue<GameObject>> objectPools = new Dictionary<GameObject, Queue<GameObject>>();
@@ -173,11 +175,12 @@ namespace MoreHit.Pool
                 ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == prefab);
                 if (poolItem != null)
                 {
+#if UNITY_EDITOR
                     if (autoExpand)
                     {
                         // プールの自動拡張
                         ExpandPool(poolItem, expandSize);
-
+                        
                         // 拡張後に再度オブジェクトを取得
                         if (objectPools[prefab].Count > 0)
                         {
@@ -186,6 +189,19 @@ namespace MoreHit.Pool
                             
                             // IPoolable インターフェースをサポート
                             var poolable = pooledObject.GetComponent<IPoolable>();
+#else
+                    // プール自動拡張（リリースビルド用固定設定）
+                    ExpandPool(poolItem, 5);
+                    
+                    // 拡張後に再度オブジェクトを取得
+                    if (objectPools[prefab].Count > 0)
+                    {
+                        GameObject pooledObject = objectPools[prefab].Dequeue();
+                        pooledObject.SetActive(true);
+                        
+                        // IPoolable インターフェースをサポート
+                        var poolable = pooledObject.GetComponent<IPoolable>();
+#endif
                             poolable?.OnPoolGet();
                             
                             return pooledObject;
