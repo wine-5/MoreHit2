@@ -212,9 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
   stockText: {fileID: 2707430625757391743}
-  readyToLaunchEffect: {fileID: 0}
   bounceEffectDuration: 3
-  enemyDataSO: {fileID: 11400000, guid: 4aa291e80a156a0458d2ee0620276997, type: 2}
+  enemyDataSO: {fileID: 11400000, guid: 51e7996db5481f64a88bddaf8ed01905, type: 2}
   enemyType: 0
   enemyAttackData: {fileID: 11400000, guid: cf2e219f3318d4b47a4cb5d5480b9a33, type: 2}
   launchVector: {x: 1, y: 1}
