@@ -23,9 +23,7 @@ namespace MoreHit.UI
         
         [Header("設定")]
         [SerializeField] private string bossName = "Boss";
-#if UNITY_EDITOR
         [SerializeField] private float hpAnimationSpeed = 2f; // HPバーアニメーション速度
-#endif
         
         private BossEnemy currentBoss;
         private Coroutine hpBarAnimationCoroutine; // アニメーション制御用

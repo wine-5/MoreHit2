@@ -72,6 +72,7 @@ namespace MoreHit.Enemy
             canMove = true;
             isDead = false;
             currentState = EnemyState.Move;
+            canTakeDamage = true; // ボス登場時にダメージを受けられるように設定
             
             // EnemyDataからHPを取得（最優先）
             if (enemyData != null)
@@ -132,9 +133,17 @@ namespace MoreHit.Enemy
         
         protected override void OnStockReachedRequired()
         {
-            base.OnStockReachedRequired();
+            Debug.Log($"[BossEnemy] OnStockReachedRequired開始 - canTakeDamage: {canTakeDamage}, isDead: {isDead}, currentHP: {currentHP}");
             
-            canTakeDamage = true;
+            // 死亡状態または非アクティブの場合は処理しない
+            if (isDead || !gameObject.activeInHierarchy)
+            {
+                Debug.Log($"[BossEnemy] 死亡またはnon-activeのため処理をスキップ");
+                return;
+            }
+            
+            // ダメージが受けられない状態でもストック満タン処理は実行
+            Debug.Log($"[BossEnemy] ダメージ処理を実行 - canTakeDamage: {canTakeDamage}");
             
             float previousHP = currentHP;
             currentHP = Mathf.Max(0, currentHP - AUTO_DAMAGE);
@@ -143,8 +152,14 @@ namespace MoreHit.Enemy
             GameEvents.TriggerBossDamaged(Mathf.FloorToInt(AUTO_DAMAGE));
             
             ClearStock();
-            canTakeDamage = false;
+            
+            // ボスは移動を続ける（基底クラスと異なる動作）
             currentState = EnemyState.Move;
+            canMove = true; // 移動継続を確保
+            canTakeDamage = true; // 次のダメージに備える
+            
+            Debug.Log($"[BossEnemy] canTakeDamage維持: true, canMove: true - 現在のHP: {currentHP}");
+            Debug.Log($"[BossEnemy] OnStockReachedRequired完了");
             
             if (currentHP <= 0) Die();
         }

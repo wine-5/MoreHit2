@@ -13,6 +13,7 @@ namespace MoreHit.Player
         private PlayerMovement movement;
         private PlayerHealth health;
         private AttackManager attackManager;
+        private PlayerAnimatorController animatorController;
 
         private void Awake()
         {
@@ -20,6 +21,7 @@ namespace MoreHit.Player
             movement = GetComponent<PlayerMovement>();
             health = GetComponent<PlayerHealth>();
             attackManager = GetComponent<AttackManager>();
+            animatorController = GetComponent<PlayerAnimatorController>();
         }
 
         private void OnEnable()
@@ -68,6 +70,7 @@ namespace MoreHit.Player
             if (!health.IsAlive) return;
             
             attackManager?.ExecuteNormalAttack();
+            animatorController?.PlayAttackAnimation();
         }
 
         private void OnRangedAttack()
@@ -75,6 +78,7 @@ namespace MoreHit.Player
             if (!health.IsAlive) return;
             
             attackManager?.ExecuteRangedAttack();
+            animatorController?.PlayAttackAnimation();
         }
 
         private void OnChargeRangedAttack()
@@ -82,6 +86,7 @@ namespace MoreHit.Player
             if (!health.IsAlive) return;
             
             attackManager?.ExecuteChargedAttack();
+            animatorController?.PlayAttackAnimation();
         }
     }
 }

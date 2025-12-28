@@ -13,10 +13,10 @@ namespace MoreHit.UI
         [Header("UI設定")]
         [SerializeField] private Image backgroundImage; // 白色（減った部分）
         [SerializeField] private Image healthImage;     // 緑色（現在のHP）
-#if UNITY_EDITOR
+        
+        [Header("エディタ専用設定")]
         [SerializeField] private bool animateChanges = true;
         [SerializeField] private float animationSpeed = 2f;
-#endif
         
         private int maxHealth;
         private int currentHealth;
@@ -41,17 +41,10 @@ namespace MoreHit.UI
         
         private void Update()
         {
-#if UNITY_EDITOR
             if (needsAnimation && animateChanges)
             {
                 AnimateHealthImage();
             }
-#else
-            if (needsAnimation)
-            {
-                AnimateHealthImage();
-            }
-#endif
         }
         
         /// <summary>

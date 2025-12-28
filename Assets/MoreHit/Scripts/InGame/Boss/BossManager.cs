@@ -37,8 +37,12 @@ namespace MoreHit.Boss
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
             
+            // どこから呼ばれているかを確認するためのスタックトレース
             if (showDebugLog)
+            {
                 Debug.Log($"🔄 [BossManager] イベントリスナーを解除しました");
+                Debug.Log($"[BossManager] OnDisable呼び出し元：\n{System.Environment.StackTrace}");
+            }
         }
         
         private void Start()
