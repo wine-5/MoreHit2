@@ -83,9 +83,7 @@ namespace MoreHit.Enemy
                 Debug.LogError("[BossEnemy] enemyDataがnullです！HPをデフォルト値に設定します。");
                 currentHP = 300; // フォールバック値
             }
-            
-            // ボス出現イベントを発火
-            GameEvents.TriggerBossAppear();
+
         }
         
         protected override void Update()
@@ -108,7 +106,6 @@ namespace MoreHit.Enemy
             if (enemyData != null)
             {
                 currentHP = GetMaxHP(); // EnemyDataから取得
-                GameEvents.TriggerBossAppear();
             }
             else
             {
