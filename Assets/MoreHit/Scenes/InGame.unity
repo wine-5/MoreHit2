@@ -119,27 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &341500224 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4290474548554007167, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-  m_PrefabInstance: {fileID: 436273946}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &341500225 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-  m_PrefabInstance: {fileID: 436273946}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 341500224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d716f11db1db4e14f82923554bc06b67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.BossHPBar
---- !u!1 &427814807 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-  m_PrefabInstance: {fileID: 436273946}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &436273946
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2401626653840851302, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 231
-      objectReference: {fileID: 0}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -196,22 +167,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_Name
       value: InGame
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6371769014185705658, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1055549084}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
 --- !u!1 &931445608
 GameObject:
@@ -257,27 +220,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1055549079 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-  m_PrefabInstance: {fileID: 436273946}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1055549084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1055549079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
-  bossGameObject: {fileID: 427814807}
-  bossHPBarUI: {fileID: 341500224}
-  bossHPBarScript: {fileID: 341500225}
-  showDebugLog: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

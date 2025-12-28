@@ -3642,7 +3642,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6398706177042928890
 Transform:
   m_ObjectHideFlags: 0
@@ -5152,7 +5152,6 @@ GameObject:
   - component: {fileID: 2737640065948983126}
   - component: {fileID: 3710502235570638027}
   - component: {fileID: 2033832472256581029}
-  - component: {fileID: 6371769014185705658}
   m_Layer: 3
   m_Name: Trigger
   m_TagString: Untagged
@@ -5243,21 +5242,6 @@ MonoBehaviour:
   showGizmosInEditor: 1
   gizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   wallGizmosColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!114 &6371769014185705658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3622192676830650244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
-  bossGameObject: {fileID: 2401626653840851302}
-  bossHPBarUI: {fileID: 4290474548554007167}
-  showDebugLog: 0
 --- !u!1 &3650680786269194866
 GameObject:
   m_ObjectHideFlags: 0
@@ -7968,7 +7952,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.057265043, y: 0}
+  m_Offset: {x: 4.1920433, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7978,7 +7962,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 10.114531, y: 1}
+  m_Size: {x: 18.61314, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &5340684146586732651
 GameObject:
@@ -9059,6 +9043,7 @@ GameObject:
   - component: {fileID: 767424792633262915}
   - component: {fileID: 7764270899322181296}
   - component: {fileID: 5123224493724679155}
+  - component: {fileID: 5134376541617848088}
   m_Layer: 0
   m_Name: InGame
   m_TagString: Untagged
@@ -9155,6 +9140,22 @@ MonoBehaviour:
   playerMovement: {fileID: 8916340882307923028}
   playerController: {fileID: 3046202257730399196}
   playerTransform: {fileID: 3572186304188018835}
+--- !u!114 &5134376541617848088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6513215529504962838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
+  bossGameObject: {fileID: 6217278153456069311}
+  bossHPBarUI: {fileID: 4290474548554007167}
+  bossHPBarScript: {fileID: 4358735776312738706}
+  showDebugLog: 1
 --- !u!1 &6572009338468886343
 GameObject:
   m_ObjectHideFlags: 0
@@ -13869,7 +13870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1848619734984554734, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 228.23
+      value: 231
       objectReference: {fileID: 0}
     - target: {fileID: 1848619734984554734, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14400,6 +14401,10 @@ PrefabInstance:
     - target: {fileID: 7853232616500384663, guid: 197a9669a8231f24eb19e0c6062ce4af, type: 3}
       propertyPath: m_Name
       value: Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853232616500384663, guid: 197a9669a8231f24eb19e0c6062ce4af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8149705935719008472, guid: 197a9669a8231f24eb19e0c6062ce4af, type: 3}
       propertyPath: fireballCount
