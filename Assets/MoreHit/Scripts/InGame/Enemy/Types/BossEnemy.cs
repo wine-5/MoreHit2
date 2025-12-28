@@ -161,13 +161,37 @@ namespace MoreHit.Enemy
             Vector3 currentPosition = transform.position;
             Vector3 direction = (targetPosition - currentPosition).normalized;
             
+            // 水平移動の判定
             if (Mathf.Abs(direction.x) > MIN_MOVE_THRESHOLD)
             {
-                Vector2 newVelocity = new Vector2(direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER, rb.linearVelocity.y);
+                // Y軸方向も考慮した移動（プレイヤーに向かって移動）
+                Vector2 newVelocity = new Vector2(
+                    direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER,
+                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.5f // 垂直移動は少し弱めに
+                );
+                
+                // 重力の影響を考慮（プレイヤーが下にいる場合のみ下向きの力を追加）
+                if (direction.y < 0) // プレイヤーが下にいる
+                {
+                    newVelocity.y += rb.gravityScale * Physics2D.gravity.y * 0.3f; // 重力を少し追加
+                }
+                
                 rb.linearVelocity = newVelocity;
                 
                 if (spriteRenderer != null)
                     spriteRenderer.flipX = direction.x < 0;
+            }
+            else
+            {
+                // 水平移動が不要でも、プレイヤーが下にいる場合は下向きに移動
+                if (direction.y < -MIN_MOVE_THRESHOLD) // プレイヤーが明確に下にいる
+                {
+                    Vector2 newVelocity = new Vector2(
+                        rb.linearVelocity.x * 0.8f, // 水平速度を少し減衰
+                        direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.7f // 下向きに移動
+                    );
+                    rb.linearVelocity = newVelocity;
+                }
             }
         }
         

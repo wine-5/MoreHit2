@@ -47,13 +47,13 @@ namespace MoreHit.Enemy
 
         // Large Enemy Constants
         private const float LARGE_HP = 100f;
-        private const float LARGE_SPEED = 2f;
-        private const int LARGE_STOCK = 2;
+        private const float LARGE_SPEED = 4f;
+        private const int LARGE_STOCK = 0;
         private const int LARGE_NEED_STOCK = 8;
 
         // Boss Enemy Constants
-        private const float BOSS_HP = 200f;
-        private const float BOSS_SPEED = 7f;
+        private const float BOSS_HP = 100f;
+        private const float BOSS_SPEED = 10f;
         private const int BOSS_STOCK = 0;
         private const int BOSS_NEED_STOCK = 20;
 

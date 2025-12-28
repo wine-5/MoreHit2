@@ -1,5 +1,6 @@
 using UnityEngine;
 using MoreHit.Events;
+using MoreHit.UI;
 
 namespace MoreHit.Boss
 {
@@ -13,6 +14,7 @@ namespace MoreHit.Boss
         
         [Header("UI設定")]
         [SerializeField] private GameObject bossHPBarUI; // ボスHPバーのUI
+        [SerializeField] private BossHPBar bossHPBarScript; // BossHPBarコンポーネント（直接参照）
         
         [Header("デバッグ")]
         [SerializeField] private bool showDebugLog = true;
@@ -22,6 +24,7 @@ namespace MoreHit.Boss
             // ボス出現イベントを購読
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
+            GameEvents.OnBossDamaged += OnBossDamaged; // 直接ダメージイベントも購読
             
             if (showDebugLog)
                 Debug.Log($"✅ [BossManager] イベントリスナーを登録しました");
@@ -32,6 +35,7 @@ namespace MoreHit.Boss
             // イベント購読を解除
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
+            GameEvents.OnBossDamaged -= OnBossDamaged;
             
             if (showDebugLog)
                 Debug.Log($"🔄 [BossManager] イベントリスナーを解除しました");
@@ -68,9 +72,38 @@ namespace MoreHit.Boss
             // HPバーを表示
             if (bossHPBarUI != null)
                 bossHPBarUI.SetActive(true);
+                
+            // BossHPBarスクリプトに直接ボスを設定
+            if (bossHPBarScript != null)
+            {
+                var bossEnemy = bossGameObject.GetComponent<MoreHit.Enemy.BossEnemy>();
+                if (bossEnemy != null)
+                {
+                    bossHPBarScript.SetCurrentBoss(bossEnemy);
+                    if (showDebugLog)
+                        Debug.Log($"✅ [BossManager] BossHPBarにボスを直接設定しました");
+                }
+                else
+                {
+                    Debug.LogError($"❌ [BossManager] ボスにBossEnemyコンポーネントが見つかりません");
+                }
+            }
             
             if (showDebugLog)
                 Debug.Log($"🔥 [BossManager] ボス '{bossGameObject.name}' を有効化しました");
+        }
+        
+        /// <summary>
+        /// ボスダメージイベント受信（HPBar更新保証）
+        /// </summary>
+        private void OnBossDamaged(int damage)
+        {
+            if (bossHPBarScript != null)
+            {
+                bossHPBarScript.ForceUpdateHPBar();
+                if (showDebugLog)
+                    Debug.Log($"🩸 [BossManager] ボスダメージ検出、HPBar強制更新");
+            }
         }
         
         /// <summary>

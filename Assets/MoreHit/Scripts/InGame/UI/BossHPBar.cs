@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using MoreHit.Events;
 using MoreHit.Enemy;
 
@@ -51,24 +52,117 @@ namespace MoreHit.UI
             // HPバーはOnBossDamagedイベント時のみアニメーション更新
         }
         
-        /// <summary>
-        /// ボス出現時の処理
+        /// <summary>        /// 外部からボスを直接設定（BossManager用）
         /// </summary>
-        private void OnBossAppear()
+        public void SetCurrentBoss(BossEnemy boss)
         {
-            // アタッチされたBossEnemyを使用
-            currentBoss = bossEnemy;
+            currentBoss = boss;
+            Debug.Log($"[BossHPBar] 外部からボスを設定: {boss?.name}");
             
             if (currentBoss != null)
             {
+                ShowBossHPBar();
+                UpdateHPBar();
+            }
+        }
+        
+        /// <summary>
+        /// 外部からHPバー強制更新（BossManager用）
+        /// </summary>
+        public void ForceUpdateHPBar()
+        {
+            if (currentBoss != null)
+            {
+                Debug.Log("[BossHPBar] 外部からHPバー強制更新");
+                UpdateHPBar();
+            }
+            else
+            {
+                Debug.LogWarning("[BossHPBar] currentBossがnullのため、HPバー強制更新をスキップ");
+            }
+        }
+        
+        /// <summary>        /// ボス出現時の処理
+        /// </summary>
+        private void OnBossAppear()
+        {
+            Debug.Log("[BossHPBar] OnBossAppear呼び出し - ボス検索開始");
+            
+            // 動的にアクティブなBossEnemyを探す
+            currentBoss = FindActiveBoss();
+            
+            if (currentBoss != null)
+            {
+                Debug.Log($"[BossHPBar] アクティブなボスを発見: {currentBoss.name}");
                 // HPバーを表示
                 ShowBossHPBar();
                 UpdateHPBar();
             }
             else
             {
-                Debug.LogError("[BossHPBar] BossEnemyがアタッチされていません！EditorでbossEnemyフィールドにアタッチしてください。");
+                Debug.LogError("[BossHPBar] アクティブなBossEnemyが見つかりません！少し待ってから再試行します");
+                // 少し待ってから再試行
+                StartCoroutine(RetryFindBoss());
             }
+        }
+        
+        /// <summary>
+        /// ボス検索を少し遅らせて再試行
+        /// </summary>
+        private System.Collections.IEnumerator RetryFindBoss()
+        {
+            yield return new WaitForSeconds(0.1f);
+            
+            Debug.Log("[BossHPBar] ボス再検索開始");
+            currentBoss = FindActiveBoss();
+            
+            if (currentBoss != null)
+            {
+                Debug.Log($"[BossHPBar] 再試行でアクティブなボスを発見: {currentBoss.name}");
+                ShowBossHPBar();
+                UpdateHPBar();
+            }
+            else
+            {
+                Debug.LogError("[BossHPBar] 再試行でもアクティブなBossEnemyが見つかりませんでした");
+            }
+        }
+        
+        /// <summary>
+        /// アクティブなBossEnemyを動的に探す
+        /// </summary>
+        private BossEnemy FindActiveBoss()
+        {
+            Debug.Log("[BossHPBar] FindActiveBoss開始");
+            
+            // まずアタッチされたbossEnemyをチェック
+            if (bossEnemy != null && bossEnemy.gameObject.activeInHierarchy)
+            {
+                Debug.Log($"[BossHPBar] アタッチされたボスを使用: {bossEnemy.name}");
+                return bossEnemy;
+            }
+            else
+            {
+                Debug.Log($"[BossHPBar] アタッチされたボス無効 - bossEnemy={(bossEnemy != null ? bossEnemy.name : "null")}, active={bossEnemy?.gameObject.activeInHierarchy}");
+            }
+            
+            // アタッチされていない、または非アクティブな場合は動的に探す
+            BossEnemy[] allBosses = FindObjectsByType<BossEnemy>(FindObjectsSortMode.None);
+            Debug.Log($"[BossHPBar] シーン内のBossEnemy数: {allBosses.Length}");
+            
+            foreach (BossEnemy boss in allBosses)
+            {
+                Debug.Log($"[BossHPBar] ボス検査: {boss?.name}, active={boss?.gameObject.activeInHierarchy}");
+                
+                if (boss != null && boss.gameObject.activeInHierarchy)
+                {
+                    Debug.Log($"[BossHPBar] 動的にアクティブなボスを発見: {boss.name}");
+                    return boss;
+                }
+            }
+            
+            Debug.Log("[BossHPBar] アクティブなボスが見つかりませんでした");
+            return null;
         }
         
         /// <summary>
