@@ -1,5 +1,6 @@
 using UnityEngine;
 using MoreHit.Effect;
+using MoreHit.Audio;
 
 namespace MoreHit.Player
 {
@@ -88,6 +89,12 @@ namespace MoreHit.Player
             if (isEffectActive) StopChargeEffect();
             
             if (EffectFactory.I == null) return;
+            
+            // チャージSE再生
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.Play("Se_Charge");
+            }
             
             // 静的データストアからエフェクトデータを取得
             EffectData chargeEffectData = EffectDataStore.GetEffectData(EffectType.ChargeAttackEffect);

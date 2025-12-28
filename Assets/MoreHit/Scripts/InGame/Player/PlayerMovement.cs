@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Audio;
 
 namespace MoreHit.Player
 {
@@ -213,6 +214,12 @@ namespace MoreHit.Player
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
             lastJumpTime = currentTime;
+            
+            // ジャンプSE再生
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.Play("Se_Jump");
+            }
         }
 
         /// <summary>

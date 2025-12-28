@@ -17,6 +17,16 @@ namespace MoreHit.Audio
         public static readonly AudioInfo GAMEOVER_BGM = new AudioInfo("GameOverBGM", "Audio/BGM/maou_bgm_8bit20", 0.05f);
         public static readonly AudioInfo CLEAR_BGM = new AudioInfo("ClearBGM", "Audio/BGM/maou_game_jingle05", 0.05f);
 
+        // SE定義
+        public static readonly AudioInfo SE_TAKE_DAMAGE = new AudioInfo("Se_TakeDamage", "Audio/SE/Se_TakeDamage", 0.15f);
+        public static readonly AudioInfo SE_PROJECTILE = new AudioInfo("Se_Projectile", "Audio/SE/Se_Projectile", 0.12f);
+        public static readonly AudioInfo SE_NORMAL_ATTACK = new AudioInfo("Se_NormalAttack", "Audio/SE/Se_NormalAttack", 0.18f);
+        public static readonly AudioInfo SE_JUMP = new AudioInfo("Se_Jump", "Audio/SE/Se_Jump", 0.1f);
+        public static readonly AudioInfo SE_ENEMY_DEFEAT = new AudioInfo("Se_EnemyDefeat", "Audio/SE/Se_EnemyDefeat", 0.16f);
+        public static readonly AudioInfo SE_CHARGE = new AudioInfo("Se_Charge", "Audio/SE/Se_Charge", 0.14f);
+        public static readonly AudioInfo SE_BUTTON = new AudioInfo("Se_Button", "Audio/SE/Se_Button", 0.1f);
+        public static readonly AudioInfo SE_BOSS_DEFEAT = new AudioInfo("Se_BossDefeat", "Audio/SE/Se_BossDefeat", 0.2f);
+
         #endregion
 
         #region 静的データアクセス
@@ -56,7 +66,16 @@ namespace MoreHit.Audio
                 { TITLE_BGM.Name, TITLE_BGM },
                 { INGAME_BGM.Name, INGAME_BGM },
                 { GAMEOVER_BGM.Name, GAMEOVER_BGM },
-                { CLEAR_BGM.Name, CLEAR_BGM }
+                { CLEAR_BGM.Name, CLEAR_BGM },
+                // SE
+                { SE_TAKE_DAMAGE.Name, SE_TAKE_DAMAGE },
+                { SE_PROJECTILE.Name, SE_PROJECTILE },
+                { SE_NORMAL_ATTACK.Name, SE_NORMAL_ATTACK },
+                { SE_JUMP.Name, SE_JUMP },
+                { SE_ENEMY_DEFEAT.Name, SE_ENEMY_DEFEAT },
+                { SE_CHARGE.Name, SE_CHARGE },
+                { SE_BUTTON.Name, SE_BUTTON },
+                { SE_BOSS_DEFEAT.Name, SE_BOSS_DEFEAT }
             };
 
             Debug.Log($"[AudioDataStore] 音声データキャッシュを構築しました。登録件数: {audioInfoCache.Count}");

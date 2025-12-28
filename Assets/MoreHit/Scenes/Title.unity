@@ -178,6 +178,7 @@ MonoBehaviour:
   - {fileID: 858434259}
   - {fileID: 834489044}
   - {fileID: 1544934328}
+  - {fileID: 8503171600034396905}
 --- !u!4 &705954737
 Transform:
   m_ObjectHideFlags: 0
@@ -221,6 +222,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2466022052854412477, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 8.400024
+      objectReference: {fileID: 0}
     - target: {fileID: 2936706385670079279, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 80.32346
@@ -278,6 +283,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+--- !u!1 &8503171600034396905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2772997846739935557, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+  m_PrefabInstance: {fileID: 8503171600034396904}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
