@@ -8,12 +8,12 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
     private static readonly object lockObject = new object();
-    private static bool isDestroying = false;
 
     /// <summary>
     /// DontDestroyOnLoadを適用するかどうか
     /// </summary>
     protected virtual bool UseDontDestroyOnLoad => true;
+    
     /// <summary>
     /// Singletonインスタンスにアクセスするプロパティ
     /// </summary>
@@ -21,12 +21,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            if (isDestroying)
-            {
-                Debug.LogWarning($"[Singleton] {typeof(T).Name}のインスタンスはすでに破棄されています。");
-                return null;
-            }
-
             lock (lockObject)
             {
                 if (instance == null)
@@ -42,7 +36,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         GameObject singletonObject = new GameObject($"{typeof(T).Name} (Singleton)");
                         instance = singletonObject.AddComponent<T>();
                         
-                        // IsPersistentプロパティをチェックしてからDontDestroyOnLoadを適用
+                        // UseDontDestroyOnLoadプロパティをチェックしてからDontDestroyOnLoadを適用
                         T singletonComponent = instance as T;
                         if (singletonComponent != null && (singletonComponent as Singleton<T>).UseDontDestroyOnLoad)
                             DontDestroyOnLoad(singletonObject);
@@ -75,12 +69,15 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (instance == this)
-            isDestroying = true;
+        // シーン切り替え時にインスタンスをクリア（UseDontDestroyOnLoadがfalseの場合）
+        if (instance == this && !UseDontDestroyOnLoad)
+        {
+            instance = null;
+        }
     }
 
     /// <summary>
     /// インスタンスが存在するかチェック
     /// </summary>
-    public static bool HasInstance => instance != null && !isDestroying;
+    public static bool HasInstance => instance != null;
 }
