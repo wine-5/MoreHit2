@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 130.00012, y: 170}
+  m_AnchoredPosition: {x: 130.00012, y: -50}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &847315333
@@ -342,6 +342,22 @@ PrefabInstance:
     - target: {fileID: 2251388525693358532, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
       propertyPath: m_Name
       value: Clear
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344256247028189189, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344256247028189189, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344256247028189189, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344256247028189189, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 5843086146545755223, guid: c93a8e816bd106545ba61a9dfe97fe53, type: 3}
       propertyPath: m_LocalPosition.x
