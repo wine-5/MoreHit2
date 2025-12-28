@@ -264,6 +264,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 355549986818305060, guid: 8de172035478f26468c48915f21889ed, type: 3}
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 5662621573035475572, guid: aedc92dc33f654045a7e5f67d6edaee2, type: 3}
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 355549986818305060, guid: 8de172035478f26468c48915f21889ed, type: 3}
     - target: {fileID: 826503546232611216, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalScale.x
       value: 4
@@ -296,6 +308,10 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: -0.057265043
       objectReference: {fileID: 0}
+    - target: {fileID: 4142422803504637575, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 5662621573035475572, guid: 4217c7501aa455640ab6fe0a5645083d, type: 3}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

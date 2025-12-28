@@ -9,65 +9,110 @@ namespace MoreHit.Effect
     [System.Serializable]
     public class EffectData
     {
-        [Header("基本設定")]
         public EffectType effectType;
         public GameObject effectPrefab;
-        
-        [Header("継続時間設定")]
-        [Tooltip("エフェクトの継続時間（秒）")]
         public float duration = 2f;
+
+        public EffectData(EffectType type, GameObject prefab, float dur)
+        {
+            effectType = type;
+            effectPrefab = prefab;
+            duration = dur;
+        }
     }
-    
+
     /// <summary>
-    /// 複数のエフェクトデータを管理するScriptableObject
+    /// 静的エフェクトデータストア - WebGL対応
     /// </summary>
-    [CreateAssetMenu(fileName = "New Effect Data Collection", menuName = "MoreHit/Effect Data Collection")]
-    public class EffectDataSO : ScriptableObject
+    public static class EffectDataStore
     {
-        [Header("Effect Collection")]
-        [SerializeField] private List<EffectData> effectList = new List<EffectData>();
+        // エフェクトプレハブのパス定義
+        private const string EFFECT_PATH = "Effect/";
         
         /// <summary>
-        /// すべてのエフェクトデータを取得
+        /// エフェクトデータを取得
         /// </summary>
-        public List<EffectData> GetAllEffects()
+        public static EffectData GetEffectData(EffectType effectType)
         {
-            return new List<EffectData>(effectList);
+            GameObject prefab = LoadEffectPrefab(effectType);
+            float duration = GetEffectDuration(effectType);
+            
+            return new EffectData(effectType, prefab, duration);
         }
-        
+
         /// <summary>
-        /// 指定したタイプのエフェクトデータを取得
+        /// エフェクトプレハブを読み込み
         /// </summary>
-        public EffectData GetEffectByType(EffectType type)
+        private static GameObject LoadEffectPrefab(EffectType effectType)
         {
-            return effectList.Find(effect => effect.effectType == type);
-        }
-        
-        /// <summary>
-        /// エフェクトデータを追加
-        /// </summary>
-        public void AddEffect(EffectData effectData)
-        {
-            if (effectData != null && !effectList.Contains(effectData))
+            string prefabName = GetEffectPrefabName(effectType);
+            GameObject prefab = Resources.Load<GameObject>(EFFECT_PATH + prefabName);
+            
+            if (prefab == null)
             {
-                effectList.Add(effectData);
+                Debug.LogWarning($"[EffectDataStore] プレハブが見つかりません: {EFFECT_PATH + prefabName}");
+            }
+            
+            return prefab;
+        }
+
+        /// <summary>
+        /// エフェクトタイプに対応するプレハブ名を取得
+        /// </summary>
+        private static string GetEffectPrefabName(EffectType effectType)
+        {
+            switch (effectType)
+            {
+                case EffectType.HitEffect:
+                    return "HitEffect";
+                case EffectType.ChargeAttackEffect:
+                    return "ChargeAttackEffect";
+                case EffectType.FullStockEffect:
+                    return "FullStockEffect";
+                default:
+                    Debug.LogWarning($"[EffectDataStore] 未知のEffectType: {effectType}");
+                    return "HitEffect"; // デフォルト
             }
         }
-        
+
         /// <summary>
-        /// エフェクトデータを削除
+        /// エフェクトタイプに対応する継続時間を取得
         /// </summary>
-        public void RemoveEffect(EffectData effectData)
+        private static float GetEffectDuration(EffectType effectType)
         {
-            effectList.Remove(effectData);
+            switch (effectType)
+            {
+                case EffectType.HitEffect:
+                    return 1.0f;
+                case EffectType.ChargeAttackEffect:
+                    return 2.0f;
+                case EffectType.FullStockEffect:
+                    return 3.0f;
+                default:
+                    return 2.0f; // デフォルト
+            }
         }
-        
+
         /// <summary>
-        /// 指定したタイプのエフェクトが存在するかチェック
+        /// 利用可能な全てのEffectTypeを取得
         /// </summary>
-        public bool HasEffectType(EffectType type)
+        public static EffectType[] GetAllEffectTypes()
         {
-            return effectList.Exists(effect => effect.effectType == type);
+            return new EffectType[]
+            {
+                EffectType.HitEffect,
+                EffectType.ChargeAttackEffect,
+                EffectType.FullStockEffect
+            };
+        }
+
+        /// <summary>
+        /// 指定したエフェクトタイプが利用可能かチェック
+        /// </summary>
+        public static bool IsEffectAvailable(EffectType effectType)
+        {
+            GameObject prefab = LoadEffectPrefab(effectType);
+            return prefab != null;
         }
     }
 }
