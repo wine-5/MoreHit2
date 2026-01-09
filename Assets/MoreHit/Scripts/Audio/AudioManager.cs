@@ -57,23 +57,7 @@ namespace MoreHit.Audio
         {
             audioDictionary = new Dictionary<string, AudioData>();
             
-            // WebGL対応: Static AudioDataStoreから音声データを取得
-            var audioInfoDict = AudioDataStore.GetAudioInfoDictionary();
-            
-            foreach (var kvp in audioInfoDict)
-            {
-                var audioInfo = kvp.Value;
-                if (audioInfo != null && !string.IsNullOrEmpty(audioInfo.Name))
-                {
-                    // AudioInfoからAudioDataを作成
-                    var audioData = new AudioData(audioInfo.Name, audioInfo.AudioClip, audioInfo.VolumeMultiplier);
-                    audioDictionary[audioInfo.Name] = audioData;
-                    
-                    Debug.Log($"[AudioManager] Static音声データを登録: {audioInfo.Name}");
-                }
-            }
-            
-            // 従来のScriptableObject方式もフォールバック用として残す
+            // ScriptableObjectから音声データを取得
             if (audioDataArray != null)
             {
                 foreach (var audioDataSO in audioDataArray)
@@ -84,15 +68,7 @@ namespace MoreHit.Audio
                         {
                             if (audioData != null && !string.IsNullOrEmpty(audioData.AudioName))
                             {
-                                if (audioDictionary.ContainsKey(audioData.AudioName))
-                                {
-                                    Debug.LogWarning($"[AudioManager] ScriptableObject音声データは既にStatic版が存在するためスキップ: {audioData.AudioName}");
-                                }
-                                else
-                                {
-                                    audioDictionary[audioData.AudioName] = audioData;
-                                    Debug.Log($"[AudioManager] ScriptableObject音声データを登録: {audioData.AudioName}");
-                                }
+                                audioDictionary[audioData.AudioName] = audioData;
                             }
                         }
                     }

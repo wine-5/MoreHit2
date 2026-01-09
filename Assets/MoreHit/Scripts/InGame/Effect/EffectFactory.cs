@@ -6,10 +6,13 @@ using System.Collections.Generic;
 namespace MoreHit
 {
     /// <summary>
-    /// エフェクト生成を一元管理するFactory - Static Data Pattern
+    /// エフェクト生成を一元管理するFactory
     /// </summary>
     public class EffectFactory : Singleton<EffectFactory>
     {
+        [Header("エフェクトデータ")]
+        [SerializeField] private EffectDataSO effectDataSO;
+        
         private ObjectPool objectPool;
         private Dictionary<EffectType, EffectData> effectDataDictionary;
         
@@ -22,7 +25,7 @@ namespace MoreHit
             // エフェクト用ObjectPoolを取得
             FindEffectObjectPool();
             
-            // 静的データストアからエフェクトデータを初期化
+            // ScriptableObjectからエフェクトデータを初期化
             InitializeEffectDataDictionary();
         }
         
@@ -55,31 +58,23 @@ namespace MoreHit
         {
             effectDataDictionary = new Dictionary<EffectType, EffectData>();
             
-            Debug.Log("🔄 EffectFactory: 静的データストアからエフェクトデータを初期化中...");
-            
-            // 静的データストアから全てのエフェクトタイプを取得
-            EffectType[] allEffectTypes = EffectDataStore.GetAllEffectTypes();
-            
-            foreach (var effectType in allEffectTypes)
+            if (effectDataSO == null || effectDataSO.EffectDataList == null)
             {
-                EffectData data = EffectDataStore.GetEffectData(effectType);
-                
-                if (data != null && data.effectPrefab != null)
-                {
-                    effectDataDictionary[effectType] = data;
-                    Debug.Log($"✅ EffectFactory: {effectType} エフェクトを登録しました");
-                }
-                else if (data != null)
-                {
-                    Debug.LogWarning($"⚠️ EffectFactory: {effectType} のプレハブが設定されていません");
-                }
-                else
-                {
-                    Debug.LogError($"❌ EffectFactory: {effectType} のデータ取得に失敗しました");
-                }
+                Debug.LogWarning("EffectFactory: エフェクトデータが設定されていません");
+                return;
             }
             
-            Debug.Log($"✅ EffectFactory: 合計{effectDataDictionary.Count}個のエフェクトを登録しました");
+            foreach (var effectData in effectDataSO.EffectDataList)
+            {
+                if (effectData != null && effectData.EffectPrefab != null)
+                {
+                    effectDataDictionary[effectData.EffectType] = effectData;
+                }
+                else if (effectData != null)
+                {
+                    Debug.LogWarning($"EffectFactory: {effectData.EffectType} のプレハブが設定されていません");
+                }
+            }
         }
         
         /// <summary>
@@ -90,11 +85,10 @@ namespace MoreHit
         /// <returns>生成されたエフェクトオブジェクト</returns>
         public GameObject CreateEffect(EffectType effectType, Vector3 position)
         {
-            // エフェクトデータ辞書がnullまたは空の場合
             if (effectDataDictionary == null || effectDataDictionary.Count == 0)
             {
-                Debug.LogError("❌ EffectFactory: エフェクトデータ辞書が初期化されていません！InitializeEffectDataDictionary()を実行してください");
-                InitializeEffectDataDictionary(); // 再初期化を試行
+                Debug.LogError("EffectFactory: エフェクトデータ辞書が初期化されていません");
+                InitializeEffectDataDictionary();
                 if (effectDataDictionary == null || effectDataDictionary.Count == 0)
                 {
                     return null;
@@ -103,30 +97,29 @@ namespace MoreHit
             
             if (!effectDataDictionary.TryGetValue(effectType, out EffectData data))
             {
-                Debug.LogError($"❌ EffectFactory: EffectType '{effectType}' のデータが見つかりません！");
-                Debug.LogError($"❌ 利用可能なエフェクトタイプ: {string.Join(", ", effectDataDictionary.Keys)}");
+                Debug.LogError($"EffectFactory: EffectType '{effectType}' のデータが見つかりません");
                 return null;
             }
             
             if (objectPool == null)
             {
-                Debug.LogError("❌ EffectFactory: ObjectPool が利用できません！エフェクト生成を中止します");
+                Debug.LogError("EffectFactory: ObjectPool が利用できません");
                 return null;
             }
             
-            if (data.effectPrefab == null)
+            if (data.EffectPrefab == null)
             {
-                Debug.LogError($"❌ EffectFactory: EffectType '{effectType}' のプレハブがnullです！");
+                Debug.LogError($"EffectFactory: EffectType '{effectType}' のプレハブがnullです");
                 return null;
             }
             
             // プールからエフェクトオブジェクトを取得
-            var result = objectPool.GetObject(data.effectPrefab, position, Quaternion.identity);
+            var result = objectPool.GetObject(data.EffectPrefab, position, Quaternion.identity);
             
             // スケールをプレハブの元の値にリセット
             if (result != null)
             {
-                result.transform.localScale = data.effectPrefab.transform.localScale;
+                result.transform.localScale = data.EffectPrefab.transform.localScale;
             }
             
             return result;
@@ -203,10 +196,10 @@ namespace MoreHit
         {
             if (effectDataDictionary.TryGetValue(effectType, out EffectData data))
             {
-                return data.duration;
+                return data.Duration;
             }
             
-            Debug.LogWarning($"⚠️ EffectFactory: EffectType '{effectType}' のデータが見つかりません！継続時間0を返します");
+            Debug.LogWarning($"EffectFactory: EffectType '{effectType}' のデータが見つかりません");
             return 0f;
         }
     }

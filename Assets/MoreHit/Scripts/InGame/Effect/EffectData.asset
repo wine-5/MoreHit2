@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Effect Data Collection
-  m_EditorClassIdentifier: Assembly-CSharp:MoreHit.Effect:EffectDataSO
-  effectList:
+  m_Script: {fileID: 11500000, guid: 1be06f0a5560c114fab41d9c67128542, type: 3}
+  m_Name: EffectData
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Effect.EffectDataSO
+  effectDataList:
   - effectType: 0
     effectPrefab: {fileID: 355549986818305060, guid: a29e659c2b06dd34a9038aafefa1cd52, type: 3}
     duration: 2
   - effectType: 1
-    effectPrefab: {fileID: 5662621573035475572, guid: 9d617a0d1ef1d9d4081b16b234fac6e9, type: 3}
+    effectPrefab: {fileID: 5662621573035475572, guid: f54b1fb72725479439c194f94e575d66, type: 3}
     duration: 2
   - effectType: 2
     effectPrefab: {fileID: 3568795517321926131, guid: 56ffdabe517aa3043ad6ee8e9024b5f2, type: 3}

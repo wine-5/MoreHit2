@@ -138,6 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
   bossGameObject: {fileID: 199866987}
   bossHPBarUI: {fileID: 1952253495}
+  bossHPBarScript: {fileID: 0}
   showDebugLog: 0
 --- !u!1 &1267770595
 GameObject:
@@ -191,6 +192,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1540952279342932342, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: effectDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: ac0fc544ede98ad49864696eef301d27, type: 2}
+    - target: {fileID: 1540952279342932342, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: effectDataArray.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2401626653840851302, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
       value: 0

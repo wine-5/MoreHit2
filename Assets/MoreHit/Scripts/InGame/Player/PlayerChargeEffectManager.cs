@@ -95,14 +95,6 @@ namespace MoreHit.Player
             {
                 AudioManager.I.Play("Se_Charge");
             }
-            
-            // 静的データストアからエフェクトデータを取得
-            EffectData chargeEffectData = EffectDataStore.GetEffectData(EffectType.ChargeAttackEffect);
-            if (chargeEffectData == null || chargeEffectData.effectPrefab == null)
-            {
-                Debug.LogWarning("⚠️ PlayerChargeEffectManager: ChargeAttackEffectのデータまたはプレハブが見つかりません");
-                return;
-            }
 
             Vector3 spawnPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
             currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, spawnPosition);

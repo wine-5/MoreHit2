@@ -23,6 +23,7 @@ namespace MoreHit.Enemy
         [SerializeField] protected float bounceEffectDuration = 3f;
         [Header("敵設定")]
         [SerializeField] protected EnemyType enemyType = EnemyType.Normal;
+        [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected AttackData enemyAttackData;
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
@@ -44,7 +45,7 @@ namespace MoreHit.Enemy
         private const string LayerEnemy = "Enemy";
         private const string LayerFlyingEnemy = "FlyingEnemy";
 
-        protected EnemyData enemyData;
+        protected EnemyDataSO enemyData;
         protected float currentHP;
         protected bool isDead = false;
         public bool IsDead => isDead;
@@ -120,7 +121,7 @@ namespace MoreHit.Enemy
             isStockTimerActive = true;
 
             // ストックが必要数に達したかチェック
-            if (enemyData != null && currentStockCount >= enemyData.Needstock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
+            if (enemyData != null && currentStockCount >= enemyData.NeedStock && currentState != EnemyState.ReadyToLaunch && currentState != EnemyState.Launch)
             {
                 OnStockReachedRequired();
             }
@@ -169,7 +170,7 @@ namespace MoreHit.Enemy
             }
 
             // 必要数を超えた分のストックを計算（ボーナス威力の算出用）
-            int extraStocks = currentStockCount - enemyData.Needstock;
+            int extraStocks = currentStockCount - enemyData.NeedStock;
             // 基本時間に、余剰ストックに応じた追加時間を加算
             currentLaunchTimer = bounceEffectDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
 
@@ -233,24 +234,20 @@ namespace MoreHit.Enemy
         }
 
         /// <summary>
-        /// 敵データをロードする - Static Data Pattern
+        /// 敵データをロードする
         /// </summary>
         private void LoadEnemyData()
         {
-            Debug.Log($"[EnemyBase] 静的データストアから {enemyType} のデータを読み込み中...");
-            
-            // 静的データストアから直接取得
-            enemyData = EnemyDataStore.GetEnemyData(enemyType);
+            enemyData = enemyDataSO;
             
             if (enemyData != null)
             {
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
-                Debug.Log($"✅ EnemyBase: {enemyType} のデータを読み込みました (HP:{currentHP}, Stock:{currentStockCount})");
             }
             else
             {
-                Debug.LogError($"❌ EnemyBase: {enemyType} のデータ取得に失敗しました");
+                Debug.LogError($"EnemyBase: {enemyType} のデータが設定されていません");
             }
         }
         protected virtual void InitializeEnemy()
@@ -269,9 +266,9 @@ namespace MoreHit.Enemy
         // 吹っ飛ばし開始処理
         public void TryLaunch()
         {
-            if (currentStockCount < enemyData.Needstock) return;
+            if (currentStockCount < enemyData.NeedStock) return;
             // 必要数を超えた分のストックを計算（ボーナス時間の算出用）
-            int extraStocks = currentStockCount - enemyData.Needstock;
+            int extraStocks = currentStockCount - enemyData.NeedStock;
             // 基本時間に、余剰ストックに応じた追加時間を加算して「飛んでいる時間」を決める
             currentLaunchTimer = baseLaunchDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
 
@@ -321,7 +318,7 @@ namespace MoreHit.Enemy
 
                 // 相手を吹っ飛ばす処理
                 Vector2 impactDir = (otherEnemy.transform.position - transform.position).normalized;
-                int effectiveStock = Mathf.Max(this.currentStockCount, enemyData.Needstock);
+                int effectiveStock = Mathf.Max(this.currentStockCount, enemyData.NeedStock);
                 float attackerStockMultiplier = 1f + (effectiveStock * collisionBounceMultiplier);
                 float finalLaunchSpeed = launchPower * attackerStockMultiplier;
 
@@ -502,6 +499,6 @@ namespace MoreHit.Enemy
         public int CurrentStockCount => currentStockCount;
         public float CurrentHP => currentHP;
         public EnemyState CurrentState => currentState;
-        public EnemyData EnemyData => enemyData;
+        public EnemyDataSO EnemyData => enemyData;
     }
 }

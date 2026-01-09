@@ -14,7 +14,7 @@ namespace MoreHit.Audio
         public float VolumeMultiplier => volumeMultiplier;
         
         /// <summary>
-        /// AudioDataのコンストラクタ（Static AudioDataStore用）
+        /// AudioDataのコンストラクタ
         /// </summary>
         public AudioData(string name, AudioClip clip, float volume)
         {
