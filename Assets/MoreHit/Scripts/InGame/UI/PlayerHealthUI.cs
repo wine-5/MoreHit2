@@ -13,10 +13,10 @@ namespace MoreHit.UI
         [Header("UI設定")]
         [SerializeField] private Image backgroundImage; // 白色（減った部分）
         [SerializeField] private Image healthImage;     // 緑色（現在のHP）
-#if UNITY_EDITOR
+        
+        [Header("エディタ専用設定")]
         [SerializeField] private bool animateChanges = true;
         [SerializeField] private float animationSpeed = 2f;
-#endif
         
         private int maxHealth;
         private int currentHealth;
@@ -41,17 +41,10 @@ namespace MoreHit.UI
         
         private void Update()
         {
-#if UNITY_EDITOR
             if (needsAnimation && animateChanges)
             {
                 AnimateHealthImage();
             }
-#else
-            if (needsAnimation)
-            {
-                AnimateHealthImage();
-            }
-#endif
         }
         
         /// <summary>
@@ -101,16 +94,25 @@ namespace MoreHit.UI
         /// </summary>
         private System.Collections.IEnumerator RetryInitialization()
         {
-            int maxRetries = 10;
+            int maxRetries = 30; // リトライ回数を増加
             int retries = 0;
+            
+            Debug.Log("PlayerHealthUI: PlayerDataProvider の初期化を開始します...");
             
             while (retries < maxRetries)
             {
-                yield return new WaitForSeconds(0.1f);
+                // 最初の数回は短い間隔で試す
+                if (retries < 10)
+                    yield return new WaitForSeconds(0.02f); // 20ms間隔
+                else if (retries < 20)
+                    yield return new WaitForSeconds(0.05f); // 50ms間隔
+                else
+                    yield return new WaitForSeconds(0.1f);  // 100ms間隔
                 
                 var playerDataProvider = PlayerDataProvider.I;
                 if (playerDataProvider != null)
                 {
+                    Debug.Log($"PlayerHealthUI: PlayerDataProviderが見つかりました（試行回数: {retries + 1}）");
                     InitializeHealth();
                     yield break;
                 }

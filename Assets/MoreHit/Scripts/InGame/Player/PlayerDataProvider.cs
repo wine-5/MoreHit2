@@ -35,6 +35,8 @@ namespace MoreHit.Player
         {
             base.Awake();
             
+            Debug.Log("PlayerDataProvider: 初期化を開始します...");
+            
             if (playerHealth == null)
                 playerHealth = GetComponent<PlayerHealth>();
             if (playerMovement == null)
@@ -43,6 +45,14 @@ namespace MoreHit.Player
                 playerController = GetComponent<PlayerController>();
             if (playerTransform == null)
                 playerTransform = transform;
+                
+            Debug.Log("PlayerDataProvider: 初期化が完了しました。");
+        }
+
+        private void Start()
+        {
+            // Startで確実に初期化完了を報告
+            Debug.Log("PlayerDataProvider: Start で初期化確認完了。");
         }
     }
 }

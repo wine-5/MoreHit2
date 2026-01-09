@@ -57,6 +57,23 @@ namespace MoreHit.Audio
         {
             audioDictionary = new Dictionary<string, AudioData>();
             
+            // WebGL対応: Static AudioDataStoreから音声データを取得
+            var audioInfoDict = AudioDataStore.GetAudioInfoDictionary();
+            
+            foreach (var kvp in audioInfoDict)
+            {
+                var audioInfo = kvp.Value;
+                if (audioInfo != null && !string.IsNullOrEmpty(audioInfo.Name))
+                {
+                    // AudioInfoからAudioDataを作成
+                    var audioData = new AudioData(audioInfo.Name, audioInfo.AudioClip, audioInfo.VolumeMultiplier);
+                    audioDictionary[audioInfo.Name] = audioData;
+                    
+                    Debug.Log($"[AudioManager] Static音声データを登録: {audioInfo.Name}");
+                }
+            }
+            
+            // 従来のScriptableObject方式もフォールバック用として残す
             if (audioDataArray != null)
             {
                 foreach (var audioDataSO in audioDataArray)
@@ -68,14 +85,21 @@ namespace MoreHit.Audio
                             if (audioData != null && !string.IsNullOrEmpty(audioData.AudioName))
                             {
                                 if (audioDictionary.ContainsKey(audioData.AudioName))
-                                    Debug.LogError($"Duplicate audio name found: {audioData.AudioName}. Skipping...");
+                                {
+                                    Debug.LogWarning($"[AudioManager] ScriptableObject音声データは既にStatic版が存在するためスキップ: {audioData.AudioName}");
+                                }
                                 else
+                                {
                                     audioDictionary[audioData.AudioName] = audioData;
+                                    Debug.Log($"[AudioManager] ScriptableObject音声データを登録: {audioData.AudioName}");
+                                }
                             }
                         }
                     }
                 }
             }
+            
+            Debug.Log($"[AudioManager] 音声辞書の初期化完了。総登録数: {audioDictionary.Count}");
         }
 
         private void SetupAudioSourcePool()
@@ -145,16 +169,22 @@ namespace MoreHit.Audio
                         audioSource.loop = true; // BGMはループ再生
                         audioSource.Play();
                         
+                        Debug.Log($"[AudioManager] BGM再生開始: {bgmName}");
                         // BGM用AudioSourceは回収しない（ループし続けるため）
                     }
                     else
-                        Debug.LogError("No available AudioSource to play BGM");
+                        Debug.LogError("[AudioManager] No available AudioSource to play BGM");
                 }
                 else
-                    Debug.LogError($"AudioClip is null for BGM: {bgmName}");
+                {
+                    Debug.LogError($"[AudioManager] AudioClip is null for BGM: {bgmName}");
+                }
             }
             else
-                Debug.LogError($"BGM not found: {bgmName}");
+            {
+                Debug.LogError($"[AudioManager] BGM not found: {bgmName}");
+                PrintRegisteredAudioNames();
+            }
         }
 
         /// <summary>
@@ -294,6 +324,19 @@ namespace MoreHit.Audio
                     return kvp.Key;
             }
             return string.Empty;
+        }
+        
+        /// <summary>
+        /// 登録されている全音声名を表示（デバッグ用）
+        /// </summary>
+        public void PrintRegisteredAudioNames()
+        {
+            Debug.Log($"[AudioManager] 登録音声数: {audioDictionary.Count}");
+            foreach (var kvp in audioDictionary)
+            {
+                bool hasClip = kvp.Value.AudioClip != null;
+                Debug.Log($"  - {kvp.Key} (AudioClip: {(hasClip ? "✓" : "✗")})");
+            }
         }
     }
 }

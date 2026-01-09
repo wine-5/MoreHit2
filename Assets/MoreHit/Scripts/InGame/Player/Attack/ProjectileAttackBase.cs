@@ -1,3 +1,4 @@
+using MoreHit.Audio;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -90,6 +91,12 @@ namespace MoreHit.Attack
             );
             
             OnAfterProjectileSpawn(projectileObj);
+            
+            // 弾丸発射SE再生
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.Play("Se_Projectile");
+            }
         }
         
         /// <summary>

@@ -42,10 +42,10 @@ namespace MoreHit.Enemy
 
         private void Update()
         {
+#if UNITY_EDITOR
             if (autoSpawn && CanSpawn())
                 SpawnEnemySequentially();
-
-           
+#endif
         }
 
         private bool CanSpawn()

@@ -72,6 +72,7 @@ namespace MoreHit.Enemy
             canMove = true;
             isDead = false;
             currentState = EnemyState.Move;
+            canTakeDamage = true; // ボス登場時にダメージを受けられるように設定
             
             // EnemyDataからHPを取得（最優先）
             if (enemyData != null)
@@ -83,9 +84,7 @@ namespace MoreHit.Enemy
                 Debug.LogError("[BossEnemy] enemyDataがnullです！HPをデフォルト値に設定します。");
                 currentHP = 300; // フォールバック値
             }
-            
-            // ボス出現イベントを発火
-            GameEvents.TriggerBossAppear();
+
         }
         
         protected override void Update()
@@ -108,7 +107,6 @@ namespace MoreHit.Enemy
             if (enemyData != null)
             {
                 currentHP = GetMaxHP(); // EnemyDataから取得
-                GameEvents.TriggerBossAppear();
             }
             else
             {
@@ -135,9 +133,17 @@ namespace MoreHit.Enemy
         
         protected override void OnStockReachedRequired()
         {
-            base.OnStockReachedRequired();
+            Debug.Log($"[BossEnemy] OnStockReachedRequired開始 - canTakeDamage: {canTakeDamage}, isDead: {isDead}, currentHP: {currentHP}");
             
-            canTakeDamage = true;
+            // 死亡状態または非アクティブの場合は処理しない
+            if (isDead || !gameObject.activeInHierarchy)
+            {
+                Debug.Log($"[BossEnemy] 死亡またはnon-activeのため処理をスキップ");
+                return;
+            }
+            
+            // ダメージが受けられない状態でもストック満タン処理は実行
+            Debug.Log($"[BossEnemy] ダメージ処理を実行 - canTakeDamage: {canTakeDamage}");
             
             float previousHP = currentHP;
             currentHP = Mathf.Max(0, currentHP - AUTO_DAMAGE);
@@ -146,8 +152,14 @@ namespace MoreHit.Enemy
             GameEvents.TriggerBossDamaged(Mathf.FloorToInt(AUTO_DAMAGE));
             
             ClearStock();
-            canTakeDamage = false;
+            
+            // ボスは移動を続ける（基底クラスと異なる動作）
             currentState = EnemyState.Move;
+            canMove = true; // 移動継続を確保
+            canTakeDamage = true; // 次のダメージに備える
+            
+            Debug.Log($"[BossEnemy] canTakeDamage維持: true, canMove: true - 現在のHP: {currentHP}");
+            Debug.Log($"[BossEnemy] OnStockReachedRequired完了");
             
             if (currentHP <= 0) Die();
         }
@@ -164,13 +176,37 @@ namespace MoreHit.Enemy
             Vector3 currentPosition = transform.position;
             Vector3 direction = (targetPosition - currentPosition).normalized;
             
+            // 水平移動の判定
             if (Mathf.Abs(direction.x) > MIN_MOVE_THRESHOLD)
             {
-                Vector2 newVelocity = new Vector2(direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER, rb.linearVelocity.y);
+                // Y軸方向も考慮した移動（プレイヤーに向かって移動）
+                Vector2 newVelocity = new Vector2(
+                    direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER,
+                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.5f // 垂直移動は少し弱めに
+                );
+                
+                // 重力の影響を考慮（プレイヤーが下にいる場合のみ下向きの力を追加）
+                if (direction.y < 0) // プレイヤーが下にいる
+                {
+                    newVelocity.y += rb.gravityScale * Physics2D.gravity.y * 0.3f; // 重力を少し追加
+                }
+                
                 rb.linearVelocity = newVelocity;
                 
                 if (spriteRenderer != null)
                     spriteRenderer.flipX = direction.x < 0;
+            }
+            else
+            {
+                // 水平移動が不要でも、プレイヤーが下にいる場合は下向きに移動
+                if (direction.y < -MIN_MOVE_THRESHOLD) // プレイヤーが明確に下にいる
+                {
+                    Vector2 newVelocity = new Vector2(
+                        rb.linearVelocity.x * 0.8f, // 水平速度を少し減衰
+                        direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.7f // 下向きに移動
+                    );
+                    rb.linearVelocity = newVelocity;
+                }
             }
         }
         

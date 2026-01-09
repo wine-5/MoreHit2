@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using MoreHit.Player;
+using MoreHit.Audio;
 
 namespace MoreHit.Attack
 {
@@ -57,6 +58,12 @@ namespace MoreHit.Attack
             
             ExecuteCurrentAttack(attackData);
             AdvanceCombo();
+            
+            // 通常攻撃SE再生
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.Play("Se_NormalAttack");
+            }
             
             yield return new WaitForSeconds(attackDuration);
             

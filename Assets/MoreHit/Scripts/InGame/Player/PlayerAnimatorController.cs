@@ -17,8 +17,6 @@ namespace MoreHit.Player
             playerMovement = GetComponent<PlayerMovement>();
         }
 
-
-
         void Update()
         {
             // Animatorコンポーネントの存在チェック
@@ -32,6 +30,40 @@ namespace MoreHit.Player
 
             // Y方向速度
             animator.SetFloat("yVelocity", rb.linearVelocity.y);
+        }
+
+        /// <summary>
+        /// 攻撃アニメーション再生（全攻撃共通）
+        /// </summary>
+        public void PlayAttackAnimation()
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger("NormalAttack");
+                Debug.Log("[PlayerAnimator] 攻撃アニメーション開始");
+            }
+        }
+
+        /// <summary>
+        /// 攻撃アニメーションが再生中かどうか
+        /// </summary>
+        public bool IsAttacking()
+        {
+            if (animator == null) return false;
+            
+            AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
+            return currentState.IsName("PlayerAttack");
+        }
+
+        /// <summary>
+        /// 現在の攻撃アニメーションの進行状況を取得（0-1）
+        /// </summary>
+        public float GetAttackAnimationProgress()
+        {
+            if (animator == null || !IsAttacking()) return 0f;
+            
+            AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
+            return currentState.normalizedTime;
         }
     }
 }

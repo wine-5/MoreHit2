@@ -211,11 +211,63 @@ namespace MoreHit.Pool
                 }
                 else
                 {
+                    // エフェクトプレハブの場合は動的に登録を試行
+                    if (TryAddEffectPrefabDynamically(prefab))
+                    {
+                        Debug.Log($"✅ [ObjectPool] エフェクトプレハブ '{prefab.name}' を動的に登録しました");
+                        return GetObject(prefab); // 再帰呼び出しで登録後に取得
+                    }
+                    
                     Debug.LogError($"❌ [ObjectPool] 要求されたプレハブ '{prefab.name}' は ObjectPool に登録されていません。");
                     return null;
                 }
             }
         }
+        
+        /// <summary>
+        /// プレハブを動的に登録する（エフェクト・プロジェクタイル対応）
+        /// </summary>
+        /// <param name="prefab">登録するプレハブ</param>
+        /// <returns>登録に成功した場合true</returns>
+        private bool TryAddEffectPrefabDynamically(GameObject prefab)
+        {
+            if (prefab == null) return false;
+            
+            string prefabName = prefab.name;
+            GameObject parentObject = null;
+            
+            // エフェクト関連のプレハブかチェック
+            if (prefabName.Contains("Effect") || prefabName.Contains("effect"))
+            {
+                parentObject = GameObject.Find("Effects");
+                if (parentObject == null)
+                {
+                    parentObject = new GameObject("Effects");
+                    parentObject.transform.SetParent(transform);
+                }
+            }
+            // プロジェクタイル関連のプレハブかチェック
+            else if (prefabName.Contains("Projectile") || prefabName.Contains("projectile") || 
+                     prefabName.Contains("Bullet") || prefabName.Contains("bullet"))
+            {
+                parentObject = GameObject.Find("Projectiles");
+                if (parentObject == null)
+                {
+                    parentObject = new GameObject("Projectiles");
+                    parentObject.transform.SetParent(transform);
+                }
+            }
+            
+            if (parentObject != null)
+            {
+                // 動的にプールに追加
+                AddToPool($"Dynamic_{prefabName}", prefab, parentObject, 10); // プロジェクタイルは多めに
+                return true;
+            }
+            
+            return false;
+            }
+        
 
         /// <summary>
         /// プレハブからオブジェクトを取得し、指定した位置と回転を設定します

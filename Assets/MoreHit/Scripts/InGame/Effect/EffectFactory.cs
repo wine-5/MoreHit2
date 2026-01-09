@@ -2,18 +2,14 @@ using UnityEngine;
 using MoreHit.Effect;
 using MoreHit.Pool;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MoreHit
 {
     /// <summary>
-    /// エフェクト生成を一元管理するFactory
+    /// エフェクト生成を一元管理するFactory - Static Data Pattern
     /// </summary>
     public class EffectFactory : Singleton<EffectFactory>
     {
-        [Header("Effect Data")]
-        [SerializeField] private EffectDataSO effectDataCollection;
-        
         private ObjectPool objectPool;
         private Dictionary<EffectType, EffectData> effectDataDictionary;
         
@@ -26,60 +22,11 @@ namespace MoreHit
             // エフェクト用ObjectPoolを取得
             FindEffectObjectPool();
             
-            // エフェクトデータを辞書化
+            // 静的データストアからエフェクトデータを初期化
             InitializeEffectDataDictionary();
-            
-            // もしEffectDataSOがnullの場合はResourcesフォルダから読み込みを試行
-            if (effectDataCollection == null)
-            {
-                TryLoadEffectDataFromResources();
-            }
-            
-            // WebGL環境での遅延読み込み対応
-            if (effectDataCollection == null)
-            {
-                StartCoroutine(DelayedResourceLoad());
-            }
         }
         
-        private System.Collections.IEnumerator DelayedResourceLoad()
-        {
-            yield return new WaitForSeconds(1f); // 1秒待機
-            
-            if (effectDataCollection == null)
-            {
-                Debug.Log("🔄 EffectFactory: 遅延読み込みを試行します");
-                TryLoadEffectDataFromResources();
-            }
-        }
-        
-        private void TryLoadEffectDataFromResources()
-        {
-            // WebGL対応: Assets/MoreHit/Prefabs/Effect/Effect Data Collection.asset を
-            // Resourcesフォルダにコピーした EffectDataCollection.asset を読み込み
-            try 
-            {
-                var resourceEffectData = Resources.Load<EffectDataSO>("EffectDataCollection");
-                if (resourceEffectData != null)
-                {
-                    Debug.Log("✅ EffectFactory: ResourcesフォルダからEffectDataCollectionを読み込みました");
-                    effectDataCollection = resourceEffectData;
-                    InitializeEffectDataDictionary();
-                    return;
-                }
-                else
-                {
-                    Debug.LogError("❌ EffectFactory: Resources.Loadはnullを返しました - EffectDataCollection.assetがResourcesフォルダに存在しない可能性があります");
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"❌ EffectFactory: Resources.Load エラー: {e.Message}");
-            }
-            
-            Debug.LogWarning("⚠️ EffectFactory: ResourcesフォルダからEffectDataCollectionの読み込みに失敗");
-            Debug.LogWarning("⚠️ 'Assets/MoreHit/Prefabs/Effect/Effect Data Collection.asset' を 'Assets/Resources/EffectDataCollection.asset' にコピーしてください");
-        }
+
         
         private void FindEffectObjectPool()
         {
@@ -108,31 +55,27 @@ namespace MoreHit
         {
             effectDataDictionary = new Dictionary<EffectType, EffectData>();
             
-            if (effectDataCollection == null)
-            {
-                Debug.LogError("❌ EffectFactory: EffectDataSOが設定されていません！Unityエディタでインスペクタを確認してください。");
-                Debug.LogError("❌ EffectFactory: WebGL版では一部のアセットが正しく読み込まれない場合があります。");
-                return;
-            }
+            Debug.Log("🔄 EffectFactory: 静的データストアからエフェクトデータを初期化中...");
             
-            var allEffects = effectDataCollection.GetAllEffects();
+            // 静的データストアから全てのエフェクトタイプを取得
+            EffectType[] allEffectTypes = EffectDataStore.GetAllEffectTypes();
             
-            if (allEffects == null || allEffects.Count == 0)
+            foreach (var effectType in allEffectTypes)
             {
-                Debug.LogWarning("⚠️ EffectFactory: EffectDataSOにエフェクトデータが登録されていません！");
-                return;
-            }
-            
-            foreach (var data in allEffects)
-            {
+                EffectData data = EffectDataStore.GetEffectData(effectType);
+                
                 if (data != null && data.effectPrefab != null)
                 {
-                    effectDataDictionary[data.effectType] = data;
-                    Debug.Log($"✅ EffectFactory: {data.effectType} エフェクトを登録しました");
+                    effectDataDictionary[effectType] = data;
+                    Debug.Log($"✅ EffectFactory: {effectType} エフェクトを登録しました");
                 }
                 else if (data != null)
                 {
-                    Debug.LogWarning($"⚠️ EffectFactory: {data.effectType} のプレハブが設定されていません");
+                    Debug.LogWarning($"⚠️ EffectFactory: {effectType} のプレハブが設定されていません");
+                }
+                else
+                {
+                    Debug.LogError($"❌ EffectFactory: {effectType} のデータ取得に失敗しました");
                 }
             }
             
@@ -147,13 +90,6 @@ namespace MoreHit
         /// <returns>生成されたエフェクトオブジェクト</returns>
         public GameObject CreateEffect(EffectType effectType, Vector3 position)
         {
-            // EffectDataSOが設定されていない場合の警告
-            if (effectDataCollection == null)
-            {
-                Debug.LogError($"❌ EffectFactory: EffectDataSOが設定されていません！エフェクト '{effectType}' を生成できません");
-                return null;
-            }
-            
             // エフェクトデータ辞書がnullまたは空の場合
             if (effectDataDictionary == null || effectDataDictionary.Count == 0)
             {
@@ -233,15 +169,7 @@ namespace MoreHit
                 ReturnEffect(effectObject);
         }
         
-        /// <summary>
-        /// エフェクトデータコレクションを設定
-        /// </summary>
-        /// <param name="dataCollection">設定するエフェクトデータコレクション</param>
-        public void SetEffectDataCollection(EffectDataSO dataCollection)
-        {
-            effectDataCollection = dataCollection;
-            InitializeEffectDataDictionary();
-        }
+
         
         /// <summary>
         /// 利用可能なエフェクトタイプの一覧を取得

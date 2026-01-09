@@ -1,5 +1,6 @@
 using UnityEngine;
 using MoreHit.Effect;
+using MoreHit.Audio;
 
 namespace MoreHit.Player
 {
@@ -11,7 +12,6 @@ namespace MoreHit.Player
         [Header("エフェクト設定")]
         [SerializeField] private Transform effectSpawnPoint; // エフェクト生成位置
         private PlayerInputManager inputManager; // 入力管理への参照
-        [SerializeField] private EffectDataSO effectDataCollection; // エフェクトデータ
         
         // 定数
         private const float POSITION_TOLERANCE = 0.01f;
@@ -89,10 +89,20 @@ namespace MoreHit.Player
             if (isEffectActive) StopChargeEffect();
             
             if (EffectFactory.I == null) return;
-            if (effectDataCollection == null) return;
             
-            EffectData chargeEffectData = effectDataCollection.GetEffectByType(EffectType.ChargeAttackEffect);
-            if (chargeEffectData == null) return;
+            // チャージSE再生
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.Play("Se_Charge");
+            }
+            
+            // 静的データストアからエフェクトデータを取得
+            EffectData chargeEffectData = EffectDataStore.GetEffectData(EffectType.ChargeAttackEffect);
+            if (chargeEffectData == null || chargeEffectData.effectPrefab == null)
+            {
+                Debug.LogWarning("⚠️ PlayerChargeEffectManager: ChargeAttackEffectのデータまたはプレハブが見つかりません");
+                return;
+            }
 
             Vector3 spawnPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
             currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, spawnPosition);

@@ -20,21 +20,20 @@ namespace MoreHit.Enemy
         [Header("UI設定")]
         [SerializeField] protected TextMeshProUGUI stockText;
         [Header("エフェクト設定")]
-        [SerializeField] protected float bounceEffectDuration = 3f; // 反射効果の時間
+        [SerializeField] protected float bounceEffectDuration = 3f;
         [Header("敵設定")]
-        [SerializeField] protected EnemyDataSO enemyDataSO;
         [SerializeField] protected EnemyType enemyType = EnemyType.Normal;
-        [SerializeField] protected AttackData enemyAttackData; // 敵の攻撃データ
+        [SerializeField] protected AttackData enemyAttackData;
         [Header("吹っ飛ばし設定")]
         [SerializeField] protected Vector2 launchVector = new Vector2(1, 1);
-        [SerializeField] protected float launchPower = 70f; // 大幅に強化
-        [SerializeField] protected float stockMultiplier = 0.2f; // 倍率も少し強化
+        [SerializeField] protected float launchPower = 70f;
+        [SerializeField] protected float stockMultiplier = 0.2f;
         [Header("ストックリセット設定")]
         [SerializeField] private float stockResetDuration = 5f;
         protected float stockResetTimer = 0f;
         protected bool isStockTimerActive = false;
         [Header("システム定数")]
-        [SerializeField] private float baseLaunchDuration = 1f; // 5fから1fに短縮
+        [SerializeField] private float baseLaunchDuration = 1f;
         [SerializeField] private float stockBonusThreshold = 5f;
         [SerializeField] private float collisionBounceMultiplier = 0.2f;
         [SerializeField] private float hitStopDuration = 1.0f;
@@ -44,8 +43,6 @@ namespace MoreHit.Enemy
         private const string TagGround = "Ground";
         private const string LayerEnemy = "Enemy";
         private const string LayerFlyingEnemy = "FlyingEnemy";
-
-
 
         protected EnemyData enemyData;
         protected float currentHP;
@@ -236,94 +233,26 @@ namespace MoreHit.Enemy
         }
 
         /// <summary>
-        /// 敵データをロードする
+        /// 敵データをロードする - Static Data Pattern
         /// </summary>
         private void LoadEnemyData()
         {
-            if (enemyDataSO == null)
-            {
-                Debug.LogError("[EnemyBase] enemyDataSOがnullです！Resources代替読み込みを試行します");
-                TryLoadEnemyDataFromResources();
-            }
+            Debug.Log($"[EnemyBase] 静的データストアから {enemyType} のデータを読み込み中...");
             
-            if (enemyDataSO == null)
-            {
-                Debug.LogError("[EnemyBase] Resources代替読み込みも失敗しました");
-                return;
-            }
-            
-            if (enemyDataSO.EnemyDataList == null)
-            {
-                Debug.LogError("[EnemyBase] EnemyDataListがnullです！");
-                return;
-            }
-            
-            // EnemyTypeで検索
-            foreach (var data in enemyDataSO.EnemyDataList)
-            {
-                if (data != null && data.EnemyType == enemyType)
-                {
-                    enemyData = data;
-                    break;
-                }
-            }
+            // 静的データストアから直接取得
+            enemyData = EnemyDataStore.GetEnemyData(enemyType);
             
             if (enemyData != null)
             {
                 currentHP = enemyData.MaxHP;
                 currentStockCount = enemyData.StockCount;
+                Debug.Log($"✅ EnemyBase: {enemyType} のデータを読み込みました (HP:{currentHP}, Stock:{currentStockCount})");
             }
             else
             {
-                Debug.LogError($"[EnemyBase] EnemyType '{enemyType}' に対応するデータが見つかりませんでした！");
-                
-                // デバッグ用：配列の全内容を表示
-                Debug.Log("[EnemyBase] 配列の内容:");
-                for (int i = 0; i < enemyDataSO.EnemyDataList.Length; i++)
-                {
-                    var data = enemyDataSO.EnemyDataList[i];
-                    if (data != null)
-                    {
-                        Debug.Log($"  [{i}] EnemyType: {data.EnemyType}");
-                    }
-                    else
-                    {
-                        Debug.Log($"  [{i}] null");
-                    }
-                }
+                Debug.LogError($"❌ EnemyBase: {enemyType} のデータ取得に失敗しました");
             }
         }
-        
-        /// <summary>
-        /// ResourcesからEnemyDataSOを読み込む試行
-        /// </summary>
-        private void TryLoadEnemyDataFromResources()
-        {
-            // WebGL対応: Assets/MoreHit/Scripts/InGame/Enemy/SO/EnemyData.asset を
-            // Resourcesフォルダにコピーした EnemyData.asset を読み込み
-            try 
-            {
-                var resourceEnemyData = Resources.Load<EnemyDataSO>("EnemyData");
-                if (resourceEnemyData != null)
-                {
-                    Debug.Log("✅ EnemyBase: ResourcesフォルダからEnemyDataを読み込みました");
-                    enemyDataSO = resourceEnemyData;
-                    return;
-                }
-                else
-                {
-                    Debug.LogError("❌ EnemyBase: Resources.Loadはnullを返しました - EnemyData.assetがResourcesフォルダに存在しない可能性があります");
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"❌ EnemyBase: Resources.Load エラー: {e.Message}");
-            }
-            
-            Debug.LogWarning("⚠️ EnemyBase: ResourcesフォルダからEnemyDataの読み込みに失敗");
-            Debug.LogWarning("⚠️ 'Assets/MoreHit/Scripts/InGame/Enemy/SO/EnemyData.asset' を 'Assets/Resources/EnemyData.asset' にコピーしてください");
-        }
-
         protected virtual void InitializeEnemy()
         {
             // 子クラスで独自の初期化処理をオーバーライド
