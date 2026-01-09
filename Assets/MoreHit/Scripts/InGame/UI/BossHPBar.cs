@@ -176,7 +176,7 @@ namespace MoreHit.UI
             // ボス撃破SE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_BossDefeat");
+                AudioManager.I.PlaySE(SeType.SE_BossDefeat);
                 Debug.Log("[BossHPBar] ボス撃破SE再生: Se_BossDefeat");
             }
             
@@ -209,7 +209,7 @@ namespace MoreHit.UI
         {
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_TakeDamage");
+                AudioManager.I.PlaySE(SeType.SE_TakeDamage);
                 Debug.Log("[BossHPBar] プレイヤーダメージSE再生: Se_TakeDamage");
             }
             else
@@ -225,7 +225,7 @@ namespace MoreHit.UI
         {
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_EnemyDefeat");
+                AudioManager.I.PlaySE(SeType.SE_EnemyDefeat);
                 Debug.Log("[BossHPBar] 敵撃破SE再生: Se_EnemyDefeat");
             }
             else

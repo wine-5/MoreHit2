@@ -8,7 +8,7 @@ namespace MoreHit.Audio
         protected override bool UseDontDestroyOnLoad => true;
 
         [Header("Audio Data")]
-        [SerializeField] private AudioDataSO[] audioDataArray;
+        [SerializeField] private AudioDataSO audioDataSO;
         [SerializeField] private int maxAudioSources = 10;
 
         [Header("Volume Settings")]
@@ -16,9 +16,11 @@ namespace MoreHit.Audio
         [SerializeField, Range(0f, 1f)] private float bgmVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float seVolume = 1f;
         
-        private Dictionary<string, AudioData> audioDictionary;
+        private Dictionary<SeType, SeAudioData> seAudioDictionary;
+        private Dictionary<BgmType, BgmAudioData> bgmAudioDictionary;
         private List<AudioSource> audioSourcePool;
         private Queue<AudioSource> availableAudioSources;
+        private AudioSource currentBgmSource;
 
         // 音量設定のPlayerPrefsキー
         private const string MASTER_VOLUME_KEY = "MasterVolume";
@@ -33,14 +35,8 @@ namespace MoreHit.Audio
         {
             base.Awake();
             LoadVolumeSettings();
-            InitializeAudioDictionary();
+            InitializeAudioDictionaries();
             SetupAudioSourcePool();
-        }
-
-        private void Start()
-        {
-            // ゲーム開始時にBGMを再生
-            // PlayBGM("GameBGM");
         }
 
         /// <summary>
@@ -53,29 +49,40 @@ namespace MoreHit.Audio
             seVolume = PlayerPrefs.GetFloat(SE_VOLUME_KEY, 1f);
         }
 
-        private void InitializeAudioDictionary()
+        private void InitializeAudioDictionaries()
         {
-            audioDictionary = new Dictionary<string, AudioData>();
+            seAudioDictionary = new Dictionary<SeType, SeAudioData>();
+            bgmAudioDictionary = new Dictionary<BgmType, BgmAudioData>();
             
-            // ScriptableObjectから音声データを取得
-            if (audioDataArray != null)
+            if (audioDataSO == null)
             {
-                foreach (var audioDataSO in audioDataArray)
+                Debug.LogWarning("AudioManager: AudioDataSOが設定されていません");
+                return;
+            }
+            
+            // SEデータを辞書に登録
+            if (audioDataSO.SeAudioDataList != null)
+            {
+                foreach (var seData in audioDataSO.SeAudioDataList)
                 {
-                    if (audioDataSO != null && audioDataSO.AudioDataList != null)
+                    if (seData != null && seData.AudioClip != null)
                     {
-                        foreach (var audioData in audioDataSO.AudioDataList)
-                        {
-                            if (audioData != null && !string.IsNullOrEmpty(audioData.AudioName))
-                            {
-                                audioDictionary[audioData.AudioName] = audioData;
-                            }
-                        }
+                        seAudioDictionary[seData.SeType] = seData;
                     }
                 }
             }
             
-            Debug.Log($"[AudioManager] 音声辞書の初期化完了。総登録数: {audioDictionary.Count}");
+            // BGMデータを辞書に登録
+            if (audioDataSO.BgmAudioDataList != null)
+            {
+                foreach (var bgmData in audioDataSO.BgmAudioDataList)
+                {
+                    if (bgmData != null && bgmData.AudioClip != null)
+                    {
+                        bgmAudioDictionary[bgmData.BgmType] = bgmData;
+                    }
+                }
+            }
         }
 
         private void SetupAudioSourcePool()
@@ -92,47 +99,44 @@ namespace MoreHit.Audio
         }
 
         /// <summary>
-        /// 指定した名前の音声を再生します
+        /// SEを再生
         /// </summary>
-        /// <param name="audioName">音声データの名前</param>
-        public void Play(string audioName)
+        public void PlaySE(SeType seType)
         {
-            if (audioDictionary.TryGetValue(audioName, out AudioData audioData))
+            if (seType == SeType.None) return;
+            
+            if (seAudioDictionary.TryGetValue(seType, out SeAudioData seData))
             {
-                if (audioData.AudioClip != null)
+                if (seData.AudioClip != null)
                 {
                     AudioSource audioSource = GetAvailableAudioSource();
                     if (audioSource != null)
                     {
-                        audioSource.clip = audioData.AudioClip;
-                        // BGMかSEかを判定（名前にbgmやmusicが含まれていればBGM）
-                        bool isBGM = audioName.ToLower().Contains("bgm") || audioName.ToLower().Contains("music");
-                        float volumeMultiplier = isBGM ? bgmVolume : seVolume;
-                        audioSource.volume = audioData.VolumeMultiplier * volumeMultiplier * masterVolume;
-                        audioSource.loop = false; // SEはループしない
+                        audioSource.clip = seData.AudioClip;
+                        audioSource.volume = seData.VolumeMultiplier * seVolume * masterVolume;
+                        audioSource.loop = false;
                         audioSource.Play();
                         
                         StartCoroutine(ReturnAudioSourceWhenFinished(audioSource));
                     }
-                    else
-                        Debug.LogError("No available AudioSource to play the audio");
                 }
-                else
-                    Debug.LogError($"AudioClip is null for audio: {audioName}");
             }
             else
-                Debug.LogError($"Audio not found: {audioName}");
+            {
+                Debug.LogWarning($"AudioManager: SE '{seType}' が見つかりません");
+            }
         }
 
         /// <summary>
-        /// BGMをループ再生します
+        /// BGMをループ再生
         /// </summary>
-        /// <param name="bgmName">BGMの名前</param>
-        public void PlayBGM(string bgmName)
+        public void PlayBGM(BgmType bgmType)
         {
-            if (audioDictionary.TryGetValue(bgmName, out AudioData audioData))
+            if (bgmType == BgmType.None) return;
+            
+            if (bgmAudioDictionary.TryGetValue(bgmType, out BgmAudioData bgmData))
             {
-                if (audioData.AudioClip != null)
+                if (bgmData.AudioClip != null)
                 {
                     // 既存のBGMを停止
                     StopBGM();
@@ -140,42 +144,32 @@ namespace MoreHit.Audio
                     AudioSource audioSource = GetAvailableAudioSource();
                     if (audioSource != null)
                     {
-                        audioSource.clip = audioData.AudioClip;
-                        audioSource.volume = audioData.VolumeMultiplier * bgmVolume * masterVolume;
-                        audioSource.loop = true; // BGMはループ再生
+                        audioSource.clip = bgmData.AudioClip;
+                        audioSource.volume = bgmData.VolumeMultiplier * bgmVolume * masterVolume;
+                        audioSource.loop = bgmData.Loop;
                         audioSource.Play();
                         
-                        Debug.Log($"[AudioManager] BGM再生開始: {bgmName}");
-                        // BGM用AudioSourceは回収しない（ループし続けるため）
+                        currentBgmSource = audioSource;
                     }
-                    else
-                        Debug.LogError("[AudioManager] No available AudioSource to play BGM");
-                }
-                else
-                {
-                    Debug.LogError($"[AudioManager] AudioClip is null for BGM: {bgmName}");
                 }
             }
             else
             {
-                Debug.LogError($"[AudioManager] BGM not found: {bgmName}");
-                PrintRegisteredAudioNames();
+                Debug.LogWarning($"AudioManager: BGM '{bgmType}' が見つかりません");
             }
         }
 
         /// <summary>
-        /// 再生中のBGMを停止します
+        /// 再生中のBGMを停止
         /// </summary>
         public void StopBGM()
         {
-            foreach (var audioSource in audioSourcePool)
+            if (currentBgmSource != null && currentBgmSource.isPlaying)
             {
-                if (audioSource.isPlaying && audioSource.loop)
-                {
-                    audioSource.Stop();
-                    audioSource.loop = false;
-                    availableAudioSources.Enqueue(audioSource);
-                }
+                currentBgmSource.Stop();
+                currentBgmSource.loop = false;
+                availableAudioSources.Enqueue(currentBgmSource);
+                currentBgmSource = null;
             }
         }
 
@@ -188,7 +182,7 @@ namespace MoreHit.Audio
             // なければ再生していないAudioSourceを探す
             foreach (var audioSource in audioSourcePool)
             {
-                if (!audioSource.isPlaying)
+                if (!audioSource.isPlaying && audioSource != currentBgmSource)
                     return audioSource;
             }
 
@@ -202,40 +196,9 @@ namespace MoreHit.Audio
                 yield return null;
             }
 
-            availableAudioSources.Enqueue(audioSource);
-        }
-
-        /// <summary>
-        /// すべての音声を停止します
-        /// </summary>
-        public void StopAll()
-        {
-            foreach (var audioSource in audioSourcePool)
+            if (audioSource != currentBgmSource)
             {
-                if (audioSource.isPlaying)
-                {
-                    audioSource.Stop();
-                    availableAudioSources.Enqueue(audioSource);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 指定した名前の音声をすべて停止します
-        /// </summary>
-        /// <param name="audioName">停止する音声の名前</param>
-        public void Stop(string audioName)
-        {
-            if (audioDictionary.TryGetValue(audioName, out AudioData audioData))
-            {
-                foreach (var audioSource in audioSourcePool)
-                {
-                    if (audioSource.isPlaying && audioSource.clip == audioData.AudioClip)
-                    {
-                        audioSource.Stop();
-                        availableAudioSources.Enqueue(audioSource);
-                    }
-                }
+                availableAudioSources.Enqueue(audioSource);
             }
         }
 
@@ -256,7 +219,7 @@ namespace MoreHit.Audio
         {
             bgmVolume = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(BGM_VOLUME_KEY, bgmVolume);
-            UpdateAllVolumes();
+            UpdateBGMVolume();
         }
 
         /// <summary>
@@ -266,7 +229,6 @@ namespace MoreHit.Audio
         {
             seVolume = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(SE_VOLUME_KEY, seVolume);
-            UpdateAllVolumes();
         }
 
         /// <summary>
@@ -274,44 +236,25 @@ namespace MoreHit.Audio
         /// </summary>
         private void UpdateAllVolumes()
         {
-            foreach (var audioSource in audioSourcePool)
-            {
-                if (audioSource.isPlaying && audioSource.clip != null)
-                {
-                    string audioName = GetAudioNameFromClip(audioSource.clip);
-                    if (!string.IsNullOrEmpty(audioName) && audioDictionary.TryGetValue(audioName, out AudioData audioData))
-                    {
-                        bool isBGM = audioName.ToLower().Contains("bgm") || audioName.ToLower().Contains("music");
-                        float volumeMultiplier = isBGM ? bgmVolume : seVolume;
-                        audioSource.volume = audioData.VolumeMultiplier * volumeMultiplier * masterVolume;
-                    }
-                }
-            }
+            UpdateBGMVolume();
         }
 
         /// <summary>
-        /// AudioClipから音声名を取得（逆引き）
+        /// BGMの音量を更新
         /// </summary>
-        private string GetAudioNameFromClip(AudioClip clip)
+        private void UpdateBGMVolume()
         {
-            foreach (var kvp in audioDictionary)
+            if (currentBgmSource != null && currentBgmSource.isPlaying)
             {
-                if (kvp.Value.AudioClip == clip)
-                    return kvp.Key;
-            }
-            return string.Empty;
-        }
-        
-        /// <summary>
-        /// 登録されている全音声名を表示（デバッグ用）
-        /// </summary>
-        public void PrintRegisteredAudioNames()
-        {
-            Debug.Log($"[AudioManager] 登録音声数: {audioDictionary.Count}");
-            foreach (var kvp in audioDictionary)
-            {
-                bool hasClip = kvp.Value.AudioClip != null;
-                Debug.Log($"  - {kvp.Key} (AudioClip: {(hasClip ? "✓" : "✗")})");
+                // 現在のBGMタイプを特定
+                foreach (var kvp in bgmAudioDictionary)
+                {
+                    if (kvp.Value.AudioClip == currentBgmSource.clip)
+                    {
+                        currentBgmSource.volume = kvp.Value.VolumeMultiplier * bgmVolume * masterVolume;
+                        break;
+                    }
+                }
             }
         }
     }

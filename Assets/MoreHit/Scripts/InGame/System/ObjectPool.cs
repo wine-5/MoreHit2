@@ -213,12 +213,8 @@ namespace MoreHit.Pool
                 {
                     // エフェクトプレハブの場合は動的に登録を試行
                     if (TryAddEffectPrefabDynamically(prefab))
-                    {
-                        Debug.Log($"✅ [ObjectPool] エフェクトプレハブ '{prefab.name}' を動的に登録しました");
                         return GetObject(prefab); // 再帰呼び出しで登録後に取得
-                    }
                     
-                    Debug.LogError($"❌ [ObjectPool] 要求されたプレハブ '{prefab.name}' は ObjectPool に登録されていません。");
                     return null;
                 }
             }

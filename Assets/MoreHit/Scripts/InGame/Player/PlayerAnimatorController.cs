@@ -38,10 +38,7 @@ namespace MoreHit.Player
         public void PlayAttackAnimation()
         {
             if (animator != null)
-            {
                 animator.SetTrigger("NormalAttack");
-                Debug.Log("[PlayerAnimator] 攻撃アニメーション開始");
-            }
         }
 
         /// <summary>

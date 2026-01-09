@@ -42,7 +42,7 @@ namespace MoreHit.Scene
         /// </summary>
         public void ChangeToTitleScene()
         {
-            Audio.AudioManager.I?.PlayBGM("TitleBGM");
+            Audio.AudioManager.I?.PlayBGM(Audio.BgmType.BGM_Title);
             LoadScene(SceneName.Title);
         }
 
@@ -51,7 +51,7 @@ namespace MoreHit.Scene
         /// </summary>
         public void ChangeToInGameScene()
         {
-            Audio.AudioManager.I?.PlayBGM("InGameBGM");
+            Audio.AudioManager.I?.PlayBGM(Audio.BgmType.BGM_InGame);
             LoadScene(SceneName.InGame);
         }
 
@@ -60,7 +60,7 @@ namespace MoreHit.Scene
         /// </summary>
         public void ChangeToGameClearScene()
         {
-            Audio.AudioManager.I?.PlayBGM("GameClearBGM");
+            Audio.AudioManager.I?.PlayBGM(Audio.BgmType.BGM_GameClear);
             LoadScene(SceneName.Clear);
         }
 
@@ -69,7 +69,7 @@ namespace MoreHit.Scene
         /// </summary>
         public void ChangeToGameOverScene()
         {
-            Audio.AudioManager.I?.PlayBGM("GameOverBGM");
+            Audio.AudioManager.I?.PlayBGM(Audio.BgmType.BGM_GameOver);
             LoadScene(SceneName.GameOver);
         }
     }

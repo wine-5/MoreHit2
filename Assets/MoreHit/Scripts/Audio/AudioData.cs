@@ -2,34 +2,51 @@ using UnityEngine;
 
 namespace MoreHit.Audio
 {
+    /// <summary>
+    /// SE用のオーディオデータ
+    /// </summary>
     [System.Serializable]
-    public class AudioData
+    public class SeAudioData
     {
-        [SerializeField] private string audioName;
+        [SerializeField] private SeType seType;
         [SerializeField] private AudioClip audioClip;
         [SerializeField, Range(0f, 2f)] private float volumeMultiplier = 1.0f;
 
-        public string AudioName => audioName;
+        public SeType SeType => seType;
         public AudioClip AudioClip => audioClip;
         public float VolumeMultiplier => volumeMultiplier;
-        
-        /// <summary>
-        /// AudioDataのコンストラクタ
-        /// </summary>
-        public AudioData(string name, AudioClip clip, float volume)
-        {
-            audioName = name;
-            audioClip = clip;
-            volumeMultiplier = Mathf.Clamp(volume, 0f, 2f);
-        }
     }
 
+    /// <summary>
+    /// BGM用のオーディオデータ
+    /// </summary>
+    [System.Serializable]
+    public class BgmAudioData
+    {
+        [SerializeField] private BgmType bgmType;
+        [SerializeField] private AudioClip audioClip;
+        [SerializeField, Range(0f, 2f)] private float volumeMultiplier = 1.0f;
+        [SerializeField] private bool loop = true;
+
+        public BgmType BgmType => bgmType;
+        public AudioClip AudioClip => audioClip;
+        public float VolumeMultiplier => volumeMultiplier;
+        public bool Loop => loop;
+    }
+
+    /// <summary>
+    /// オーディオデータを管理するScriptableObject
+    /// </summary>
     [CreateAssetMenu(fileName = "AudioData", menuName = "MoreHit/AudioData")]
     public class AudioDataSO : ScriptableObject
     {
-        [Header("Audio List")]
-        [SerializeField] private AudioData[] audioDataList;
+        [Header("SE List")]
+        [SerializeField] private SeAudioData[] seAudioDataList;
+        
+        [Header("BGM List")]
+        [SerializeField] private BgmAudioData[] bgmAudioDataList;
 
-        public AudioData[] AudioDataList => audioDataList;
+        public SeAudioData[] SeAudioDataList => seAudioDataList;
+        public BgmAudioData[] BgmAudioDataList => bgmAudioDataList;
     }
 }

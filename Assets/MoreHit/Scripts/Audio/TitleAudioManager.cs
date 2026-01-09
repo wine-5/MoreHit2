@@ -27,7 +27,7 @@ namespace MoreHit
         {
             if (Audio.AudioManager.I != null)
             {
-                Audio.AudioManager.I.PlayBGM("TitleBGM");
+                Audio.AudioManager.I.PlayBGM(Audio.BgmType.BGM_Title);
             }
             else
             {

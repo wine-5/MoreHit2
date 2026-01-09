@@ -95,7 +95,7 @@ namespace MoreHit.Attack
             // 弾丸発射SE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_Projectile");
+                AudioManager.I.PlaySE(SeType.SE_Projectile);
             }
         }
         

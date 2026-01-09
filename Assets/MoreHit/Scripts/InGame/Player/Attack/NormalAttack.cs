@@ -62,7 +62,7 @@ namespace MoreHit.Attack
             // 通常攻撃SE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_NormalAttack");
+                AudioManager.I.PlaySE(SeType.SE_NormalAttack);
             }
             
             yield return new WaitForSeconds(attackDuration);
