@@ -38,7 +38,16 @@ namespace MoreHit.Player
         public void PlayAttackAnimation()
         {
             if (animator != null)
-                animator.SetTrigger("NormalAttack");
+                animator.SetBool("isAttacking", true);
+        }
+        
+        /// <summary>
+        /// 攻撃アニメーション終了（StateMachineBehaviourまたは外部から呼び出し）
+        /// </summary>
+        public void StopAttackAnimation()
+        {
+            if (animator != null)
+                animator.SetBool("isAttacking", false);
         }
 
         /// <summary>
