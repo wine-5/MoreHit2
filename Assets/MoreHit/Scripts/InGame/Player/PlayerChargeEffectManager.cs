@@ -93,7 +93,7 @@ namespace MoreHit.Player
             // チャージSE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.PlaySE(SeType.SE_Charge);
+                AudioManager.I.PlaySE(SeType.Charge);
             }
 
             Vector3 spawnPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;

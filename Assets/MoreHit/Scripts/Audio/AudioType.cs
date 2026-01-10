@@ -6,14 +6,14 @@ namespace MoreHit.Audio
     public enum SeType
     {
         None,
-        SE_Button,
-        SE_Charge,
-        SE_Projectile,
-        SE_NormalAttack,
-        SE_Jump,
-        SE_BossDefeat,
-        SE_TakeDamage,
-        SE_EnemyDefeat,
+        Button,
+        Charge,
+        Projectile,
+        NormalAttack,
+        Jump,
+        BossDefeat,
+        TakeDamage,
+        EnemyDefeat,
     }
 
     /// <summary>
@@ -22,9 +22,9 @@ namespace MoreHit.Audio
     public enum BgmType
     {
         None,
-        BGM_Title,
-        BGM_InGame,
-        BGM_GameClear,
-        BGM_GameOver,
+        Title,
+        InGame,
+        GameClear,
+        GameOver,
     }
 }

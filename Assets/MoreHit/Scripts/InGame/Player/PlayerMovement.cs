@@ -218,7 +218,7 @@ namespace MoreHit.Player
             // ジャンプSE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.PlaySE(SeType.SE_Jump);
+                AudioManager.I.PlaySE(SeType.Jump);
             }
         }
 
