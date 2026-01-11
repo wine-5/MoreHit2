@@ -310,7 +310,6 @@ MonoBehaviour:
   normalAttack: {fileID: 2635167507232531641}
   rangedAttack: {fileID: 8023844534812116791}
   chargedAttack: {fileID: 5308112580863814748}
-  stockSystem: {fileID: 1531229486111971778}
 --- !u!114 &176521708161786785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +348,6 @@ GameObject:
   - component: {fileID: 1297214947161366064}
   - component: {fileID: 2635167507232531641}
   - component: {fileID: 8023844534812116791}
-  - component: {fileID: 1531229486111971778}
   - component: {fileID: 5308112580863814748}
   m_Layer: 0
   m_Name: AttackManager
@@ -409,19 +407,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5266394483918783614, guid: 77d61f79999f38946ae2bc39905efc77, type: 3}
   firePoint: {fileID: 7521217734071746653}
   cooldownTime: 0.3
---- !u!114 &1531229486111971778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5672871783251214348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09fa058f25c45a843b26f5cc611e81ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.StockSystem
-  maxStock: 99
 --- !u!114 &5308112580863814748
 MonoBehaviour:
   m_ObjectHideFlags: 0
