@@ -259,6 +259,9 @@ MonoBehaviour:
   onChargeStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  onChargeStarted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6019163792659854377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,11 +275,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerMovement
   playerData: {fileID: 11400000, guid: d838a82cbd7278d4ba18c9f51508a32e, type: 2}
-  groundCheck: {fileID: 419043580032405669}
-  groundCheckSize: {x: 0.8, y: 0.1}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  groundCheckDistance: 0.3
+  groundCheckWidth: 0.6
+  groundCheckYOffset: 0
+  groundRayCount: 5
 --- !u!114 &7828012760253446485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.ChargedAttack
   projectileData: {fileID: 11400000, guid: db39ed13109f2344c96fda4c0d6fdc11, type: 2}
-  projectilePrefab: {fileID: 5266394483918783614, guid: b41f7453a2d486b46a0f282887df70a8, type: 3}
+  projectilePrefab: {fileID: 2116767409353763841, guid: 4af07c85cb938fd4da9cbfa0eb340611, type: 3}
   firePoint: {fileID: 7521217734071746653}
   cooldownTime: 0.5
 --- !u!1 &7288781321796847522

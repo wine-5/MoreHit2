@@ -12,10 +12,10 @@ namespace MoreHit.Attack
         {
             if (EffectFactory.I != null)
             {
-                var effect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, position);
+                var effect = EffectFactory.I.CreateEffect(EffectType.ChargeEffect, position);
                 if (effect != null)
                 {
-                    float duration = EffectFactory.I.GetEffectDuration(EffectType.ChargeAttackEffect);
+                    float duration = EffectFactory.I.GetEffectDuration(EffectType.ChargeEffect);
                     EffectFactory.I.ReturnEffectDelayed(effect, duration);
                 }
             }

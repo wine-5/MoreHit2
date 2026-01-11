@@ -14,7 +14,7 @@ namespace MoreHit.Effect
         /// <summary>
         /// チャージ攻撃エフェクト
         /// </summary>
-        ChargeAttackEffect,
+        ChargeEffect,
         
         
         /// <summary>

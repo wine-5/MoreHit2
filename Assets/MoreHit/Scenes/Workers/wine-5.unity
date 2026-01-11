@@ -171,6 +171,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[1].name
+      value: ChargeEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 355549986818305060, guid: a29e659c2b06dd34a9038aafefa1cd52, type: 3}
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 5662621573035475572, guid: f54b1fb72725479439c194f94e575d66, type: 3}
+    - target: {fileID: 472806706245281675, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 3568795517321926131, guid: 56ffdabe517aa3043ad6ee8e9024b5f2, type: 3}
+    - target: {fileID: 4142422803504637575, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: poolItems.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 2116767409353763841, guid: 4af07c85cb938fd4da9cbfa0eb340611, type: 3}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -211,11 +231,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4455117012622010470, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_Name
+      value: ChargeEffect
+      objectReference: {fileID: 0}
     - target: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_Name
       value: InGame
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1635889738655504701, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

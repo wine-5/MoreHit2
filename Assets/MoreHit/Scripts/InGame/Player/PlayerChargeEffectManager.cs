@@ -32,14 +32,7 @@ namespace MoreHit.Player
             if (isEffectActive && currentChargeEffect != null)
             {
                 Vector3 targetPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-                Transform effectTransform = currentChargeEffect.transform;
-                
-                // 毎フレーム親をチェックして解除（必要に応じて）
-                if (effectTransform.parent != null)
-                    effectTransform.SetParent(null, false);
-                
-                // 位置を強制的に設定
-                effectTransform.position = targetPosition;
+                currentChargeEffect.transform.position = targetPosition;
             }
             else if (isEffectActive)
                 isEffectActive = false; // 状態を修正
@@ -97,25 +90,14 @@ namespace MoreHit.Player
             }
 
             Vector3 spawnPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-            currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, spawnPosition);
+            currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeEffect, spawnPosition);
             
             // エフェクト生成が成功した場合のみフラグを設定
             if (currentChargeEffect != null)
             {
                 isEffectActive = true;
-                Transform effectTransform = currentChargeEffect.transform;
-                
-                // 生成直後に親を確実に解除し、位置を正しく設定
-                if (effectTransform.parent != null)
-                    effectTransform.SetParent(null, false);
-                
-                // 現在のプレイヤー位置に強制設定
-                Vector3 currentPlayerPos = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-                effectTransform.position = currentPlayerPos;
-                
-                // 位置設定の即座確認と再設定（確実な同期のため）
-                if (Vector3.Distance(effectTransform.position, currentPlayerPos) > POSITION_TOLERANCE)
-                    effectTransform.position = currentPlayerPos;
+                // エフェクトはプールの親の下に配置されたまま、位置だけ更新
+                currentChargeEffect.transform.position = spawnPosition;
             }
             else
                 isEffectActive = false;

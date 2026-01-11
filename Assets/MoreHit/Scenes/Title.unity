@@ -154,8 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49458f0c6d843a48941bf520515c9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Audio.AudioManager
-  audioDataArray:
-  - {fileID: 11400000, guid: ca101ea4f0e0b1f409e7cd12401e3450, type: 2}
+  audioDataSO: {fileID: 11400000, guid: 3105d3841ffc9a943add6b6052c39fbe, type: 2}
   maxAudioSources: 10
   masterVolume: 1
   bgmVolume: 1
