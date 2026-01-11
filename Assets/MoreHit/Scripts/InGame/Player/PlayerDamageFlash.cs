@@ -52,7 +52,7 @@ namespace MoreHit.Player
                 yield break;
             }
             
-            float flashDuration = playerData.InvincibleTimeAfterDamage;
+            float flashDuration = playerData.InvincibleTime;
             float elapsed = 0f;
             
             while (elapsed < flashDuration)

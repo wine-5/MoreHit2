@@ -27,7 +27,7 @@ namespace MoreHit
 #endif
         }
         
-        public void InitializeFactory()
+        private void InitializeFactory()
         {
             var factory = ProjectileFactory.Instance;
             
@@ -45,11 +45,6 @@ namespace MoreHit
             if (projectilePool == null)
                 projectilePool = FindFirstObjectByType<ObjectPool>();
 #endif
-        }
-        
-        public void SetObjectPool(ObjectPool pool)
-        {
-            projectilePool = pool;
         }
     }
 }

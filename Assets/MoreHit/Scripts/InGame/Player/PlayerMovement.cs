@@ -252,14 +252,5 @@ namespace MoreHit.Player
             scale.x *= SCALE_FLIP_MULTIPLIER;
             transform.localScale = scale;
         }
-
-        /// <summary>
-        /// 移動を停止
-        /// </summary>
-        public void Stop()
-        {
-            moveInput = Vector2.zero;
-            rb.linearVelocity = Vector2.zero;
-        }
     }
 }

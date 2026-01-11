@@ -16,12 +16,10 @@ namespace MoreHit.Player
 
         protected override bool UseDontDestroyOnLoad => false;
         public Vector3 Position => playerTransform.position;
-        public Quaternion Rotation => playerTransform.rotation;
         public int CurrentHealth => playerHealth.CurrentHealth;
         public int MaxHealth => playerHealth.MaxHealth;
         public float HealthRatio => MaxHealth > 0 ? (float)CurrentHealth / MaxHealth : 0f;
         public bool IsAlive => playerHealth.IsAlive;
-        public bool IsInvincible => playerHealth.IsInvincible;
         public bool IsGrounded => playerMovement.IsGrounded;
         public Vector2 Velocity => playerMovement.Velocity;
         public bool IsFacingRight => playerMovement.IsFacingRight;

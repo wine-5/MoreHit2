@@ -158,13 +158,5 @@ namespace MoreHit.Player
             else
                 onRangedAttack?.Invoke(); // それ以外は通常射撃
         }
-        
-        private void ResetChargeState()
-        {
-            chargeHoldTime = 0f;
-            isChargeReady = false;
-            chargeCooldownRemaining = 0f;
-            onChargeStateChanged?.Invoke(false);
-        }
     }
 }
