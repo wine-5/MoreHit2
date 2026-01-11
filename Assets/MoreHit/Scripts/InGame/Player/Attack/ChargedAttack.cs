@@ -1,24 +1,14 @@
-using UnityEngine;
-using MoreHit.Effect;
-
 namespace MoreHit.Attack
 {
     /// <summary>
     /// プレイヤーの溜め攻撃（強化された遠距離攻撃）
+    /// 【役割】
+    /// - 強化された弾丸の発射処理を実行（ProjectileAttackBaseから継承）
+    /// - チャージエフェクトの管理はPlayerChargeEffectManagerが担当
+    /// - このクラスは攻撃処理のみに専念
     /// </summary>
     public class ChargedAttack : ProjectileAttackBase
     {
-        protected override void OnBeforeProjectileSpawn(Vector3 position, Vector3 direction)
-        {
-            if (EffectFactory.I != null)
-            {
-                var effect = EffectFactory.I.CreateEffect(EffectType.ChargeEffect, position);
-                if (effect != null)
-                {
-                    float duration = EffectFactory.I.GetEffectDuration(EffectType.ChargeEffect);
-                    EffectFactory.I.ReturnEffectDelayed(effect, duration);
-                }
-            }
-        }
+        // ProjectileAttackBaseのExecute()メソッドで弾丸発射を実行
     }
 }

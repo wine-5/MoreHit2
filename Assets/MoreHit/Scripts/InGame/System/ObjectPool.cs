@@ -35,8 +35,6 @@ namespace MoreHit.Pool
         /// </summary>
         private void InitializeAllPools()
         {
-            Debug.Log($"[ObjectPool] InitializeAllPools 開始 - poolItems数: {(poolItems != null ? poolItems.Count : 0)}");
-            
             if (poolItems == null || poolItems.Count == 0)
             {
                 Debug.LogWarning("Object Poolの初期化が不足しています。プールリストを設定してください。");
@@ -50,8 +48,6 @@ namespace MoreHit.Pool
                     Debug.LogError($"プール項目 '{poolItem.name}' のプレハブがnullです。");
                     continue;
                 }
-                
-                Debug.Log($"[ObjectPool] プール初期化: {poolItem.name}, プレハブ: {poolItem.prefab.name}, InstanceID: {poolItem.prefab.GetInstanceID()}");
 
                 if (poolItem.parent == null)
                 {
@@ -83,10 +79,7 @@ namespace MoreHit.Pool
             // 名前ベースの辞書にも登録（同じ名前の場合は上書き）
             string prefabName = poolItem.prefab.name.Replace("(Clone)", "").Trim();
             if (!prefabNameToOriginalPrefab.ContainsKey(prefabName))
-            {
                 prefabNameToOriginalPrefab[prefabName] = poolItem.prefab;
-                Debug.Log($"[ObjectPool] 名前ベース登録: {prefabName} -> InstanceID: {poolItem.prefab.GetInstanceID()}");
-            }
 
             for (int i = 0; i < poolItem.initialSize; i++)
             {
@@ -160,8 +153,6 @@ namespace MoreHit.Pool
                 return null;
             }
             
-            Debug.Log($"[ObjectPool] GetObject 呼び出し - プレハブ: {prefab.name}, InstanceID: {prefab.GetInstanceID()}");
-            
             // まずInstanceIDで検索
             GameObject actualPrefab = prefab;
             
@@ -170,10 +161,7 @@ namespace MoreHit.Pool
             {
                 string prefabName = prefab.name.Replace("(Clone)", "").Trim();
                 if (prefabNameToOriginalPrefab.TryGetValue(prefabName, out GameObject foundPrefab))
-                {
-                    Debug.Log($"[ObjectPool] 名前ベースで検索成功: {prefabName} -> InstanceID: {foundPrefab.GetInstanceID()}");
                     actualPrefab = foundPrefab;
-                }
             }
 
             // プールが存在し、オブジェクトがある場合
