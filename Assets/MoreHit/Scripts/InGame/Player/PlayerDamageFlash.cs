@@ -15,7 +15,7 @@ namespace MoreHit.Player
         private Color originalColor;
         private Coroutine flashCoroutine;
         
-        private const int FLASH_CYCLE_PHASES = 2; // 点滅1サイクルのフェーズ数（色変更 + 戻す）
+        private const int FLASH_CYCLE_PHASES = 2;
         
         private void Awake()
         {
@@ -57,18 +57,15 @@ namespace MoreHit.Player
             
             while (elapsed < flashDuration)
             {
-                // 点滅色に変更
                 spriteRenderer.color = flashColor;
                 yield return new WaitForSeconds(flashInterval);
                 
-                // 元の色に戻す
                 spriteRenderer.color = originalColor;
                 yield return new WaitForSeconds(flashInterval);
                 
                 elapsed += flashInterval * FLASH_CYCLE_PHASES;
             }
             
-            // 確実に元の色に戻す
             spriteRenderer.color = originalColor;
             flashCoroutine = null;
         }

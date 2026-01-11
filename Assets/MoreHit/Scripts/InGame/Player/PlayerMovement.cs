@@ -15,6 +15,7 @@ namespace MoreHit.Player
         [SerializeField] private LayerMask groundLayer;
 
         private Rigidbody2D rb;
+        private Collider2D playerCollider;
 
         private float moveSpeed;
         private float acceleration;
@@ -31,18 +32,15 @@ namespace MoreHit.Player
         private int jumpCount = 0;
         private bool isGrounded;
 
-        // RayCastベースの地面検出用変数
         [Header("地面接触判定（RayCast）")]
         [SerializeField] private float groundCheckDistance = 0.3f;
         [SerializeField] private float groundCheckWidth = 0.6f;
         [SerializeField] private float groundCheckYOffset = 0f;
         [SerializeField] private int groundRayCount = 5;
 
-        // ジャンプ連打防止用
         private float lastJumpTime = 0f;
         private const float MIN_JUMP_INTERVAL = 0.15f;
 
-        // 速度・方向判定用定数
         private const float ASCENDING_VELOCITY_THRESHOLD = 0.2f;
         private const float STABLE_VELOCITY_THRESHOLD = 0.1f;
         private const float MIN_FALLING_VELOCITY = -0.3f;
@@ -61,6 +59,7 @@ namespace MoreHit.Player
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            playerCollider = GetComponent<Collider2D>();
             defaultGravityScale = rb.gravityScale;
 
             if (playerData != null)
@@ -107,34 +106,25 @@ namespace MoreHit.Player
         {
             float currentTime = Time.time;
 
-            // 連打防止：前回のジャンプから最小間隔をチェック
             if (currentTime - lastJumpTime < MIN_JUMP_INTERVAL) return;
-
-            // 最大ジャンプ回数チェック
             if (jumpCount >= maxJumpCount) return;
 
-            // 最初のジャンプ：地面に立っている必要がある
             if (jumpCount == 0)
             {
                 if (!isGrounded) return;
-                // 地面に立っていても上昇中なら拒否
                 if (rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD) return;
             }
 
-            // 2回目以降のジャンプ：地面にいる場合は常に許可、空中なら下降中のみ
             if (jumpCount > 0)
             {
                 if (!isGrounded && rb.linearVelocity.y >= MIN_FALLING_VELOCITY) return;
-                // 地面にいて上昇中なら拒否
                 if (isGrounded && rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD) return;
             }
 
-            // ジャンプ実行
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
             lastJumpTime = currentTime;
             
-            // ジャンプSE再生
             if (AudioManager.I != null)
                 AudioManager.I.PlaySE(SeType.Jump);
         }
@@ -153,13 +143,11 @@ namespace MoreHit.Player
         /// </summary>
         private void CheckGroundStatus()
         {
-            // RayCastによる地面検出（複数のレイを使用して安定性向上）
             isGrounded = PerformGroundRayCast();
 
             if (rb.linearVelocity.y > ASCENDING_VELOCITY_THRESHOLD)
                 isGrounded = false;
 
-            // ジャンプカウントリセット
             if (isGrounded && rb.linearVelocity.y <= STABLE_VELOCITY_THRESHOLD && jumpCount > 0)
                 jumpCount = 0;
         }
@@ -169,17 +157,13 @@ namespace MoreHit.Player
         /// </summary>
         private bool PerformGroundRayCast()
         {
-            // プレイヤーのColliderから直接計算
-            Collider2D playerCollider = GetComponent<Collider2D>();
             if (playerCollider == null)
                 return Mathf.Abs(rb.linearVelocity.y) < STABLE_VELOCITY_THRESHOLD && rb.linearVelocity.y <= 0;
 
-            // プレイヤーのColliderの下端を起点とし、Yオフセットを適用
             Bounds bounds = playerCollider.bounds;
             Vector2 startPos = new Vector2(bounds.center.x, bounds.min.y + groundCheckYOffset);
             float halfWidth = groundCheckWidth * 0.5f;
 
-            // 複数のポイントからRayCastを実行
             for (int i = 0; i < groundRayCount; i++)
             {
                 float offsetX = 0f;

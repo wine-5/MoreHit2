@@ -10,12 +10,11 @@ namespace MoreHit.Player
     public class PlayerDamageVisualManager : MonoBehaviour
     {
         [Header("スプライト設定")]
-        [SerializeField] private GameObject normalSprite; // 通常時のスプライト
-        [SerializeField] private GameObject damagedSprite; // ダメージ時のスプライト
+        [SerializeField] private GameObject normalSprite;
+        [SerializeField] private GameObject damagedSprite;
         
         private void Awake()
         {
-            // 初期状態を設定
             if (normalSprite != null) normalSprite.SetActive(true);
             if (damagedSprite != null) damagedSprite.SetActive(false);
         }
