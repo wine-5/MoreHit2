@@ -11,6 +11,7 @@ namespace MoreHit
     {
         [Header("Pool設定")]
         [SerializeField] private ObjectPool projectilePool;
+        
         protected override bool UseDontDestroyOnLoad => false;
         
         protected override void Awake()

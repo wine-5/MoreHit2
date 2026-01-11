@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &1244068264 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2774494477509848877, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7d9cc3f824f9041a1273210bea8e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.ProjectileFactory
 --- !u!1 &1267770595
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,10 +340,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5147338710975254346, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: projectileFactory
+      value: 
+      objectReference: {fileID: 1244068264}
     - target: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_Name
       value: InGame
       objectReference: {fileID: 0}
+    - target: {fileID: 7034443511273940001, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: projectileFactory
+      value: 
+      objectReference: {fileID: 1244068264}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

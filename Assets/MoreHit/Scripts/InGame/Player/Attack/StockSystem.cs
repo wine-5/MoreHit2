@@ -1,9 +1,7 @@
-
 using UnityEngine;
-using MoreHit.Attack;
 using MoreHit.Events;
 
-namespace MoreHit.Player
+namespace MoreHit.Attack
 {
     /// <summary>
     /// ストックシステム
@@ -12,7 +10,7 @@ namespace MoreHit.Player
     public class StockSystem : IStockable
     {
         private readonly int maxStock;
-        private readonly GameObject ownerObject; // StockFullイベント用
+        private readonly GameObject ownerObject;
         private int currentStock = 0;
         
         public int CurrentStock => currentStock;
@@ -22,8 +20,6 @@ namespace MoreHit.Player
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="maxStock">最大ストック数</param>
-        /// <param name="ownerObject">所有者のGameObject（イベント通知用）</param>
         public StockSystem(int maxStock, GameObject ownerObject)
         {
             this.maxStock = maxStock;
