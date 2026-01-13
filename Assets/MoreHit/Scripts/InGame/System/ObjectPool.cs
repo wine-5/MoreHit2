@@ -18,6 +18,9 @@ namespace MoreHit.Pool
 
         // 各プレハブごとのオブジェクトプール
         private Dictionary<GameObject, Queue<GameObject>> objectPools = new Dictionary<GameObject, Queue<GameObject>>();
+        
+        // プレハブ名からプレハブを検索するための辞書（InstanceIDの不一致対策）
+        private Dictionary<string, GameObject> prefabNameToOriginalPrefab = new Dictionary<string, GameObject>();
 
         // インスタンスと元のプレハブを紐づける辞書
         private Dictionary<GameObject, ObjectPoolItem> instanceToPoolItemMap = new Dictionary<GameObject, ObjectPoolItem>();
@@ -72,6 +75,11 @@ namespace MoreHit.Pool
             {
                 objectPools[poolItem.prefab] = new Queue<GameObject>();
             }
+            
+            // 名前ベースの辞書にも登録（同じ名前の場合は上書き）
+            string prefabName = poolItem.prefab.name.Replace("(Clone)", "").Trim();
+            if (!prefabNameToOriginalPrefab.ContainsKey(prefabName))
+                prefabNameToOriginalPrefab[prefabName] = poolItem.prefab;
 
             for (int i = 0; i < poolItem.initialSize; i++)
             {
@@ -144,9 +152,20 @@ namespace MoreHit.Pool
                 Debug.LogError("❌ [ObjectPool] nullのプレハブからオブジェクトを取得できません。");
                 return null;
             }
+            
+            // まずInstanceIDで検索
+            GameObject actualPrefab = prefab;
+            
+            // InstanceIDで見つからない場合、名前で検索
+            if (!objectPools.ContainsKey(prefab))
+            {
+                string prefabName = prefab.name.Replace("(Clone)", "").Trim();
+                if (prefabNameToOriginalPrefab.TryGetValue(prefabName, out GameObject foundPrefab))
+                    actualPrefab = foundPrefab;
+            }
 
             // プールが存在し、オブジェクトがある場合
-            if (objectPools.TryGetValue(prefab, out Queue<GameObject> pool) && pool.Count > 0)
+            if (objectPools.TryGetValue(actualPrefab, out Queue<GameObject> pool) && pool.Count > 0)
             {
                 GameObject pooledObject = pool.Dequeue();
 
@@ -154,7 +173,7 @@ namespace MoreHit.Pool
                 if (pooledObject == null)
                 {
                     // nullの場合は新しいインスタンスを作成
-                    ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == prefab);
+                    ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == actualPrefab);
                     if (poolItem != null)
                     {
                         pooledObject = CreateNewInstance(poolItem);
@@ -172,7 +191,7 @@ namespace MoreHit.Pool
             else
             {
                 // 初期リストに含まれるプレハブか確認
-                ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == prefab);
+                ObjectPoolItem poolItem = poolItems.Find(item => item.prefab == actualPrefab);
                 if (poolItem != null)
                 {
 #if UNITY_EDITOR
@@ -192,9 +211,9 @@ namespace MoreHit.Pool
 #endif
                     
                     // 拡張後に再度オブジェクトを取得
-                    if (objectPools[prefab].Count > 0)
+                    if (objectPools[actualPrefab].Count > 0)
                     {
-                        GameObject pooledObject = objectPools[prefab].Dequeue();
+                        GameObject pooledObject = objectPools[actualPrefab].Dequeue();
                         pooledObject.SetActive(true);
                         
                         // IPoolable インターフェースをサポート
@@ -211,63 +230,12 @@ namespace MoreHit.Pool
                 }
                 else
                 {
-                    // エフェクトプレハブの場合は動的に登録を試行
-                    if (TryAddEffectPrefabDynamically(prefab))
-                    {
-                        Debug.Log($"✅ [ObjectPool] エフェクトプレハブ '{prefab.name}' を動的に登録しました");
-                        return GetObject(prefab); // 再帰呼び出しで登録後に取得
-                    }
-                    
-                    Debug.LogError($"❌ [ObjectPool] 要求されたプレハブ '{prefab.name}' は ObjectPool に登録されていません。");
+                    // プールに登録されていないプレハブの場合はエラー
+                    Debug.LogError($"❌ [ObjectPool] プレハブ '{actualPrefab.name}' はプールに登録されていません。poolItems リストに追加してください。");
                     return null;
                 }
             }
         }
-        
-        /// <summary>
-        /// プレハブを動的に登録する（エフェクト・プロジェクタイル対応）
-        /// </summary>
-        /// <param name="prefab">登録するプレハブ</param>
-        /// <returns>登録に成功した場合true</returns>
-        private bool TryAddEffectPrefabDynamically(GameObject prefab)
-        {
-            if (prefab == null) return false;
-            
-            string prefabName = prefab.name;
-            GameObject parentObject = null;
-            
-            // エフェクト関連のプレハブかチェック
-            if (prefabName.Contains("Effect") || prefabName.Contains("effect"))
-            {
-                parentObject = GameObject.Find("Effects");
-                if (parentObject == null)
-                {
-                    parentObject = new GameObject("Effects");
-                    parentObject.transform.SetParent(transform);
-                }
-            }
-            // プロジェクタイル関連のプレハブかチェック
-            else if (prefabName.Contains("Projectile") || prefabName.Contains("projectile") || 
-                     prefabName.Contains("Bullet") || prefabName.Contains("bullet"))
-            {
-                parentObject = GameObject.Find("Projectiles");
-                if (parentObject == null)
-                {
-                    parentObject = new GameObject("Projectiles");
-                    parentObject.transform.SetParent(transform);
-                }
-            }
-            
-            if (parentObject != null)
-            {
-                // 動的にプールに追加
-                AddToPool($"Dynamic_{prefabName}", prefab, parentObject, 10); // プロジェクタイルは多めに
-                return true;
-            }
-            
-            return false;
-            }
-        
 
         /// <summary>
         /// プレハブからオブジェクトを取得し、指定した位置と回転を設定します
@@ -358,9 +326,7 @@ namespace MoreHit.Pool
             if (instanceToPoolItemMap.TryGetValue(obj, out ObjectPoolItem poolItem))
             {
                 if (poolItem.parent != null)
-                {
                     obj.transform.SetParent(poolItem.parent.transform);
-                }
 
                 if (objectPools.ContainsKey(poolItem.prefab))
                 {

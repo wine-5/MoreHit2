@@ -59,11 +59,8 @@ namespace MoreHit.Attack
             ExecuteCurrentAttack(attackData);
             AdvanceCombo();
             
-            // 通常攻撃SE再生
             if (AudioManager.I != null)
-            {
-                AudioManager.I.Play("Se_NormalAttack");
-            }
+                AudioManager.I.PlaySE(SeType.NormalAttack);
             
             yield return new WaitForSeconds(attackDuration);
             
@@ -102,7 +99,6 @@ namespace MoreHit.Attack
             if (playerMovement != null)
                 return playerMovement.transform.position;
             
-            // フォールバック: 親オブジェクトの位置を使用
             return transform.parent != null ? transform.parent.position : transform.position;
         }
         

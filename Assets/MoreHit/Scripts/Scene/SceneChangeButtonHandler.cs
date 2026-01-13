@@ -20,7 +20,7 @@ namespace MoreHit.Scene
             // ボタンクリックSE再生
             if (AudioManager.I != null)
             {
-                AudioManager.I.Play("Se_Button");
+                AudioManager.I.PlaySE(SeType.Button);
             }
             
             if (SceneController.I != null)

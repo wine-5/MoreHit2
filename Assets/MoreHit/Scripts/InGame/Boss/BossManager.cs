@@ -24,10 +24,7 @@ namespace MoreHit.Boss
             // ボス出現イベントを購読
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
-            GameEvents.OnBossDamaged += OnBossDamaged; // 直接ダメージイベントも購読
-            
-            if (showDebugLog)
-                Debug.Log($"✅ [BossManager] イベントリスナーを登録しました");
+            GameEvents.OnBossDamaged += OnBossDamaged; // 直接ダメージイベントも購読   
         }
         
         private void OnDisable()
@@ -36,13 +33,6 @@ namespace MoreHit.Boss
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
-            
-            // どこから呼ばれているかを確認するためのスタックトレース
-            if (showDebugLog)
-            {
-                Debug.Log($"🔄 [BossManager] イベントリスナーを解除しました");
-                Debug.Log($"[BossManager] OnDisable呼び出し元：\n{System.Environment.StackTrace}");
-            }
         }
         
         private void Start()

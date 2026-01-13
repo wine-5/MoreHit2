@@ -73,9 +73,9 @@ namespace MoreHit.UI
         /// </summary>
         private void OnMasterVolumeChanged(float value)
         {
-            if (AudioManager.Instance != null)
+            if (AudioManager.I != null)
             {
-                AudioManager.Instance.SetMasterVolume(value);
+                AudioManager.I.SetMasterVolume(value);
                 UpdateVolumeLabel(masterVolumeLabel, value);
             }
         }
@@ -85,9 +85,9 @@ namespace MoreHit.UI
         /// </summary>
         private void OnBGMVolumeChanged(float value)
         {
-            if (AudioManager.Instance != null)
+            if (AudioManager.I != null)
             {
-                AudioManager.Instance.SetBGMVolume(value);
+                AudioManager.I.SetBGMVolume(value);
                 UpdateVolumeLabel(bgmVolumeLabel, value);
             }
         }
@@ -97,9 +97,9 @@ namespace MoreHit.UI
         /// </summary>
         private void OnSEVolumeChanged(float value)
         {
-            if (AudioManager.Instance != null)
+            if (AudioManager.I != null)
             {
-                AudioManager.Instance.SetSEVolume(value);
+                AudioManager.I.SetSEVolume(value);
                 UpdateVolumeLabel(seVolumeLabel, value);
             }
         }
@@ -118,11 +118,11 @@ namespace MoreHit.UI
         /// </summary>
         public void ResetToDefault()
         {
-            if (AudioManager.Instance != null)
+            if (AudioManager.I != null)
             {
-                AudioManager.Instance.SetMasterVolume(1f);
-                AudioManager.Instance.SetBGMVolume(1f);
-                AudioManager.Instance.SetSEVolume(1f);
+                AudioManager.I.SetMasterVolume(1f);
+                AudioManager.I.SetBGMVolume(1f);
+                AudioManager.I.SetSEVolume(1f);
                 
                 // スライダーの値も更新
                 if (masterVolumeSlider != null) masterVolumeSlider.value = 1f;

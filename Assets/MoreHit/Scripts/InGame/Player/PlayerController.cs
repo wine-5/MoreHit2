@@ -46,47 +46,43 @@ namespace MoreHit.Player
 
         private void OnMoveInput(Vector2 moveInput)
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             movement.SetMoveInput(moveInput);
         }
 
         private void OnJumpInput()
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             movement.Jump();
         }
 
         private void OnJumpCanceled()
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             movement.CancelJump();
         }
 
         private void OnNormalAttack()
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             attackManager?.ExecuteNormalAttack();
             animatorController?.PlayAttackAnimation();
         }
 
         private void OnRangedAttack()
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             attackManager?.ExecuteRangedAttack();
             animatorController?.PlayAttackAnimation();
         }
 
         private void OnChargeRangedAttack()
         {
-            if (!health.IsAlive) return;
-            
+            if (!CanExecuteAction()) return;
             attackManager?.ExecuteChargedAttack();
             animatorController?.PlayAttackAnimation();
         }
+
+        private bool CanExecuteAction() => health.IsAlive;
     }
 }

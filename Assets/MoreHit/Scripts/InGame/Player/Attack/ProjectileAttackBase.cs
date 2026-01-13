@@ -30,13 +30,13 @@ namespace MoreHit.Attack
         {
             return projectileData != null && 
                    projectilePrefab != null && 
+                   ProjectileFactory.Instance != null &&
                    Time.time - lastFireTime >= cooldownTime;
         }
         
         public virtual void Execute()
         {
-            if (!CanExecute())
-                return;
+            if (!CanExecute()) return;
             
             Vector3 direction = CalculateFireDirection();
             FireProjectile(direction);
@@ -81,7 +81,6 @@ namespace MoreHit.Attack
             
             OnBeforeProjectileSpawn(firePos, direction);
             
-            // Factoryを使用してプロジェクタイル生成
             GameObject projectileObj = ProjectileFactory.Instance.CreateProjectile(
                 projectilePrefab, 
                 firePos, 
@@ -92,11 +91,8 @@ namespace MoreHit.Attack
             
             OnAfterProjectileSpawn(projectileObj);
             
-            // 弾丸発射SE再生
             if (AudioManager.I != null)
-            {
-                AudioManager.I.Play("Se_Projectile");
-            }
+                AudioManager.I.PlaySE(SeType.Projectile);
         }
         
         /// <summary>

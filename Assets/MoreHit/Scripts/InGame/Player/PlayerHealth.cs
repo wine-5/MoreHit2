@@ -31,7 +31,7 @@ namespace MoreHit.Player
             if (playerData != null)
             {
                 maxHealth = playerData.MaxHealth;
-                invincibleDuration = playerData.InvincibleTimeAfterDamage;
+                invincibleDuration = playerData.InvincibleTime;
                 currentHealth = maxHealth;
             }
         }

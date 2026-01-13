@@ -1,5 +1,4 @@
 using UnityEngine;
-using MoreHit;
 using MoreHit.Pool;
 using MoreHit.Effect;
 
@@ -60,22 +59,18 @@ namespace MoreHit.Attack
         {
             if (other == null || data == null) return;
 
-            // Ground レイヤーとの衝突チェック
             if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
                 DestroyProjectile(true);
                 return;
             }
 
-            // Enemy タグの場合は通常の処理を実行（ShouldIgnoreCollisionをスキップ）
             bool isEnemy = other.CompareTag("Enemy");
             bool shouldProcess = isEnemy || !ShouldIgnoreCollision(other);
 
             if (shouldProcess)
             {
                 var damageable = other.GetComponent<IDamageable>();
-                var stockable = other.GetComponent<IStockable>();
-
                 damageable?.TakeDamage(data.Damage);
 
                 ApplyStock(other);
@@ -116,8 +111,7 @@ namespace MoreHit.Attack
 
         private void ApplyStock(Collider2D other)
         {
-            if (data.StockAmount <= 0)
-                return;
+            if (data.StockAmount <= 0) return;
 
             var stockable = other.GetComponent<IStockable>();
             stockable?.AddStock(data.StockAmount);

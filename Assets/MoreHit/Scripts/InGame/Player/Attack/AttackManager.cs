@@ -1,6 +1,6 @@
 using UnityEngine;
 using MoreHit.Attack;
-using MoreHit.Events;
+using UnityEngine.Events;
 
 namespace MoreHit.Player
 {
@@ -13,19 +13,20 @@ namespace MoreHit.Player
         [SerializeField] private NormalAttack normalAttack;
         [SerializeField] private RangedAttack rangedAttack;
         [SerializeField] private ChargedAttack chargedAttack;
-        [SerializeField] private StockSystem stockSystem;
         
-        // プロパティ
-        public int CurrentStock => stockSystem?.CurrentStock ?? 0;
-        public int MaxStock => stockSystem?.MaxStock ?? 0;
-        public bool IsStockFull => stockSystem?.IsFull ?? false;
+        [Header("攻撃実行イベント")]
+        public UnityEvent onNormalAttackExecuted;
+        public UnityEvent onRangedAttackExecuted;
+        public UnityEvent onChargedAttackExecuted;
         
         /// <summary>
         /// 通常攻撃を実行
         /// </summary>
         public void ExecuteNormalAttack()
         {
-            normalAttack?.Execute();
+            if (normalAttack == null) return;
+            normalAttack.Execute();
+            onNormalAttackExecuted?.Invoke();
         }
         
         /// <summary>
@@ -33,7 +34,9 @@ namespace MoreHit.Player
         /// </summary>
         public void ExecuteRangedAttack()
         {
-            rangedAttack?.Execute();
+            if (rangedAttack == null) return;
+            rangedAttack.Execute();
+            onRangedAttackExecuted?.Invoke();
         }
         
         /// <summary>
@@ -41,7 +44,9 @@ namespace MoreHit.Player
         /// </summary>
         public void ExecuteChargedAttack()
         {
-            chargedAttack?.Execute();
+            if (chargedAttack == null) return;
+            chargedAttack.Execute();
+            onChargedAttackExecuted?.Invoke();
         }
         
         /// <summary>
@@ -50,30 +55,6 @@ namespace MoreHit.Player
         public void ResetNormalAttackCombo()
         {
             normalAttack?.ResetCombo();
-        }
-        
-        /// <summary>
-        /// ストックが使用可能かチェック
-        /// </summary>
-        public bool CanUseStock(int amount)
-        {
-            return stockSystem?.CanUseStock(amount) ?? false;
-        }
-        
-        /// <summary>
-        /// ストックを追加（敵を攻撃した時に呼ばれる）
-        /// </summary>
-        public void AddStock(int amount)
-        {
-            stockSystem?.AddStock(amount);
-        }
-        
-        /// <summary>
-        /// ストックをクリア
-        /// </summary>
-        public void ClearStock()
-        {
-            stockSystem?.ClearStock();
         }
     }
 }

@@ -9,27 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 28c382c18aee8dc439a1c31505faed50, type: 3}
   m_Name: EnemyData
-  m_EditorClassIdentifier: Assembly-CSharp:MoreHit.Enemy:EnemyDataSO
-  enemyDataList:
-  - enemyType: 0
-    maxHP: 100
-    moveSpeed: 10
-    stockCount: 0
-    needstock: 6
-  - enemyType: 1
-    maxHP: 30
-    moveSpeed: 15
-    stockCount: 0
-    needstock: 4
-  - enemyType: 2
-    maxHP: 150
-    moveSpeed: 5
-    stockCount: 0
-    needstock: 8
-  - enemyType: 3
-    maxHP: 200
-    moveSpeed: 6
-    stockCount: 0
-    needstock: 2
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.EnemyDataSO
+  enemyType: 0
+  maxHP: 100
+  moveSpeed: 5
+  stockCount: 1
+  needStock: 5

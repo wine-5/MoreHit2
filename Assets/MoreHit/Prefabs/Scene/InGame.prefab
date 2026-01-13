@@ -5820,13 +5820,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6398706177042928890}
+  - component: {fileID: 1567725516487059567}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6398706177042928890
 Transform:
   m_ObjectHideFlags: 0
@@ -5836,13 +5837,29 @@ Transform:
   m_GameObject: {fileID: 2401626653840851302}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 259.8, y: -3.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5321597760455263419}
   m_Father: {fileID: 6937487933585484956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1567725516487059567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2401626653840851302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
+  bossGameObject: {fileID: 2401626653840851302}
+  bossHPBarUI: {fileID: 4290474548554007167}
+  bossHPBarScript: {fileID: 0}
+  showDebugLog: 0
 --- !u!1 &2440417829590549792
 GameObject:
   m_ObjectHideFlags: 0
@@ -7288,15 +7305,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Pool.ObjectPool
   poolItems:
   - name: FullStockEffect
-    prefab: {fileID: 355549986818305060, guid: 8de172035478f26468c48915f21889ed, type: 3}
+    prefab: {fileID: 355549986818305060, guid: a29e659c2b06dd34a9038aafefa1cd52, type: 3}
     parent: {fileID: 8150707402158719205}
     initialSize: 10
-  - name: ChargeAttackEffect
-    prefab: {fileID: 5662621573035475572, guid: aedc92dc33f654045a7e5f67d6edaee2, type: 3}
+  - name: ChargeEffect
+    prefab: {fileID: 5662621573035475572, guid: f54b1fb72725479439c194f94e575d66, type: 3}
     parent: {fileID: 4455117012622010470}
     initialSize: 10
   - name: HitEffect
-    prefab: {fileID: 355549986818305060, guid: 8de172035478f26468c48915f21889ed, type: 3}
+    prefab: {fileID: 3568795517321926131, guid: 56ffdabe517aa3043ad6ee8e9024b5f2, type: 3}
     parent: {fileID: 2786801260358310160}
     initialSize: 10
   autoExpand: 1
@@ -7313,6 +7330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff53f15a27a6764a9ed2630e5187995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.EffectFactory
+  effectDataSO: {fileID: 11400000, guid: ac0fc544ede98ad49864696eef301d27, type: 2}
 --- !u!1 &3159233062309538738
 GameObject:
   m_ObjectHideFlags: 0
@@ -9901,7 +9919,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6617137926274167881}
   m_Layer: 0
-  m_Name: ChargeAttackEffect
+  m_Name: ChargeEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11956,7 +11974,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 4.1920433, y: 0}
+  m_Offset: {x: 4.252982, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -11966,7 +11984,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 18.61314, y: 1}
+  m_Size: {x: 18.505966, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &5337402131341818364
 GameObject:
@@ -17643,7 +17661,7 @@ MonoBehaviour:
     parent: {fileID: 6655828482031627951}
     initialSize: 10
   - name: ChargedProjectile
-    prefab: {fileID: 5662621573035475572, guid: 4217c7501aa455640ab6fe0a5645083d, type: 3}
+    prefab: {fileID: 2116767409353763841, guid: 4af07c85cb938fd4da9cbfa0eb340611, type: 3}
     parent: {fileID: 499011122675947740}
     initialSize: 10
   autoExpand: 1
@@ -21228,7 +21246,8 @@ PrefabInstance:
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 2116767409353763841, guid: 8e99cf28b059ab44fb1b05a8ed3db0e4, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1531229486111971778, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -21244,9 +21263,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4231705497029412974, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5529452526367255235}
-    - targetCorrespondingSourceObject: {fileID: 4231705497029412974, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1635889738655504701}
   m_SourcePrefab: {fileID: 100100000, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
 --- !u!1 &1337394147000188947 stripped
 GameObject:
@@ -21314,20 +21330,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerDamageVisualManager
   normalSprite: {fileID: 3315521980036648666}
   damagedSprite: {fileID: 3684248434214619991}
---- !u!114 &1635889738655504701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337394147000188947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53046a349c326e242982b44a9a590c56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Player.PlayerDamageVisualManager
-  normalSprite: {fileID: 2360456424114633569}
-  damagedSprite: {fileID: 2876358916422299834}
 --- !u!114 &3046202257730399196 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 176521708161786785, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}

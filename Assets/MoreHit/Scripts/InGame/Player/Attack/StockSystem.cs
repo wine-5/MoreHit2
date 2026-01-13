@@ -1,24 +1,30 @@
 using UnityEngine;
-using MoreHit.Attack;
 using MoreHit.Events;
 
-namespace MoreHit.Player
+namespace MoreHit.Attack
 {
     /// <summary>
     /// ストックシステム
     /// 敵がストックを蓄積し、一定量溜まると倒せるようになる
     /// </summary>
-    public class StockSystem : MonoBehaviour, IStockable
+    public class StockSystem : IStockable
     {
-        [Header("ストック設定")]
-        [Tooltip("最大ストック数")]
-        [SerializeField] private int maxStock = 99;
-        
+        private readonly int maxStock;
+        private readonly GameObject ownerObject;
         private int currentStock = 0;
         
         public int CurrentStock => currentStock;
         public int MaxStock => maxStock;
         public bool IsFull => currentStock >= MaxStock;
+        
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public StockSystem(int maxStock, GameObject ownerObject)
+        {
+            this.maxStock = maxStock;
+            this.ownerObject = ownerObject;
+        }
         
         public void AddStock(int amount)
         {
@@ -32,7 +38,7 @@ namespace MoreHit.Player
                 GameEvents.TriggerStockChanged(currentStock, MaxStock);
                 
                 if (currentStock >= MaxStock)
-                    GameEvents.TriggerStockFull(gameObject);
+                    GameEvents.TriggerStockFull(ownerObject);
             }
         }
         

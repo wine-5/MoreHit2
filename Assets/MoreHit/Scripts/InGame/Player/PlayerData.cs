@@ -34,11 +34,9 @@ namespace MoreHit.Player
         [Tooltip("プレイヤーの最大HP")]
         [SerializeField] private int maxHealth = 100;
         [Tooltip("ダメージを受けた後の無敵時間（秒）")]
-        [SerializeField] private float invincibleTimeAfterDamage = 1f;
+        [SerializeField] private float invincibleTime = 1f;
 
         // プロパティ
-        public string PlayerName => playerName;
-        
         public float MoveSpeed => moveSpeed;
         public float Acceleration => acceleration;
         public float Deceleration => deceleration;
@@ -49,6 +47,6 @@ namespace MoreHit.Player
         public int MaxJumpCount => maxJumpCount;
 
         public int MaxHealth => maxHealth;
-        public float InvincibleTimeAfterDamage => invincibleTimeAfterDamage;
+        public float InvincibleTime => invincibleTime;
     }
 }

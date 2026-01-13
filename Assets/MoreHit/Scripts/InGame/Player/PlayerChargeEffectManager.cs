@@ -10,13 +10,9 @@ namespace MoreHit.Player
     public class PlayerChargeEffectManager : MonoBehaviour
     {
         [Header("エフェクト設定")]
-        [SerializeField] private Transform effectSpawnPoint; // エフェクト生成位置
-        private PlayerInputManager inputManager; // 入力管理への参照
+        [SerializeField] private Transform effectSpawnPoint;
+        private PlayerInputManager inputManager;
         
-        // 定数
-        private const float POSITION_TOLERANCE = 0.01f;
-
-        // エフェクト管理
         private GameObject currentChargeEffect;
         private bool isEffectActive = false;
 
@@ -27,22 +23,13 @@ namespace MoreHit.Player
         
         private void LateUpdate()
         {
-            // エフェクトがアクティブな場合、毎フレーム位置を更新
-            // LateUpdateを使用することでプレイヤーの移動処理の後に実行される
             if (isEffectActive && currentChargeEffect != null)
             {
                 Vector3 targetPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-                Transform effectTransform = currentChargeEffect.transform;
-                
-                // 毎フレーム親をチェックして解除（必要に応じて）
-                if (effectTransform.parent != null)
-                    effectTransform.SetParent(null, false);
-                
-                // 位置を強制的に設定
-                effectTransform.position = targetPosition;
+                currentChargeEffect.transform.position = targetPosition;
             }
             else if (isEffectActive)
-                isEffectActive = false; // 状態を修正
+                isEffectActive = false;
         }
 
         private void OnEnable()
@@ -64,18 +51,14 @@ namespace MoreHit.Player
                 inputManager.onChargeRangedAttack.RemoveListener(OnChargeRangedAttack);
             }
             
-            // コンポーネントが無効化される時はエフェクトを確実に停止
             StopChargeEffect();
         }
 
         /// <summary>
         /// チャージ状態変化時の処理（チャージ準備完了・失敗時）
         /// </summary>
-        /// <param name="isCharging">チャージ中かどうか</param>
         private void OnChargeStateChanged(bool isCharging)
         {
-            // チャージが終了した時のみエフェクトを停止
-            // ただし、既にエフェクトが停止している場合は処理をスキップ
             if (!isCharging && (isEffectActive || currentChargeEffect != null))
                 StopChargeEffect();
         }
@@ -85,45 +68,19 @@ namespace MoreHit.Player
         /// </summary>
         private void StartChargeEffect()
         {
-            // 既にエフェクトがアクティブの場合は一度停止
             if (isEffectActive) StopChargeEffect();
-            
             if (EffectFactory.I == null) return;
             
-            // チャージSE再生
             if (AudioManager.I != null)
-            {
-                AudioManager.I.Play("Se_Charge");
-            }
-            
-            // 静的データストアからエフェクトデータを取得
-            EffectData chargeEffectData = EffectDataStore.GetEffectData(EffectType.ChargeAttackEffect);
-            if (chargeEffectData == null || chargeEffectData.effectPrefab == null)
-            {
-                Debug.LogWarning("⚠️ PlayerChargeEffectManager: ChargeAttackEffectのデータまたはプレハブが見つかりません");
-                return;
-            }
+                AudioManager.I.PlaySE(SeType.Charge);
 
             Vector3 spawnPosition = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-            currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeAttackEffect, spawnPosition);
+            currentChargeEffect = EffectFactory.I.CreateEffect(EffectType.ChargeEffect, spawnPosition);
             
-            // エフェクト生成が成功した場合のみフラグを設定
             if (currentChargeEffect != null)
             {
                 isEffectActive = true;
-                Transform effectTransform = currentChargeEffect.transform;
-                
-                // 生成直後に親を確実に解除し、位置を正しく設定
-                if (effectTransform.parent != null)
-                    effectTransform.SetParent(null, false);
-                
-                // 現在のプレイヤー位置に強制設定
-                Vector3 currentPlayerPos = effectSpawnPoint != null ? effectSpawnPoint.position : transform.position;
-                effectTransform.position = currentPlayerPos;
-                
-                // 位置設定の即座確認と再設定（確実な同期のため）
-                if (Vector3.Distance(effectTransform.position, currentPlayerPos) > POSITION_TOLERANCE)
-                    effectTransform.position = currentPlayerPos;
+                currentChargeEffect.transform.position = spawnPosition;
             }
             else
                 isEffectActive = false;
@@ -134,24 +91,18 @@ namespace MoreHit.Player
         /// </summary>
         private void StopChargeEffect()
         {
-            // 既に停止している場合は何もしない
             if (!isEffectActive && currentChargeEffect == null) return;
             
             if (currentChargeEffect != null)
             {
                 if (EffectFactory.I != null)
-                {
                     EffectFactory.I.ReturnEffect(currentChargeEffect);
-                }
                 else
-                {
-                    // EffectFactoryがない場合は直接破棄
                     Destroy(currentChargeEffect);
-                }
+                
                 currentChargeEffect = null;
             }
             
-            // エフェクトの有無に関わらず状態をリセット
             isEffectActive = false;
         }
 
@@ -165,7 +116,6 @@ namespace MoreHit.Player
 
         private void OnDestroy()
         {
-            // 念のためエフェクトをクリーンアップ
             StopChargeEffect();
         }
     }

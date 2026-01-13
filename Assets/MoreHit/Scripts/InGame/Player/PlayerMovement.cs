@@ -15,6 +15,7 @@ namespace MoreHit.Player
         [SerializeField] private LayerMask groundLayer;
 
         private Rigidbody2D rb;
+        private Collider2D playerCollider;
 
         private float moveSpeed;
         private float acceleration;
@@ -28,26 +29,18 @@ namespace MoreHit.Player
         private float currentSpeed;
         private bool isFacingRight = true;
 
-        public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
-        public bool IsFacingRight => isFacingRight;
-        public bool IsWalking => Mathf.Abs(moveInput.x) > MIN_WALKING_THRESHOLD;
-
         private int jumpCount = 0;
         private bool isGrounded;
-        public bool IsGrounded => isGrounded;
 
-        // RayCastベースの地面検出用変数
         [Header("地面接触判定（RayCast）")]
-        [SerializeField] private float groundCheckDistance = 0.3f; // 短くして精度向上
-        [SerializeField] private float groundCheckWidth = 0.6f;   // キャラクター幅に合わせて調整
-        [SerializeField] private float groundCheckYOffset = 0f;  // Raycast起点のYオフセット（マイナスで上、プラスで下）
-        [SerializeField] private int groundRayCount = 5;           // レイの本数を増やして安定性向上
+        [SerializeField] private float groundCheckDistance = 0.3f;
+        [SerializeField] private float groundCheckWidth = 0.6f;
+        [SerializeField] private float groundCheckYOffset = 0f;
+        [SerializeField] private int groundRayCount = 5;
 
-        // ジャンプ連打防止用
         private float lastJumpTime = 0f;
         private const float MIN_JUMP_INTERVAL = 0.15f;
 
-        // 速度・方向判定用定数
         private const float ASCENDING_VELOCITY_THRESHOLD = 0.2f;
         private const float STABLE_VELOCITY_THRESHOLD = 0.1f;
         private const float MIN_FALLING_VELOCITY = -0.3f;
@@ -58,13 +51,30 @@ namespace MoreHit.Player
 
         private float defaultGravityScale;
 
+        public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
+        public bool IsFacingRight => isFacingRight;
+        public bool IsWalking => Mathf.Abs(moveInput.x) > MIN_WALKING_THRESHOLD;
+        public bool IsGrounded => isGrounded;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            playerCollider = GetComponent<Collider2D>();
             defaultGravityScale = rb.gravityScale;
 
             if (playerData != null)
                 CachePlayerParameters();
+        }
+
+        private void Update()
+        {
+            CheckGroundStatus();
+        }
+
+        private void FixedUpdate()
+        {
+            HandleMovement();
+            HandleGravity();
         }
 
         /// <summary>
@@ -81,17 +91,6 @@ namespace MoreHit.Player
             maxJumpCount = playerData.MaxJumpCount;
         }
 
-        private void Update()
-        {
-            CheckGroundStatus();
-        }
-
-        private void FixedUpdate()
-        {
-            HandleMovement();
-            HandleGravity();
-        }
-
         /// <summary>
         /// 移動入力を設定
         /// </summary>
@@ -101,24 +100,55 @@ namespace MoreHit.Player
         }
 
         /// <summary>
+        /// ジャンプ実行
+        /// </summary>
+        public void Jump()
+        {
+            float currentTime = Time.time;
+
+            if (currentTime - lastJumpTime < MIN_JUMP_INTERVAL) return;
+            if (jumpCount >= maxJumpCount) return;
+
+            if (jumpCount == 0)
+            {
+                if (!isGrounded) return;
+                if (rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD) return;
+            }
+
+            if (jumpCount > 0)
+            {
+                if (!isGrounded && rb.linearVelocity.y >= MIN_FALLING_VELOCITY) return;
+                if (isGrounded && rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD) return;
+            }
+
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpCount++;
+            lastJumpTime = currentTime;
+            
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.Jump);
+        }
+
+        /// <summary>
+        /// ジャンプキャンセル（短押し対応）
+        /// </summary>
+        public void CancelJump()
+        {
+            if (rb.linearVelocity.y > 0)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
+        }
+
+        /// <summary>
         /// RayCastベース
         /// </summary>
         private void CheckGroundStatus()
         {
-            bool previouslyGrounded = isGrounded;
-
-            // RayCastによる地面検出（複数のレイを使用して安定性向上）
             isGrounded = PerformGroundRayCast();
 
             if (rb.linearVelocity.y > ASCENDING_VELOCITY_THRESHOLD)
                 isGrounded = false;
 
-            // ジャンプカウントリセット
             if (isGrounded && rb.linearVelocity.y <= STABLE_VELOCITY_THRESHOLD && jumpCount > 0)
-                jumpCount = 0;
-
-            // 着地検出（追加のセーフティ）
-            if (!previouslyGrounded && isGrounded)
                 jumpCount = 0;
         }
 
@@ -127,17 +157,13 @@ namespace MoreHit.Player
         /// </summary>
         private bool PerformGroundRayCast()
         {
-            // プレイヤーのColliderから直接計算
-            Collider2D playerCollider = GetComponent<Collider2D>();
             if (playerCollider == null)
                 return Mathf.Abs(rb.linearVelocity.y) < STABLE_VELOCITY_THRESHOLD && rb.linearVelocity.y <= 0;
 
-            // プレイヤーのColliderの下端を起点とし、Yオフセットを適用
             Bounds bounds = playerCollider.bounds;
             Vector2 startPos = new Vector2(bounds.center.x, bounds.min.y + groundCheckYOffset);
             float halfWidth = groundCheckWidth * 0.5f;
 
-            // 複数のポイントからRayCastを実行
             for (int i = 0; i < groundRayCount; i++)
             {
                 float offsetX = 0f;
@@ -174,75 +200,6 @@ namespace MoreHit.Player
         }
 
         /// <summary>
-        /// ジャンプ実行
-        /// </summary>
-        public void Jump()
-        {
-            float currentTime = Time.time;
-
-            // 連打防止：前回のジャンプから最小間隔をチェック
-            if (currentTime - lastJumpTime < MIN_JUMP_INTERVAL)
-                return;
-
-            // 最大ジャンプ回数チェック
-            if (jumpCount >= maxJumpCount)
-                return;
-
-            // 最初のジャンプ：地面に立っている必要がある
-            if (jumpCount == 0)
-            {
-                if (!isGrounded)
-                    return;
-
-                // 地面に立っていても上昇中なら拒否
-                if (rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD)
-                    return;
-            }
-
-            // 2回目以降のジャンプ：地面にいる場合は常に許可、空中なら下降中のみ
-            if (jumpCount > 0)
-            {
-                if (!isGrounded && rb.linearVelocity.y >= MIN_FALLING_VELOCITY) // 空中で十分に下降していない
-                    return;
-
-                // 地面にいて上昇中なら拒否
-                if (isGrounded && rb.linearVelocity.y > STABLE_VELOCITY_THRESHOLD)
-                    return;
-            }
-
-            // ジャンプ実行
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpCount++;
-            lastJumpTime = currentTime;
-            
-            // ジャンプSE再生
-            if (AudioManager.I != null)
-            {
-                AudioManager.I.Play("Se_Jump");
-            }
-        }
-
-        /// <summary>
-        /// ジャンプキャンセル（短押し対応）
-        /// </summary>
-        public void CancelJump()
-        {
-            if (rb.linearVelocity.y > 0)
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * jumpCutMultiplier);
-        }
-
-        /// <summary>
-        /// 重力調整（落下時の重力を強くする）
-        /// </summary>
-        private void HandleGravity()
-        {
-            if (rb.linearVelocity.y < 0)
-                rb.gravityScale = defaultGravityScale * fallGravityMultiplier;
-            else
-                rb.gravityScale = defaultGravityScale;
-        }
-
-        /// <summary>
         /// プレイヤーの向きを反転
         /// </summary>
         private void Flip()
@@ -254,12 +211,14 @@ namespace MoreHit.Player
         }
 
         /// <summary>
-        /// 移動を停止
+        /// 重力調整（落下時の重力を強くする）
         /// </summary>
-        public void Stop()
+        private void HandleGravity()
         {
-            moveInput = Vector2.zero;
-            rb.linearVelocity = Vector2.zero;
+            if (rb.linearVelocity.y < 0)
+                rb.gravityScale = defaultGravityScale * fallGravityMultiplier;
+            else
+                rb.gravityScale = defaultGravityScale;
         }
     }
 }
