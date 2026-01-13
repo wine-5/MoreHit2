@@ -31,7 +31,6 @@ namespace MoreHit.UI
                 
         private void OnEnable()
         {
-            GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
             GameEvents.OnBossDamaged += OnBossDamaged;
             GameEvents.OnStockFull += OnStockFull;
@@ -41,7 +40,6 @@ namespace MoreHit.UI
         
         private void OnDisable()
         {
-            GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
             GameEvents.OnStockFull -= OnStockFull;

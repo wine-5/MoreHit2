@@ -119,6 +119,68 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &96550446 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde85e77e4137a948a9b467ccf3c223e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossEnemy
+--- !u!114 &288762456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &361591066 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2472573640021100859, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &361591069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361591066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d716f11db1db4e14f82923554bc06b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.BossHPBar
+  bossHPPanel: {fileID: 371932146}
+  hpBackgroundImage: {fileID: 288762456}
+  hpForegroundImage: {fileID: 533741454}
+  bossNameText: {fileID: 1957471918}
+  bossEnemy: {fileID: 96550446}
+  bossName: "\u30DC\u30B9"
+  hpAnimationSpeed: 2
+--- !u!1 &371932146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4290474548554007167, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &533741454 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3909105702400102042, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &1244068264 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2774494477509848877, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
@@ -300,6 +362,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1567725516487059567, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: bossHPBarScript
+      value: 
+      objectReference: {fileID: 361591069}
+    - target: {fileID: 2401626653840851302, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 228.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -344,6 +418,14 @@ PrefabInstance:
       propertyPath: projectileFactory
       value: 
       objectReference: {fileID: 1244068264}
+    - target: {fileID: 5321597760455263419, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6513215529504962838, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_Name
       value: InGame
@@ -352,11 +434,26 @@ PrefabInstance:
       propertyPath: projectileFactory
       value: 
       objectReference: {fileID: 1244068264}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2472573640021100859, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 361591069}
   m_SourcePrefab: {fileID: 100100000, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+--- !u!114 &1957471918 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1902388849574718400, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
