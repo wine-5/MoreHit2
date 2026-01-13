@@ -61,7 +61,8 @@ namespace MoreHit.UI
         
         public void ForceUpdateHPBar()
         {
-            if (currentBoss != null) UpdateHPBar();
+            if (currentBoss != null)
+                UpdateHPBar();
         }
         
         private void OnBossAppear()
@@ -74,7 +75,9 @@ namespace MoreHit.UI
                 UpdateHPBar();
             }
             else
+            {
                 StartCoroutine(RetryFindBoss());
+            }
         }
         
         private IEnumerator RetryFindBoss()
@@ -101,37 +104,44 @@ namespace MoreHit.UI
         
         private void OnBossDefeated()
         {
-            if (AudioManager.I != null) AudioManager.I.PlaySE(SeType.BossDefeat);
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.BossDefeat);
             HideBossHPBar();
             currentBoss = null;
         }
         
         private void OnBossDamaged(int damage)
         {
-            if (currentBoss != null) UpdateHPBar();
+            if (currentBoss != null)
+                UpdateHPBar();
         }
 
         private void OnPlayerDamage(int damage, int currentHealth)
         {
-            if (AudioManager.I != null) AudioManager.I.PlaySE(SeType.TakeDamage);
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.TakeDamage);
         }
 
         private void OnEnemyDefeated(GameObject enemy)
         {
-            if (AudioManager.I != null) AudioManager.I.PlaySE(SeType.EnemyDefeat);
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.EnemyDefeat);
         }
         
         private void ShowBossHPBar()
         {
             if (bossHPPanel == null) return;
             bossHPPanel.SetActive(true);
-            if (bossNameText != null) bossNameText.text = bossName;
-            if (hpForegroundImage != null) hpForegroundImage.fillAmount = FULL_HP_RATIO;
+            if (bossNameText != null)
+                bossNameText.text = bossName;
+            if (hpForegroundImage != null)
+                hpForegroundImage.fillAmount = FULL_HP_RATIO;
         }
         
         private void HideBossHPBar()
         {
-            if (bossHPPanel != null) bossHPPanel.SetActive(false);
+            if (bossHPPanel != null)
+                bossHPPanel.SetActive(false);
         }
         
         private void UpdateHPBar()
@@ -146,7 +156,8 @@ namespace MoreHit.UI
         
         private void StartHPBarAnimation(float targetRatio)
         {
-            if (hpBarAnimationCoroutine != null) StopCoroutine(hpBarAnimationCoroutine);
+            if (hpBarAnimationCoroutine != null)
+                StopCoroutine(hpBarAnimationCoroutine);
             hpBarAnimationCoroutine = StartCoroutine(AnimateHPBar(targetRatio));
         }
         
@@ -174,7 +185,9 @@ namespace MoreHit.UI
         private void OnStockFull(GameObject target)
         {
             if (target != null && target.GetComponent<BossEnemy>() != null)
+            {
                 StartCoroutine(StockFullEffect());
+            }
         }
         
         private IEnumerator StockFullEffect()

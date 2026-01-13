@@ -40,7 +40,9 @@ namespace MoreHit.Boss
             GameEvents.TriggerBossAreaEntered();
             
             if (wallsToActivate != null && wallsToActivate.Length > 0)
+            {
                 StartCoroutine(ActivateWallsDelayed());
+            }
         }
         
         /// <summary>
@@ -55,7 +57,8 @@ namespace MoreHit.Boss
                 if (wallsToActivate[i] != null)
                 {
                     wallsToActivate[i].SetActive(true);
-                    if (i < wallsToActivate.Length - 1) yield return new WaitForSeconds(0.1f);
+                    if (i < wallsToActivate.Length - 1)
+                        yield return new WaitForSeconds(0.1f);
                 }
             }
         }
@@ -72,7 +75,8 @@ namespace MoreHit.Boss
             {
                 foreach (var wall in wallsToActivate)
                 {
-                    if (wall != null) wall.SetActive(false);
+                    if (wall != null)
+                        wall.SetActive(false);
                 }
             }
         }

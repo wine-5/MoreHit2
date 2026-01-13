@@ -30,7 +30,8 @@ namespace MoreHit.Boss
             if (playerTransform == null)
             {
                 var player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null) playerTransform = player.transform;
+                if (player != null)
+                    playerTransform = player.transform;
             }
             
             if (mainCamera != null)

@@ -37,7 +37,8 @@ namespace MoreHit.Boss
         
         private void Start()
         {
-            if (bossHPBarUI != null) bossHPBarUI.SetActive(false);
+            if (bossHPBarUI != null)
+                bossHPBarUI.SetActive(false);
         }
         
         /// <summary>
@@ -47,21 +48,12 @@ namespace MoreHit.Boss
         {
             if (bossGameObject == null)
             {
-                Debug.LogError($"❌ [BossManager] ボスGameObjectが設定されていません！");
+                Debug.LogError("[BossManager] ボスGameObjectが設定されていません！");
                 return;
             }
             
-            if (bossGameObject.activeInHierarchy)
-            {
-                if (showDebugLog)
-                    Debug.LogWarning($"⚠️ [BossManager] ボスは既にアクティブです");
-                return;
-            }
-            
-            // ボスを有効化
             bossGameObject.SetActive(true);
             
-            // HPバーを表示
             if (bossHPBarUI != null)
                 bossHPBarUI.SetActive(true);
                 
@@ -87,12 +79,14 @@ namespace MoreHit.Boss
         
         private void OnBossDamaged(int damage)
         {
-            if (bossHPBarScript != null) bossHPBarScript.ForceUpdateHPBar();
+            if (bossHPBarScript != null)
+                bossHPBarScript.ForceUpdateHPBar();
         }
         
         private void OnBossDefeated()
         {
-            if (bossHPBarUI != null) bossHPBarUI.SetActive(false);
+            if (bossHPBarUI != null)
+                bossHPBarUI.SetActive(false);
         }
     }
 }

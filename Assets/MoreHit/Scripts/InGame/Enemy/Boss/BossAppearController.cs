@@ -20,6 +20,7 @@ namespace MoreHit.Boss
         
         [Header("ボス参照")]
         [SerializeField] private Transform bossTransform;
+        [SerializeField] private GameObject bossGameObject;
         
         [Header("タイミング設定")]
         [SerializeField] private float delayBeforeZoomOut = 0.5f; // ボススポーン後の待機時間
@@ -43,6 +44,7 @@ namespace MoreHit.Boss
         private void StartBossIntroduction()
         {
             if (isPlayingIntro) return;
+            
             StartCoroutine(PlayBossIntroductionSequence());
         }
         
@@ -56,7 +58,8 @@ namespace MoreHit.Boss
             LockPlayerInput(true);
             Time.timeScale = 0f;
             
-            if (warningUI != null) yield return warningUI.PlayWarningAnimation();
+            if (warningUI != null)
+                yield return warningUI.PlayWarningAnimation();
             
             Time.timeScale = 1f;
             
@@ -66,7 +69,8 @@ namespace MoreHit.Boss
             GameEvents.TriggerBossAppear();
             yield return new WaitForSeconds(delayBeforeZoomOut);
             
-            if (bossCameraController != null) yield return bossCameraController.ZoomOutToFieldView();
+            if (bossCameraController != null)
+                yield return bossCameraController.ZoomOutToFieldView();
             
             if (bossBattleStartUI != null)
             {
@@ -85,20 +89,6 @@ namespace MoreHit.Boss
         {
             // イベントを発火して入力ロックを通知
             GameEvents.TriggerInputLockChanged(isLocked);
-        }
-        
-        /// <summary>
-        /// 演出を強制リセット（デバッグ用）
-        /// </summary>
-        [ContextMenu("Reset Boss Introduction")]
-        public void ResetIntroduction()
-        {
-            StopAllCoroutines();
-            isPlayingIntro = false;
-            Time.timeScale = 1f;
-            LockPlayerInput(false);
-            
-            if (bossCameraController != null) bossCameraController.ReturnToNormalCamera();
         }
     }
 }

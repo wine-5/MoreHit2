@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1124, y: 766}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchoredPosition: {x: 3421, y: 1157}
+  m_SizeDelta: {x: 5000, y: 1000}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &72288300
 MonoBehaviour:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Warning
+  m_text: Warning Warning Warning Warning Warning Warning
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8834e75c48fa4eb46a2080bd979868ab, type: 2}
   m_sharedMaterial: {fileID: -4606138022287472320, guid: 8834e75c48fa4eb46a2080bd979868ab, type: 2}
@@ -185,8 +185,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190335
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -261,23 +261,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
   m_PrefabInstance: {fileID: 1883267849}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 750999067}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dde85e77e4137a948a9b467ccf3c223e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossEnemy
---- !u!114 &288762456 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7992551857196012061, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-  m_PrefabInstance: {fileID: 1883267849}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &320255920
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +317,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.BossHPBar
   bossHPPanel: {fileID: 371932146}
-  hpBackgroundImage: {fileID: 288762456}
   hpForegroundImage: {fileID: 533741454}
   bossNameText: {fileID: 1957471918}
   bossEnemy: {fileID: 96550446}
@@ -405,6 +393,11 @@ MonoBehaviour:
   scaleAnimationDuration: 0.3
   minScale: 0.5
   maxScale: 1
+--- !u!1 &750999067 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &846639138
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +453,7 @@ GameObject:
   - component: {fileID: 1267770596}
   - component: {fileID: 1267770597}
   - component: {fileID: 1267770598}
+  - component: {fileID: 1267770599}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -510,7 +504,24 @@ MonoBehaviour:
   bossBattleStartUI: {fileID: 583172343}
   bossCameraController: {fileID: 1883267855}
   bossTransform: {fileID: 1883267850}
+  bossGameObject: {fileID: 750999067}
   delayBeforeZoomOut: 0.01
+--- !u!114 &1267770599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267770595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
+  bossGameObject: {fileID: 750999067}
+  bossHPBarUI: {fileID: 371932146}
+  bossHPBarScript: {fileID: 361591069}
+  showDebugLog: 1
 --- !u!1 &1305008768
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,7 +564,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 885439200153385063, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1567725516487059567, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: bossHPBarScript
@@ -565,19 +576,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2820182417669312770, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2898683286263442493, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3057726758798398845, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3437624495957861289, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -625,19 +636,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4453469214818363106, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4823353733614590204, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4864198335958008072, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4901542060602015177, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5134376541617848088, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: bossHPBarScript
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5147338710975254346, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: projectileFactory
@@ -649,11 +664,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362016295759900278, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: enemyDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: d9c480572bbc6a04389fc02ebed806c5, type: 2}
     - target: {fileID: 5589912846543232211, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
@@ -665,7 +684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6862033619885010150, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7034443511273940001, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: projectileFactory
@@ -673,18 +692,20 @@ PrefabInstance:
       objectReference: {fileID: 1244068264}
     - target: {fileID: 7052828302394622375, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7335962206628363644, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8172846346421243130, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+    - {fileID: 5134376541617848088, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+    - {fileID: 1567725516487059567, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5720997154559892497, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
@@ -897,8 +918,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1045,8 +1066,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -108,9 +108,13 @@ namespace MoreHit.Enemy
             base.InitializeEnemy();
             
             if (enemyData != null)
+            {
                 currentHP = GetMaxHP();
+            }
             else
+            {
                 Debug.LogError("[BossEnemy] enemyDataがnullです!");
+            }
         }
         
         #endregion
@@ -142,7 +146,8 @@ namespace MoreHit.Enemy
             canMove = true;
             canTakeDamage = true;
             
-            if (currentHP <= 0) Die();
+            if (currentHP <= 0)
+                Die();
         }
         
         #endregion
@@ -169,7 +174,8 @@ namespace MoreHit.Enemy
                 
                 rb.linearVelocity = newVelocity;
                 
-                if (spriteRenderer != null) spriteRenderer.flipX = direction.x < 0;
+                if (spriteRenderer != null)
+                    spriteRenderer.flipX = direction.x < 0;
             }
             else if (direction.y < -MIN_MOVE_THRESHOLD)
             {

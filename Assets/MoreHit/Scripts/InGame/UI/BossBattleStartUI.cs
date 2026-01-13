@@ -24,8 +24,10 @@ namespace MoreHit.UI
         
         private void Start()
         {
-            if (readyPanel != null) readyPanel.SetActive(false);
-            if (fightPanel != null) fightPanel.SetActive(false);
+            if (readyPanel != null)
+                readyPanel.SetActive(false);
+            if (fightPanel != null)
+                fightPanel.SetActive(false);
         }
         
         /// <summary>
