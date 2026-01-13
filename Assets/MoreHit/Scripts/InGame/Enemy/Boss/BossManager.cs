@@ -37,9 +37,7 @@ namespace MoreHit.Boss
         
         private void Start()
         {
-            // HPバーは最初は非表示
-            if (bossHPBarUI != null)
-                bossHPBarUI.SetActive(false);
+            if (bossHPBarUI != null) bossHPBarUI.SetActive(false);
         }
         
         /// <summary>
@@ -87,30 +85,14 @@ namespace MoreHit.Boss
                 Debug.Log($"🔥 [BossManager] ボス '{bossGameObject.name}' を有効化しました");
         }
         
-        /// <summary>
-        /// ボスダメージイベント受信（HPBar更新保証）
-        /// </summary>
         private void OnBossDamaged(int damage)
         {
-            if (bossHPBarScript != null)
-            {
-                bossHPBarScript.ForceUpdateHPBar();
-                if (showDebugLog)
-                    Debug.Log($"🩸 [BossManager] ボスダメージ検出、HPBar強制更新");
-            }
+            if (bossHPBarScript != null) bossHPBarScript.ForceUpdateHPBar();
         }
         
-        /// <summary>
-        /// ボス敗北イベント受信
-        /// </summary>
         private void OnBossDefeated()
         {
-            // HPバーを非表示
-            if (bossHPBarUI != null)
-                bossHPBarUI.SetActive(false);
-                
-            if (showDebugLog)
-                Debug.Log($"💀 [BossManager] ボス敗北 - HPバーを非表示にしました");
+            if (bossHPBarUI != null) bossHPBarUI.SetActive(false);
         }
     }
 }

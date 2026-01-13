@@ -24,7 +24,6 @@ namespace MoreHit.UI
         
         private void Start()
         {
-            // 初期状態は非表示
             if (readyPanel != null) readyPanel.SetActive(false);
             if (fightPanel != null) fightPanel.SetActive(false);
         }

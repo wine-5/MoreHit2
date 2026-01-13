@@ -43,7 +43,6 @@ namespace MoreHit.Boss
         private void StartBossIntroduction()
         {
             if (isPlayingIntro) return;
-            
             StartCoroutine(PlayBossIntroductionSequence());
         }
         
@@ -57,8 +56,7 @@ namespace MoreHit.Boss
             LockPlayerInput(true);
             Time.timeScale = 0f;
             
-            if (warningUI != null)
-                yield return warningUI.PlayWarningAnimation();
+            if (warningUI != null) yield return warningUI.PlayWarningAnimation();
             
             Time.timeScale = 1f;
             
@@ -68,8 +66,7 @@ namespace MoreHit.Boss
             GameEvents.TriggerBossAppear();
             yield return new WaitForSeconds(delayBeforeZoomOut);
             
-            if (bossCameraController != null)
-                yield return bossCameraController.ZoomOutToFieldView();
+            if (bossCameraController != null) yield return bossCameraController.ZoomOutToFieldView();
             
             if (bossBattleStartUI != null)
             {
@@ -101,8 +98,7 @@ namespace MoreHit.Boss
             Time.timeScale = 1f;
             LockPlayerInput(false);
             
-            if (bossCameraController != null)
-                bossCameraController.ReturnToNormalCamera();
+            if (bossCameraController != null) bossCameraController.ReturnToNormalCamera();
         }
     }
 }

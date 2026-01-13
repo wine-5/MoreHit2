@@ -30,7 +30,11 @@ namespace MoreHit.Enemy
         private const float MIN_MOVE_THRESHOLD = 0.1f;
         private const float BOSS_SPEED_MULTIPLIER = 0.3f;
         private const float FIREBALL_DEFAULT_SPEED = 10f;
-        private const float FIREBALL_TRACKING_DURATION = 2f; // FireBallの追従時間
+        private const float FIREBALL_TRACKING_DURATION = 2f;
+        private const float VERTICAL_MOVE_MULTIPLIER = 0.5f;
+        private const float GRAVITY_ADDITION_MULTIPLIER = 0.3f;
+        private const float HORIZONTAL_DECAY_MULTIPLIER = 0.8f;
+        private const float DOWNWARD_MOVE_MULTIPLIER = 0.7f;
         
         #endregion
         
@@ -90,7 +94,6 @@ namespace MoreHit.Enemy
         protected override void Update()
         {
             if (isDead || !canMove) return;
-            
             UpdateStockTimer();
             Move();
             Attack();
@@ -105,13 +108,9 @@ namespace MoreHit.Enemy
             base.InitializeEnemy();
             
             if (enemyData != null)
-            {
-                currentHP = GetMaxHP(); // EnemyDataから取得
-            }
+                currentHP = GetMaxHP();
             else
-            {
                 Debug.LogError("[BossEnemy] enemyDataがnullです!");
-            }
         }
         
         #endregion
@@ -133,33 +132,15 @@ namespace MoreHit.Enemy
         
         protected override void OnStockReachedRequired()
         {
-            Debug.Log($"[BossEnemy] OnStockReachedRequired開始 - canTakeDamage: {canTakeDamage}, isDead: {isDead}, currentHP: {currentHP}");
+            if (isDead || !gameObject.activeInHierarchy) return;
             
-            // 死亡状態または非アクティブの場合は処理しない
-            if (isDead || !gameObject.activeInHierarchy)
-            {
-                Debug.Log($"[BossEnemy] 死亡またはnon-activeのため処理をスキップ");
-                return;
-            }
-            
-            // ダメージが受けられない状態でもストック満タン処理は実行
-            Debug.Log($"[BossEnemy] ダメージ処理を実行 - canTakeDamage: {canTakeDamage}");
-            
-            float previousHP = currentHP;
             currentHP = Mathf.Max(0, currentHP - AUTO_DAMAGE);
-            
-            Debug.Log($"[BossEnemy] ストック満タンでHP減少: {previousHP} -> {currentHP}, イベント発火");
             GameEvents.TriggerBossDamaged(Mathf.FloorToInt(AUTO_DAMAGE));
-            
             ClearStock();
             
-            // ボスは移動を続ける（基底クラスと異なる動作）
             currentState = EnemyState.Move;
-            canMove = true; // 移動継続を確保
-            canTakeDamage = true; // 次のダメージに備える
-            
-            Debug.Log($"[BossEnemy] canTakeDamage維持: true, canMove: true - 現在のHP: {currentHP}");
-            Debug.Log($"[BossEnemy] OnStockReachedRequired完了");
+            canMove = true;
+            canTakeDamage = true;
             
             if (currentHP <= 0) Die();
         }
@@ -176,37 +157,27 @@ namespace MoreHit.Enemy
             Vector3 currentPosition = transform.position;
             Vector3 direction = (targetPosition - currentPosition).normalized;
             
-            // 水平移動の判定
             if (Mathf.Abs(direction.x) > MIN_MOVE_THRESHOLD)
             {
-                // Y軸方向も考慮した移動（プレイヤーに向かって移動）
                 Vector2 newVelocity = new Vector2(
                     direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER,
-                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.5f // 垂直移動は少し弱めに
+                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * VERTICAL_MOVE_MULTIPLIER
                 );
                 
-                // 重力の影響を考慮（プレイヤーが下にいる場合のみ下向きの力を追加）
-                if (direction.y < 0) // プレイヤーが下にいる
-                {
-                    newVelocity.y += rb.gravityScale * Physics2D.gravity.y * 0.3f; // 重力を少し追加
-                }
+                if (direction.y < 0)
+                    newVelocity.y += rb.gravityScale * Physics2D.gravity.y * GRAVITY_ADDITION_MULTIPLIER;
                 
                 rb.linearVelocity = newVelocity;
                 
-                if (spriteRenderer != null)
-                    spriteRenderer.flipX = direction.x < 0;
+                if (spriteRenderer != null) spriteRenderer.flipX = direction.x < 0;
             }
-            else
+            else if (direction.y < -MIN_MOVE_THRESHOLD)
             {
-                // 水平移動が不要でも、プレイヤーが下にいる場合は下向きに移動
-                if (direction.y < -MIN_MOVE_THRESHOLD) // プレイヤーが明確に下にいる
-                {
-                    Vector2 newVelocity = new Vector2(
-                        rb.linearVelocity.x * 0.8f, // 水平速度を少し減衰
-                        direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * 0.7f // 下向きに移動
-                    );
-                    rb.linearVelocity = newVelocity;
-                }
+                Vector2 newVelocity = new Vector2(
+                    rb.linearVelocity.x * HORIZONTAL_DECAY_MULTIPLIER,
+                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * DOWNWARD_MOVE_MULTIPLIER
+                );
+                rb.linearVelocity = newVelocity;
             }
         }
         
@@ -274,25 +245,16 @@ namespace MoreHit.Enemy
         {
             if (EnemyFactory.I == null) yield break;
             
-            // プレイヤーの位置を取得
             Vector3 playerPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             
             for (int i = 0; i < minionSpawnCount; i++)
             {
-                // プレイヤーがいる方向を計算
                 Vector2 directionToPlayer = (playerPosition - transform.position).normalized;
+                Vector3 spawnPosition = transform.position + (Vector3)(directionToPlayer * 2f);
                 
-                // ボスの目の前（プレイヤー方向）に生成位置を設定
-                Vector3 spawnPosition = transform.position + (Vector3)(directionToPlayer * 2f); // 2ユニット前
-                
-                // 複数生成時は少しずつ位置をずらす
                 if (i > 0)
                 {
-                    Vector3 offset = new Vector3(
-                        Random.Range(-1f, 1f), 
-                        Random.Range(-1f, 1f), 
-                        0f
-                    );
+                    Vector3 offset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
                     spawnPosition += offset;
                 }
                 
@@ -300,13 +262,11 @@ namespace MoreHit.Enemy
                 
                 if (minion != null)
                 {
-                    // 通常の敵として動作させる（投げる処理は削除）
                     Rigidbody2D minionRb = minion.GetComponent<Rigidbody2D>();
                     if (minionRb != null)
                     {
-                        // 重力を通常値に設定
                         minionRb.gravityScale = 1f;
-                        minionRb.linearVelocity = Vector2.zero; // 初期速度なし
+                        minionRb.linearVelocity = Vector2.zero;
                     }
                 }
                 
@@ -320,50 +280,29 @@ namespace MoreHit.Enemy
             Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             Transform playerTransform = PlayerDataProvider.I?.Transform;
             
-            // AttackDataが設定されている場合はAttackExecutorを使用（Pool対応）
             if (fireballAttackData != null && AttackExecutor.I != null)
             {
-                Debug.Log("[BossEnemy] AttackExecutorを使用してFireBall攻撃（Pool対応）");
-                
                 for (int i = 0; i < fireballCount; i++)
                 {
                     Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
                     Vector2 fireballDirection = (targetPosition - spawnPos).normalized;
                     
-                    Debug.Log($"[BossEnemy] FireBall AttackData {i + 1} 発射 - 方向: {fireballDirection}");
-                    
-                    // AttackExecutor経由で攻撃（Poolが自動的に使用される）
-                    AttackExecutor.I.Execute(
-                        fireballAttackData,
-                        spawnPos,
-                        fireballDirection,
-                        gameObject
-                    );
-                    
+                    AttackExecutor.I.Execute(fireballAttackData, spawnPos, fireballDirection, gameObject);
                     yield return new WaitForSeconds(fireballInterval);
                 }
             }
-            // Prefabが設定されている場合は直接生成（フォールバック）
             else if (fireballPrefab != null)
             {
-                Debug.LogWarning("[BossEnemy] fireballAttackDataが未設定のため、Instantiateを使用します（Pool未使用）");
-                
                 for (int i = 0; i < fireballCount; i++)
                 {
                     Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
-                    
                     GameObject fireball = Instantiate(fireballPrefab, spawnPos, Quaternion.identity);
-                    
-                    // FireBallに追従機能を追加
                     StartCoroutine(UpdateFireballDirection(fireball, playerTransform));
-                    
                     yield return new WaitForSeconds(fireballInterval);
                 }
             }
             else
-            {
                 Debug.LogWarning("[BossEnemy] fireballAttackDataもfireballPrefabも設定されていません");
-            }
         }
         
         /// <summary>
@@ -398,26 +337,17 @@ namespace MoreHit.Enemy
         
         public override void TakeDamage(int damage)
         {
-            if (isDead) 
-                return;
+            if (isDead) return;
             
-            // 実際のダメージ処理を追加
             currentHP = Mathf.Max(0, currentHP - damage);
             
-            // 死亡判定
             if (currentHP <= 0)
             {
                 Die();
                 return;
             }
-            
-            // 注意：ストックの追加はAttackExecutorで既に行われているため、ここでは行わない
-            // ストックが満タンになったら自動的にOnStockReachedRequiredが呼ばれてHPが減る
         }
         
-        /// <summary>
-        /// プレイヤーへの攻撃
-        /// </summary>
         public override void AttackPlayer()
         {
             if (enemyAttackData == null)
@@ -426,20 +356,16 @@ namespace MoreHit.Enemy
                 return;
             }
             
-            // 基底クラスのAttackPlayer実行
             base.AttackPlayer();
         }
 
         public override void Die()
         {
             if (isDead) return;
-            
             isDead = true;
             canMove = false;
-            
             GameEvents.TriggerBossDefeated();
             GameEvents.TriggerEnemyDefeated(gameObject);
-            
             gameObject.SetActive(false);
         }
         
