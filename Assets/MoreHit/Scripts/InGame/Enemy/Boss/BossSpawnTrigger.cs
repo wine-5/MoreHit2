@@ -48,13 +48,13 @@ namespace MoreHit.Boss
                 return;
             }
             
-            Debug.Log($"🔥 [BossSpawnTrigger] プレイヤーがボス出現エリアに侵入！ボスを召喚します");
+            Debug.Log($"🔥 [BossSpawnTrigger] プレイヤーがボス出現エリアに侵入！ボス演出を開始します");
             
             // フラグを先に立てる（重複防止）
             hasTriggered = true;
             
-            // GameEventsでボス出現を通知
-            GameEvents.TriggerBossAppear();
+            // GameEventsでボス出現エリア侵入を通知（演出開始）
+            GameEvents.TriggerBossAreaEntered();
             
             // 壁を遅延して出現させる
             if (wallsToActivate != null && wallsToActivate.Length > 0)

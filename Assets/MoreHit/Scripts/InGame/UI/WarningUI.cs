@@ -1,19 +1,81 @@
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
-namespace MoreHit
+namespace MoreHit.UI
 {
+    /// <summary>
+    /// WARNING テキストのスクロール表示
+    /// 右から左へスクロールしながらフェードアウト
+    /// </summary>
     public class WarningUI : MonoBehaviour
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        [Header("UI参照")]
+        [SerializeField] private TextMeshProUGUI warningText;
         
+        [Header("アニメーション設定")]
+        [SerializeField] private float scrollSpeed = 500f;
+        [SerializeField] private float displayDuration = 2f;
+        [SerializeField] private float fadeOutDuration = 0.5f;
+        
+        private RectTransform canvasRect;
+        
+        private void Start()
+        {
+            gameObject.SetActive(false);
+            canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
         }
-
-        // Update is called once per frame
-        void Update()
-        {
         
+        /// <summary>
+        /// WARNING アニメーション実行
+        /// </summary>
+        public IEnumerator PlayWarningAnimation()
+        {
+            if (warningText == null) yield break;
+            
+            gameObject.SetActive(true);
+            
+            RectTransform textRect = warningText.rectTransform;
+            float canvasWidth = canvasRect.rect.width;
+            float startX = canvasWidth / 2f + textRect.rect.width / 2f;
+            float originalY = textRect.anchoredPosition.y;
+            
+            textRect.anchoredPosition = new Vector2(startX, originalY);
+            
+            Color originalColor = warningText.color;
+            warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+            
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < displayDuration)
+            {
+                elapsedTime += Time.unscaledDeltaTime;
+                float newX = startX - (scrollSpeed * elapsedTime);
+                textRect.anchoredPosition = new Vector2(newX, originalY);
+                yield return null;
+            }
+            
+            yield return FadeOut();
+            
+            gameObject.SetActive(false);
+            warningText.color = originalColor;
+        }
+        
+        /// <summary>
+        /// フェードアウト処理
+        /// </summary>
+        private IEnumerator FadeOut()
+        {
+            float elapsed = 0f;
+            Color originalColor = warningText.color;
+            
+            while (elapsed < fadeOutDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float alpha = 1f - (elapsed / fadeOutDuration);
+                warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+                yield return null;
+            }
         }
     }
 }

@@ -35,6 +35,16 @@ namespace MoreHit.Events
         public static event Action<int, int> OnStockChanged;
         
         /// <summary>
+        /// 入力ロック状態が変更された時（ボス演出、カットシーンなど）
+        /// </summary>
+        public static event Action<bool> OnInputLockChanged;
+        
+        /// <summary>
+        /// ボス出現エリアに侵入した時（演出開始）
+        /// </summary>
+        public static event Action OnBossAreaEntered;
+        
+        /// <summary>
         /// ボスが出現した時
         /// </summary>
         public static event Action OnBossAppear;
@@ -84,6 +94,16 @@ namespace MoreHit.Events
             OnStockChanged?.Invoke(currentStock, maxStock);
         }
         
+        public static void TriggerInputLockChanged(bool isLocked)
+        {
+            OnInputLockChanged?.Invoke(isLocked);
+        }
+        
+        public static void TriggerBossAreaEntered()
+        {
+            OnBossAreaEntered?.Invoke();
+        }
+        
         public static void TriggerBossAppear()
         {
             OnBossAppear?.Invoke();
@@ -119,6 +139,8 @@ namespace MoreHit.Events
             OnPlayerInvincibilityEnded = null;
             OnStockFull = null;
             OnStockChanged = null;
+            OnInputLockChanged = null;
+            OnBossAreaEntered = null;
             OnBossAppear = null;
             OnBossDefeated = null;
             OnBossDamaged = null;
