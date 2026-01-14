@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3141956349949170040}
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 742f1669efbeb2e40856f384aee00be9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.509434, g: 0.555845, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -113,8 +113,8 @@ MonoBehaviour:
   stockText: {fileID: 2565995880358027698}
   bounceEffectDuration: 3
   enemyType: 2
-  enemyDataSO: {fileID: 11400000, guid: 51e7996db5481f64a88bddaf8ed01905, type: 2}
-  enemyAttackData: {fileID: 11400000, guid: 075888cfc0e408d459def24dfc312667, type: 2}
+  enemyDataSO: {fileID: 11400000, guid: a0bcf965430ab424ba05f95d4ab71abd, type: 2}
+  enemyAttackData: {fileID: 11400000, guid: b5008b2a8c5a93b4facc3c88715a3283, type: 2}
   launchVector: {x: 1, y: 1}
   launchPower: 15
   stockMultiplier: 0.1

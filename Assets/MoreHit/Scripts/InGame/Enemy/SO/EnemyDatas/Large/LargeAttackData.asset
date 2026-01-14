@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a99d4f7942553d4b80aac534aa23c38, type: 3}
   m_Name: LargeAttackData
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Attack.AttackData
-  damage: 17
+  damage: 12
   range: 1.5
   hitboxSize: {x: 1, y: 1}
   targetTags:

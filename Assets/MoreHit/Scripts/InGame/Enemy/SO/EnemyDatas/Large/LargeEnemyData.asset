@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28c382c18aee8dc439a1c31505faed50, type: 3}
   m_Name: LargeEnemyData
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.EnemyDataSO
-  enemyType: 0
+  enemyType: 2
   maxHP: 100
   moveSpeed: 5
   stockCount: 0
-  needStock: 6
+  needStock: 15
