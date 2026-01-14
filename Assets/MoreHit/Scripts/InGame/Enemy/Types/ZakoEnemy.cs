@@ -22,9 +22,6 @@ namespace MoreHit.Enemy
         private float rightLimit;
         private int direction = 1;
 
-       
-
-       
         public void SetPatrolRange(float left, float right)
         {
             leftRange = left;
@@ -34,11 +31,9 @@ namespace MoreHit.Enemy
 
         protected override void Update()
         {
-          
+            HandleJumpTimer();
             base.Update();
-
         }
-       
 
         private void HandleJumpTimer()
         {
@@ -47,15 +42,13 @@ namespace MoreHit.Enemy
             if (jumpTimer <= 0)
             {
                 Jump();
-                jumpTimer = jumpInterval; 
+                jumpTimer = jumpInterval;
             }
         }
 
         private void Jump()
         {
-           
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-
         }
 
         protected override void Move()
@@ -69,15 +62,11 @@ namespace MoreHit.Enemy
             spriteRenderer.flipX = direction > 0;
         }
 
-       
-
         /// <summary>
         /// 雑魚敵の攻撃処理
         /// </summary>
         protected override void Attack()
         {
-            // TODO: 雑魚敵の攻撃ロジックを実装
-            // 例: 接触ダメージ、弾の発射など
         }
 
         /// <summary>

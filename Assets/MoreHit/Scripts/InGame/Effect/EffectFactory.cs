@@ -25,12 +25,9 @@ namespace MoreHit
             // エフェクト用ObjectPoolを取得
             FindEffectObjectPool();
             
-            // ScriptableObjectからエフェクトデータを初期化
             InitializeEffectDataDictionary();
         }
-        
 
-        
         private void FindEffectObjectPool()
         {
             var allObjectPools = FindObjectsByType<ObjectPool>(FindObjectsSortMode.None);
@@ -161,9 +158,7 @@ namespace MoreHit
             if (effectObject != null)
                 ReturnEffect(effectObject);
         }
-        
 
-        
         /// <summary>
         /// 利用可能なエフェクトタイプの一覧を取得
         /// </summary>

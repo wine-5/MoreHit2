@@ -11,8 +11,8 @@ namespace MoreHit.UI
     public class PlayerHealthUI : MonoBehaviour
     {
         [Header("UI設定")]
-        [SerializeField] private Image backgroundImage; // 白色（減った部分）
-        [SerializeField] private Image healthImage;     // 緑色（現在のHP）
+        [SerializeField] private Image backgroundImage;
+        [SerializeField] private Image healthImage;
         
         [Header("エディタ専用設定")]
         [SerializeField] private bool animateChanges = true;
@@ -94,20 +94,19 @@ namespace MoreHit.UI
         /// </summary>
         private System.Collections.IEnumerator RetryInitialization()
         {
-            int maxRetries = 30; // リトライ回数を増加
+            int maxRetries = 30;
             int retries = 0;
             
             Debug.Log("PlayerHealthUI: PlayerDataProvider の初期化を開始します...");
             
             while (retries < maxRetries)
             {
-                // 最初の数回は短い間隔で試す
                 if (retries < 10)
-                    yield return new WaitForSeconds(0.02f); // 20ms間隔
+                    yield return new WaitForSeconds(0.02f);
                 else if (retries < 20)
-                    yield return new WaitForSeconds(0.05f); // 50ms間隔
+                    yield return new WaitForSeconds(0.05f);
                 else
-                    yield return new WaitForSeconds(0.1f);  // 100ms間隔
+                    yield return new WaitForSeconds(0.1f);
                 
                 var playerDataProvider = PlayerDataProvider.I;
                 if (playerDataProvider != null)
@@ -153,7 +152,7 @@ namespace MoreHit.UI
             
             currentHealth = newCurrentHealth;
             float fillRatio = maxHealth > 0 ? (float)currentHealth / maxHealth : 0f;
-            targetFillAmount = Mathf.Clamp01(fillRatio); // 0-1の範囲にクランプ
+            targetFillAmount = Mathf.Clamp01(fillRatio);
             
 #if UNITY_EDITOR
             if (animateChanges)

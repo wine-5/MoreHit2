@@ -12,11 +12,11 @@ namespace MoreHit.UI
         private GameObject rulePanel; 
 
         [SerializeField]
-        private GameObject closeButton; // パネル閉じるボタン
+        private GameObject closeButton;
 
         [Header("表示・非表示を切り替えるオブジェクト")]
         [SerializeField]
-        private GameObject[] objectsToHide; // パネルが開いている時に隠すオブジェクトのリスト
+        private GameObject[] objectsToHide;
 
         private void Start()
         {
@@ -34,7 +34,6 @@ namespace MoreHit.UI
             rulePanel.SetActive(true);
             if (closeButton != null) closeButton.SetActive(true);
 
-            // リストに登録されたオブジェクトをすべて非表示にする
             ToggleObjects(false);
         }
 
@@ -48,7 +47,6 @@ namespace MoreHit.UI
             rulePanel.SetActive(false);
             if (closeButton != null) closeButton.SetActive(false);
 
-            // リストに登録されたオブジェクトをすべて表示にする
             ToggleObjects(true);
         }
 

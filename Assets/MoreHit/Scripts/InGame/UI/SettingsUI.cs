@@ -124,7 +124,6 @@ namespace MoreHit.UI
                 AudioManager.I.SetBGMVolume(1f);
                 AudioManager.I.SetSEVolume(1f);
                 
-                // スライダーの値も更新
                 if (masterVolumeSlider != null) masterVolumeSlider.value = 1f;
                 if (bgmVolumeSlider != null) bgmVolumeSlider.value = 1f;
                 if (seVolumeSlider != null) seVolumeSlider.value = 1f;

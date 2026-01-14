@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 
 public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // 1.5”{‚Ìw’è
+    // 1.5ï¿½{ï¿½Ìwï¿½ï¿½
     [SerializeField] private float scaleFactor = 1.5f;
     [SerializeField] private float animationDuration = 0.1f;
 
@@ -18,7 +18,7 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //ƒkƒ‹‚Á‚Æ‚µ‚½ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‚½‚ß‚ÌƒRƒ‹[ƒ`ƒ“
+        //ï¿½kï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ÌƒRï¿½ï¿½ï¿½[ï¿½`ï¿½ï¿½
         StartScaleAnimation(initialScale * scaleFactor);
     }
 
@@ -29,7 +29,6 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void StartScaleAnimation(Vector3 targetScale)
     {
-        // “Á’è‚ÌƒRƒ‹[ƒ`ƒ“‚Ì‚İ‚ğ’â~‚³‚¹‚ÄŠ±Â‚ğ–h‚®
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
@@ -45,8 +44,8 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         while (elapsedTime < animationDuration)
         {
             elapsedTime += Time.deltaTime;
-            // ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìi’»—¦ (0.0 ` 1.0)
-            // t‚ªƒRƒ‹[ƒ`ƒ“‚É‚æ‚Á‚Ä–ˆƒtƒŒ[ƒ€‘‚¦‚é‚±‚Æ‚ÅƒTƒCƒY‚ª•Ï‚í‚é
+            // ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìiï¿½ï¿½ï¿½ï¿½ (0.0 ï¿½` 1.0)
+            // tï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½[ï¿½`ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä–ï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚±ï¿½Æ‚ÅƒTï¿½Cï¿½Yï¿½ï¿½ï¿½Ï‚ï¿½ï¿½
             float t = elapsedTime / animationDuration;
             transform.localScale = Vector3.Lerp(startScale, targetScale, t);
             yield return null;

@@ -41,9 +41,8 @@ namespace MoreHit.Enemy
         #region シリアライズフィールド
         
         [Header("ボス専用設定")]
-        [SerializeField] private float attackCooldown = 0.5f; // 攻撃間隔を大幅に短縮
+        [SerializeField] private float attackCooldown = 0.5f;
         [SerializeField] private float attackRange = 5f;
-        // maxHPはEnemyDataから取得するため削除
         
         [Header("攻撃パターン設定")]
         [SerializeField] private AttackData fireballAttackData;
@@ -76,19 +75,12 @@ namespace MoreHit.Enemy
             canMove = true;
             isDead = false;
             currentState = EnemyState.Move;
-            canTakeDamage = true; // ボス登場時にダメージを受けられるように設定
+            canTakeDamage = true;
             
-            // EnemyDataからHPを取得（最優先）
             if (enemyData != null)
-            {
-                currentHP = enemyData.MaxHP; // 正しいプロパティ名はMaxHP
-            }
+                currentHP = enemyData.MaxHP;
             else
-            {
-                Debug.LogError("[BossEnemy] enemyDataがnullです！HPをデフォルト値に設定します。");
-                currentHP = 300; // フォールバック値
-            }
-
+                currentHP = 300;
         }
         
         protected override void Update()
@@ -108,13 +100,7 @@ namespace MoreHit.Enemy
             base.InitializeEnemy();
             
             if (enemyData != null)
-            {
                 currentHP = GetMaxHP();
-            }
-            else
-            {
-                Debug.LogError("[BossEnemy] enemyDataがnullです!");
-            }
         }
         
         #endregion
@@ -282,7 +268,6 @@ namespace MoreHit.Enemy
         
         private IEnumerator ExecuteFireballBarrage()
         {
-            // プレイヤーの位置を攻撃開始時に一度だけ取得（この位置を追従ターゲットとして使用）
             Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             Transform playerTransform = PlayerDataProvider.I?.Transform;
             
@@ -307,8 +292,6 @@ namespace MoreHit.Enemy
                     yield return new WaitForSeconds(fireballInterval);
                 }
             }
-            else
-                Debug.LogWarning("[BossEnemy] fireballAttackDataもfireballPrefabも設定されていません");
         }
         
         /// <summary>
@@ -327,7 +310,6 @@ namespace MoreHit.Enemy
             {
                 if (playerTransform != null)
                 {
-                    // プレイヤーの現在位置に向かう方向を計算
                     Vector2 directionToPlayer = (playerTransform.position - fireball.transform.position).normalized;
                     rb.linearVelocity = directionToPlayer * FIREBALL_DEFAULT_SPEED;
                 }
@@ -356,11 +338,7 @@ namespace MoreHit.Enemy
         
         public override void AttackPlayer()
         {
-            if (enemyAttackData == null)
-            {
-                Debug.LogError("[BossEnemy] enemyAttackDataが設定されていません！Unityエディタでアタッチしてください。");
-                return;
-            }
+            if (enemyAttackData == null) return;
             
             base.AttackPlayer();
         }
@@ -381,14 +359,13 @@ namespace MoreHit.Enemy
         
         public float GetHPRatio()
         {
-            int maxHP = GetMaxHP(); // EnemyDataから取得
+            int maxHP = GetMaxHP();
             return maxHP > 0 ? (float)currentHP / maxHP : 0f;
         }
         
         public int GetMaxHP()
         {
-            // EnemyDataを最優先に使用
-            return Mathf.FloorToInt(enemyData?.MaxHP ?? 300f); // 正しいプロパティ名はMaxHP
+            return Mathf.FloorToInt(enemyData?.MaxHP ?? 300f);
         }
         
         public int GetCurrentHP()

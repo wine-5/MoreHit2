@@ -16,11 +16,11 @@ namespace MoreHit.UI
         [SerializeField] private TextMeshProUGUI fightText;
         
         [Header("アニメーション設定")]
-        [SerializeField] private float readyDisplayDuration = 1.5f; // Ready表示時間
-        [SerializeField] private float fightDisplayDuration = 1f; // Fight表示時間
-        [SerializeField] private float scaleAnimationDuration = 0.3f; // スケールアニメーション時間
-        [SerializeField] private float minScale = 0.5f; // 開始時のスケール
-        [SerializeField] private float maxScale = 1f; // 最終スケール
+        [SerializeField] private float readyDisplayDuration = 1.5f;
+        [SerializeField] private float fightDisplayDuration = 1f;
+        [SerializeField] private float scaleAnimationDuration = 0.3f;
+        [SerializeField] private float minScale = 0.5f;
+        [SerializeField] private float maxScale = 1f;
         
         private void Start()
         {

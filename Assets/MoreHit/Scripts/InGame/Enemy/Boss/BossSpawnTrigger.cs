@@ -10,13 +10,12 @@ namespace MoreHit.Boss
     public class BossSpawnTrigger : MonoBehaviour
     {
         [Header("設定")]
-        [SerializeField] private bool isOneTimeOnly = true; // 一度だけトリガーするか
-        [SerializeField] private string playerTag = "Player"; // プレイヤーのタグ
+        [SerializeField] private bool isOneTimeOnly = true;
+        [SerializeField] private string playerTag = "Player";
         
         [Header("壁設定")]
-        [SerializeField] private GameObject[] wallsToActivate; // 出現させる壁のリスト
-        [SerializeField] private float wallActivateDelay = 0.5f; // ボス出現後、壁が出現するまでの遅延時間
-        [SerializeField] private bool showWallActivationLog = true; // 壁出現のログを表示するか
+        [SerializeField] private GameObject[] wallsToActivate;
+        [SerializeField] private float wallActivateDelay = 0.5f;
         
         [Header("デバッグ表示")]
         [SerializeField] private bool showGizmosInEditor = true;
@@ -40,14 +39,9 @@ namespace MoreHit.Boss
             GameEvents.TriggerBossAreaEntered();
             
             if (wallsToActivate != null && wallsToActivate.Length > 0)
-            {
                 StartCoroutine(ActivateWallsDelayed());
-            }
         }
         
-        /// <summary>
-        /// 遅延して壁を出現させる
-        /// </summary>
         private System.Collections.IEnumerator ActivateWallsDelayed()
         {
             yield return new WaitForSeconds(wallActivateDelay);
@@ -63,9 +57,6 @@ namespace MoreHit.Boss
             }
         }
         
-        /// <summary>
-        /// トリガー状態をリセット（デバッグ用）
-        /// </summary>
         [ContextMenu("Reset Trigger")]
         public void ResetTrigger()
         {

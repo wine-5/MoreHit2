@@ -10,26 +10,21 @@ namespace MoreHit.Boss
     public class BossManager : MonoBehaviour
     {
         [Header("ボス設定")]
-        [SerializeField] private GameObject bossGameObject; // ボスのGameObject
+        [SerializeField] private GameObject bossGameObject;
 
         [Header("UI設定")]
-        [SerializeField] private GameObject bossHPBarUI; // ボスHPバーのUI
-        [SerializeField] private BossHPBar bossHPBarScript; // BossHPBarコンポーネント（直接参照）
-
-        [Header("デバッグ")]
-        [SerializeField] private bool showDebugLog = true;
+        [SerializeField] private GameObject bossHPBarUI;
+        [SerializeField] private BossHPBar bossHPBarScript;
 
         private void OnEnable()
         {
-            // ボス出現イベントを購読
             GameEvents.OnBossAppear += OnBossAppear;
             GameEvents.OnBossDefeated += OnBossDefeated;
-            GameEvents.OnBossDamaged += OnBossDamaged; // 直接ダメージイベントも購読   
+            GameEvents.OnBossDamaged += OnBossDamaged;
         }
 
         private void OnDisable()
         {
-            // イベント購読を解除
             GameEvents.OnBossAppear -= OnBossAppear;
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
@@ -41,30 +36,20 @@ namespace MoreHit.Boss
                 bossHPBarUI.SetActive(false);
         }
 
-        /// <summary>
-        /// ボス出現イベント受信
-        /// </summary>
         private void OnBossAppear()
         {
-            if (bossGameObject == null)
-            {
-                Debug.LogError("[BossManager] ボスGameObjectが設定されていません！");
-                return;
-            }
+            if (bossGameObject == null) return;
 
             bossGameObject.SetActive(true);
 
             if (bossHPBarUI != null)
                 bossHPBarUI.SetActive(true);
 
-            // BossHPBarスクリプトに直接ボスを設定
             if (bossHPBarScript != null)
             {
                 var bossEnemy = bossGameObject.GetComponent<MoreHit.Enemy.BossEnemy>();
                 if (bossEnemy != null)
-                {
                     bossHPBarScript.SetCurrentBoss(bossEnemy);
-                }
             }
         }
 

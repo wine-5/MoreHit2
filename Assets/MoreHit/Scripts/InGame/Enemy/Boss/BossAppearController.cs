@@ -23,8 +23,7 @@ namespace MoreHit.Boss
         [SerializeField] private GameObject bossGameObject;
         
         [Header("タイミング設定")]
-        [SerializeField] private float delayBeforeZoomOut = 0.5f; // ボススポーン後の待機時間
-        
+        [SerializeField] private float delayBeforeZoomOut = 0.5f;
 
         private bool isPlayingIntro = false;
         
@@ -87,7 +86,6 @@ namespace MoreHit.Boss
         /// </summary>
         private void LockPlayerInput(bool isLocked)
         {
-            // イベントを発火して入力ロックを通知
             GameEvents.TriggerInputLockChanged(isLocked);
         }
     }

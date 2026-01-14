@@ -30,7 +30,6 @@ namespace MoreHit.Enemy
                 enemyFactory = GetComponent<EnemyFactory>();
                 if (enemyFactory == null)
                 {
-                    Debug.LogError("[EnemySpawner] EnemyFactory component not found!");
                     enabled = false;
                     return;
                 }
@@ -55,27 +54,20 @@ namespace MoreHit.Enemy
                    Time.time - lastSpawnTime >= spawnInterval;
         }
 
-        // クラスの変数として追加
         private int nextSpawnIndex = 0;
 
-        public EnemyBase SpawnEnemySequentially() // 名前を「Sequential」に変更すると分かりやすい
+        public EnemyBase SpawnEnemySequentially()
         {
             if (enemyFactory == null || spawnPoints.Length == 0) return null;
 
-            // 1. カウンターを使って現在の地点を選ぶ
             Transform selectedPoint = spawnPoints[nextSpawnIndex];
 
-            // 2. 敵を生成する
             Vector3 spawnPosition = selectedPoint.position;
             EnemyBase enemy = enemyFactory.CreateRandomEnemy(spawnPosition);
 
             if (enemy != null)
-            {
                 RegisterEnemy(enemy, selectedPoint);
-            }
 
-            // 3. 重要：カウンターを次に進める
-            // リストの最後に到達したら 0 に戻るように計算する
             nextSpawnIndex = (nextSpawnIndex + 1) % spawnPoints.Length;
 
             return enemy;
@@ -83,15 +75,12 @@ namespace MoreHit.Enemy
 
         private Vector3 GetRandomSpawnPosition()
         {
-            // スポーンポイントが設定されていない場合のフォールバック
             if (spawnPoints.Length == 0)
                 return transform.position;
 
-            // 最低2つのスポーンポイントが必要（範囲を定義するため）
             if (spawnPoints.Length < 2)
                 return spawnPoints[0].position;
 
-            // 全てのスポーンポイントからX座標とY座標の最小値と最大値を取得
             float minX = float.MaxValue;
             float maxX = float.MinValue;
             float minY = float.MaxValue;
@@ -108,11 +97,10 @@ namespace MoreHit.Enemy
                 maxY = Mathf.Max(maxY, pos.y);
             }
 
-            // 完全ランダムな座標を生成
             return new Vector3(
-                Random.Range(minX, maxX),    // X座標: 最小X〜最大Xの範囲でランダム
-                Random.Range(minY, maxY),    // Y座標: 最小Y〜最大Yの範囲でランダム
-                0f                           // Z座標: 2Dなので0
+                Random.Range(minX, maxX),
+                Random.Range(minY, maxY),
+                0f
             );
         }
 
@@ -122,9 +110,7 @@ namespace MoreHit.Enemy
 
             EnemyBase enemy = enemyFactory.CreateEnemyByIndex(index, position);
             if (enemy != null)
-            {
-                RegisterEnemy(enemy, transform); // とりあえず自分自身（Spawner）を渡す
-            }
+                RegisterEnemy(enemy, transform);
 
             return enemy;
         }
@@ -135,13 +121,9 @@ namespace MoreHit.Enemy
             enemy.OnEnemyDeath += OnEnemyDeath;
             lastSpawnTime = Time.time;
 
-            // スポーン地点に設定スクリプトが付いているか確認
             EnemySpawnSettings settings = spawnPoint.GetComponent<EnemySpawnSettings>();
             if (settings != null && enemy is ZakoEnemy zako)
-            {
-                // 敵がZakoEnemyなら、設定値を反映させる
                 zako.SetPatrolRange(settings.leftRange, settings.rightRange);
-            }
         }
 
         private void OnEnemyDeath(EnemyBase enemy)

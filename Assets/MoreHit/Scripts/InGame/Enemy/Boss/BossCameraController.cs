@@ -27,6 +27,7 @@ namespace MoreHit.Boss
         private void Awake()
         {
             if (mainCamera == null) mainCamera = UnityEngine.Camera.main;
+            
             if (playerTransform == null)
             {
                 var player = GameObject.FindGameObjectWithTag("Player");
@@ -42,7 +43,7 @@ namespace MoreHit.Boss
         }
         
         /// <summary>
-        /// ボスへカメラをパン（移動）
+        /// ボスへカメラをパン
         /// </summary>
         public IEnumerator PanToBoss(Transform bossTransform)
         {
