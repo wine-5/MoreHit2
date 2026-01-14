@@ -66,6 +66,9 @@ namespace MoreHit.Enemy
 
         private GameObject currentFullStockEffect = null;
         
+        [Header("ストック満タン直前エフェクト")]
+        [SerializeField] private GameObject stockAlmostFullEffect;
+        
         #endregion
         
         #region 初期化とライフサイクル
@@ -98,6 +101,9 @@ namespace MoreHit.Enemy
             LoadEnemyData();
             InitializeEnemy();
             UpdateStockText();
+            
+            if (stockAlmostFullEffect != null)
+                stockAlmostFullEffect.SetActive(false);
         }
         
         #endregion
@@ -111,6 +117,7 @@ namespace MoreHit.Enemy
             currentStockCount += amount;
 
             UpdateStockText();
+            UpdateStockAlmostFullEffect();
 
             StopMovement(hitStopDuration);
 
@@ -128,6 +135,8 @@ namespace MoreHit.Enemy
         {
             currentStockCount = 0;
             UpdateStockText();
+            if (stockAlmostFullEffect != null)
+                stockAlmostFullEffect.SetActive(false);
         }
 
         protected virtual void OnStockReachedRequired()
@@ -214,6 +223,9 @@ namespace MoreHit.Enemy
         public void TryLaunch()
         {
             if (currentStockCount < enemyData.NeedStock) return;
+            
+            if (stockAlmostFullEffect != null)
+                stockAlmostFullEffect.SetActive(false);
             
             int extraStocks = currentStockCount - enemyData.NeedStock;
             currentLaunchTimer = baseLaunchDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
@@ -422,11 +434,22 @@ namespace MoreHit.Enemy
                 stockText.text = currentStockCount.ToString();
         }
 
+        private void UpdateStockAlmostFullEffect()
+        {
+            if (stockAlmostFullEffect == null || enemyData == null) return;
+
+            bool shouldShow = currentStockCount == enemyData.NeedStock - 1;
+            stockAlmostFullEffect.SetActive(shouldShow);
+        }
+
         private void ResetStock()
         {
             isStockTimerActive = false;
             currentStockCount = enemyData.StockCount;
             UpdateStockText();
+            
+            if (stockAlmostFullEffect != null)
+                stockAlmostFullEffect.SetActive(false);
 
             if (stockText != null) stockText.color = Color.white;
         }
