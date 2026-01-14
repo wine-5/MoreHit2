@@ -58,26 +58,26 @@ namespace MoreHit.Attack
 
         private Collider2D[] DetectHits(Vector3 position, Vector2 size)
         {
-            // 接触攻撃の場合はヒットボックスサイズを適切に調整
             Vector2 adjustedSize = size;
             if (size.x <= SMALL_HITBOX_THRESHOLD && size.y <= SMALL_HITBOX_THRESHOLD)
             {
-                adjustedSize = new Vector2(CONTACT_ATTACK_HITBOX_SIZE, CONTACT_ATTACK_HITBOX_SIZE); // 接触攻撃用に拡張
+                adjustedSize = new Vector2(CONTACT_ATTACK_HITBOX_SIZE, CONTACT_ATTACK_HITBOX_SIZE);
             }
             
-            return Physics2D.OverlapBoxAll(position, adjustedSize, 0f);
+            Collider2D[] results = Physics2D.OverlapBoxAll(position, adjustedSize, 0f);
+            
+            return results;
         }
 
         private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
         {
             int hitCount = 0;
-            
-            // TargetTagsの内容を確認
-            string targetTagsStr = data.TargetTags != null ? string.Join(", ", data.TargetTags) : "null";
 
             foreach (var hit in hits)
             {
-                if (ShouldIgnoreHit(hit, attacker, data.TargetTags))
+                bool shouldIgnore = ShouldIgnoreHit(hit, attacker, data.TargetTags);
+                
+                if (shouldIgnore)
                 {
                     continue;
                 }
@@ -140,10 +140,17 @@ namespace MoreHit.Attack
 
         private void ApplyStock(Collider2D hit, int stockAmount)
         {
-            if (stockAmount <= 0) return;
+            if (stockAmount <= 0)
+            {
+                return;
+            }
 
             var stockable = hit.GetComponent<IStockable>();
-            stockable?.AddStock(stockAmount);
+            
+            if (stockable != null)
+            {
+                stockable.AddStock(stockAmount);
+            }
             
             // ReadyToLaunch状態の敵なら反射効果を発動
             var enemyBase = hit.GetComponent<MoreHit.Enemy.EnemyBase>();

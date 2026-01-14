@@ -11,14 +11,14 @@ namespace MoreHit.Boss
     {
         [Header("ボス設定")]
         [SerializeField] private GameObject bossGameObject; // ボスのGameObject
-        
+
         [Header("UI設定")]
         [SerializeField] private GameObject bossHPBarUI; // ボスHPバーのUI
         [SerializeField] private BossHPBar bossHPBarScript; // BossHPBarコンポーネント（直接参照）
-        
+
         [Header("デバッグ")]
         [SerializeField] private bool showDebugLog = true;
-        
+
         private void OnEnable()
         {
             // ボス出現イベントを購読
@@ -26,7 +26,7 @@ namespace MoreHit.Boss
             GameEvents.OnBossDefeated += OnBossDefeated;
             GameEvents.OnBossDamaged += OnBossDamaged; // 直接ダメージイベントも購読   
         }
-        
+
         private void OnDisable()
         {
             // イベント購読を解除
@@ -34,13 +34,13 @@ namespace MoreHit.Boss
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
         }
-        
+
         private void Start()
         {
             if (bossHPBarUI != null)
                 bossHPBarUI.SetActive(false);
         }
-        
+
         /// <summary>
         /// ボス出現イベント受信
         /// </summary>
@@ -51,12 +51,12 @@ namespace MoreHit.Boss
                 Debug.LogError("[BossManager] ボスGameObjectが設定されていません！");
                 return;
             }
-            
+
             bossGameObject.SetActive(true);
-            
+
             if (bossHPBarUI != null)
                 bossHPBarUI.SetActive(true);
-                
+
             // BossHPBarスクリプトに直接ボスを設定
             if (bossHPBarScript != null)
             {
@@ -64,25 +64,19 @@ namespace MoreHit.Boss
                 if (bossEnemy != null)
                 {
                     bossHPBarScript.SetCurrentBoss(bossEnemy);
-                    if (showDebugLog)
-                        Debug.Log($"✅ [BossManager] BossHPBarにボスを直接設定しました");
-                }
-                else
-                {
-                    Debug.LogError($"❌ [BossManager] ボスにBossEnemyコンポーネントが見つかりません");
                 }
             }
-            
+
             if (showDebugLog)
                 Debug.Log($"🔥 [BossManager] ボス '{bossGameObject.name}' を有効化しました");
         }
-        
+
         private void OnBossDamaged(int damage)
         {
             if (bossHPBarScript != null)
                 bossHPBarScript.ForceUpdateHPBar();
         }
-        
+
         private void OnBossDefeated()
         {
             if (bossHPBarUI != null)

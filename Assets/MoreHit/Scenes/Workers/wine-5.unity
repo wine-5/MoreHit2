@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &72288299
 RectTransform:
   m_ObjectHideFlags: 0
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c50553ed8cf5a14fb881e1e53204d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossAppearController
-  warningUI: {fileID: 1883670645}
+  warningUI: {fileID: 0}
   bossBattleStartUI: {fileID: 583172343}
   bossCameraController: {fileID: 1883267855}
   bossTransform: {fileID: 1883267850}
@@ -564,7 +564,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 885439200153385063, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1567725516487059567, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: bossHPBarScript
@@ -580,19 +580,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2820182417669312770, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2898683286263442493, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3057726758798398845, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3437624495957861289, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -640,19 +640,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4453469214818363106, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4823353733614590204, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4864198335958008072, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4901542060602015177, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5134376541617848088, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: bossHPBarScript
@@ -668,7 +668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362016295759900278, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: enemyDataSO
@@ -676,7 +676,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: d9c480572bbc6a04389fc02ebed806c5, type: 2}
     - target: {fileID: 5589912846543232211, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
@@ -688,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6862033619885010150, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7034443511273940001, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: projectileFactory
@@ -696,15 +696,15 @@ PrefabInstance:
       objectReference: {fileID: 1244068264}
     - target: {fileID: 7052828302394622375, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7335962206628363644, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8172846346421243130, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_CastShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8748781379863872311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive

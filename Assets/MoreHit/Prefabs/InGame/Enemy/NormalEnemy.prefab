@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -4122080702705760679}
   - component: {fileID: 2760139359437823241}
   m_Layer: 0
-  m_Name: Zako
+  m_Name: NormalEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acfc1f5e84b884459e88b9e82e76ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.ZakoEnemy
-  stockText: {fileID: 0}
+  stockText: {fileID: 2565995880358027698}
   bounceEffectDuration: 3
   enemyType: 0
   enemyDataSO: {fileID: 11400000, guid: 51e7996db5481f64a88bddaf8ed01905, type: 2}
@@ -464,6 +464,10 @@ PrefabInstance:
     - target: {fileID: 1754088470737090217, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
       propertyPath: m_Name
       value: StockAlmostFullEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 2437174823988410593, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

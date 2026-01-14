@@ -18,7 +18,7 @@ namespace MoreHit.Enemy
         protected EnemyState currentState = EnemyState.Move;
 
         [Header("UI設定")]
-        [SerializeField] protected TextMeshProUGUI stockText;
+        [SerializeField] protected TMP_Text stockText;
         [Header("エフェクト設定")]
         [SerializeField] protected float bounceEffectDuration = 3f;
         [Header("敵設定")]
@@ -109,11 +109,13 @@ namespace MoreHit.Enemy
         {
             // 死亡状態または非アクティブの場合はストック追加を無視
             if (isDead || !gameObject.activeInHierarchy)
+            {
                 return;
+            }
             
             currentStockCount += amount;
 
-            UpdateStockText(); // TMPテキストを更新
+            UpdateStockText();
 
             StopMovement(hitStopDuration);
 
