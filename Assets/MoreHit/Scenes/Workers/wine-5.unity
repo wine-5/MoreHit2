@@ -826,6 +826,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7519184687076746466, guid: d740e1df716055c4ab4bcbf99c45a995, type: 3}
   m_PrefabInstance: {fileID: 1074743693}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1084976663 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8673333072580973046, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 1883267849}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1244068264 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2774494477509848877, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
@@ -1084,6 +1089,22 @@ PrefabInstance:
       propertyPath: enemyDataSO
       value: 
       objectReference: {fileID: 11400000, guid: d9c480572bbc6a04389fc02ebed806c5, type: 2}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: aiController
+      value: 
+      objectReference: {fileID: 2120274079}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: bossAttackData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c5e70d6ec0ed624f9615649946136c3, type: 2}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: rotatingAttackData
+      value: 
+      objectReference: {fileID: 11400000, guid: 67b5e02c3a9d7d84cb202431ac067b84, type: 2}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: stockAlmostFullEffect
+      value: 
+      objectReference: {fileID: 1084976663}
     - target: {fileID: 5534553251790498180, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: poolItems.Array.data[0].prefab
       value: 
@@ -1206,6 +1227,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 660597234767366221, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2120274079}
   m_SourcePrefab: {fileID: 100100000, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
 --- !u!4 &1883267850 stripped
 Transform:
@@ -1672,6 +1696,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094167786}
   m_CullTransparentMesh: 1
+--- !u!114 &2120274079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750999067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce80e6d4c5459446bb4c3ec4f8bb065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossAIController
+  bossEnemy: {fileID: 96550446}
+  attackData: {fileID: 11400000, guid: 6c5e70d6ec0ed624f9615649946136c3, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

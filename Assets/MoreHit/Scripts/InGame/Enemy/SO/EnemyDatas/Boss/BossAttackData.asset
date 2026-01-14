@@ -9,12 +9,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a99d4f7942553d4b80aac534aa23c38, type: 3}
+  m_Script: {fileID: 11500000, guid: 91472b01205600c4fbb8c2a9ef6c6ac6, type: 3}
   m_Name: BossAttackData
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Attack.AttackData
-  damage: 20
-  range: 0.5
-  hitboxSize: {x: 3, y: 3}
-  targetTags:
-  - Player
-  stockAmount: 0
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossAttackDataSO
+  meleeCombo:
+    damage: 10
+    attackRange: 5
+    attackDuration: 1
+    animationDuration: 1.5
+    attackSE: 0
+    projectileCount: 3
+    projectileInterval: 0.3
+    projectileSpeed: 10
+  fireBall:
+    damage: 10
+    attackRange: 5
+    attackDuration: 1
+    animationDuration: 1.5
+    attackSE: 0
+    projectileCount: 3
+    projectileInterval: 0.3
+    projectileSpeed: 10
+  groundSlam:
+    damage: 10
+    attackRange: 5
+    attackDuration: 1
+    animationDuration: 1.5
+    attackSE: 0
+    projectileCount: 3
+    projectileInterval: 0.3
+    projectileSpeed: 10
+  baseAttackCooldown: 2
+  meleeAttackRange: 5
+  rangedAttackRange: 15
+  groundSlamHPThreshold: 0.5

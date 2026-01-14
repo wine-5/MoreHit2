@@ -433,14 +433,12 @@ MonoBehaviour:
   stockBonusThreshold: 5
   collisionBounceMultiplier: 0.2
   hitStopDuration: 1
-  attackCooldown: 3
-  attackRange: 5
-  fireballAttackData: {fileID: 11400000, guid: cd7f441e3696a1c4f8a48d50055662fc, type: 2}
+  stockAlmostFullEffect: {fileID: 0}
+  bossAttackData: {fileID: 0}
+  aiController: {fileID: 0}
+  rotatingAttackData: {fileID: 0}
   fireballPrefab: {fileID: 0}
   fireballSpawnPoint: {fileID: 0}
-  fireballCount: 3
-  fireballInterval: 0.5
-  minionSpawnCount: 2
 --- !u!1001 &6538774401582472823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -500,6 +498,14 @@ PrefabInstance:
     - target: {fileID: 1754088470737090217, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
       propertyPath: m_Name
       value: StockAlmostFullEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754088470737090217, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2437174823988410593, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2437174823988410593, guid: 107331e06cbf08a4399a098907fd8b19, type: 3}
       propertyPath: m_CastShadows

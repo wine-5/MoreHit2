@@ -41,16 +41,13 @@ namespace MoreHit.Enemy
         #region シリアライズフィールド
         
         [Header("ボス専用設定")]
-        [SerializeField] private float attackCooldown = 0.5f;
-        [SerializeField] private float attackRange = 5f;
+        [SerializeField] private BossAttackDataSO bossAttackData;
+        [SerializeField] private BossAIController aiController;
         
         [Header("攻撃パターン設定")]
-        [SerializeField] private AttackData fireballAttackData;
+        [SerializeField] private AttackData rotatingAttackData;
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private Transform fireballSpawnPoint;
-        [SerializeField] private int fireballCount = 3;
-        [SerializeField] private float fireballInterval = 0.5f;
-        [SerializeField] private int minionSpawnCount = 2;
         
         #endregion
         
@@ -68,6 +65,17 @@ namespace MoreHit.Enemy
         {
             enemyType = EnemyType.Boss;
             base.Awake();
+            
+            if (aiController == null)
+                aiController = GetComponent<BossAIController>();
+            
+            Debug.Log($"[BossEnemy] Awake: aiController={aiController != null}, bossAttackData={bossAttackData != null}, enemyAttackData={enemyAttackData != null}");
+            
+            if (bossAttackData == null)
+                Debug.LogError("[BossEnemy] BossAttackDataSOがアタッチされていません！Inspectorで設定してください。");
+            
+            if (enemyAttackData == null)
+                Debug.LogError("[BossEnemy] enemyAttackDataがアタッチされていません！Inspectorで設定してください。");
         }
         
         private void Start()
@@ -81,11 +89,22 @@ namespace MoreHit.Enemy
                 currentHP = enemyData.MaxHP;
             else
                 currentHP = 300;
+            
+            Debug.Log($"[BossEnemy] Start: HP={currentHP}, canMove={canMove}, state={currentState}");
         }
         
         protected override void Update()
         {
-            if (isDead || !canMove) return;
+            if (isDead || !canMove)
+            {
+                if (Time.frameCount % 300 == 0)
+                    Debug.Log($"[BossEnemy] Update: 停止中 - isDead={isDead}, canMove={canMove}");
+                return;
+            }
+            
+            if (Time.frameCount % 300 == 0)
+                Debug.Log($"[BossEnemy] Update: 動作中 - HP={currentHP}, state={currentState}");
+            
             UpdateStockTimer();
             Move();
             Attack();
@@ -179,23 +198,41 @@ namespace MoreHit.Enemy
         
         protected override void Attack()
         {
-            if (Time.time - lastAttackTime < attackCooldown) return;
-            if (isAttacking) return;
-            if (PlayerDataProvider.I == null) return;
-            
-            float distanceToPlayer = Vector3.Distance(transform.position, PlayerDataProvider.I.Position);
-            
-            if (distanceToPlayer <= attackRange)
+            if (isAttacking)
             {
-                BossAttackPattern selectedPattern = (BossAttackPattern)Random.Range(0, System.Enum.GetValues(typeof(BossAttackPattern)).Length);
-                StartCoroutine(ExecuteAttackPattern(selectedPattern));
-                lastAttackTime = Time.time;
+                if (Time.frameCount % 100 == 0)
+                    Debug.Log("[BossEnemy] Attack: 攻撃中のためスキップ");
+                return;
             }
+            
+            if (aiController == null)
+            {
+                Debug.LogWarning("[BossEnemy] Attack: aiControllerがnull");
+                return;
+            }
+            
+            if (!aiController.CanAttack())
+            {
+                if (Time.frameCount % 100 == 0)
+                    Debug.Log("[BossEnemy] Attack: クールダウン中");
+                return;
+            }
+            
+            if (PlayerDataProvider.I == null)
+            {
+                Debug.LogWarning("[BossEnemy] Attack: PlayerDataProviderがnull");
+                return;
+            }
+            
+            BossAttackPattern selectedPattern = aiController.SelectAttackPattern();
+            Debug.Log($"[BossEnemy] Attack: 攻撃開始 - pattern={selectedPattern}");
+            StartCoroutine(ExecuteAttackPattern(selectedPattern));
         }
         
         private IEnumerator ExecuteAttackPattern(BossAttackPattern pattern)
         {
             isAttacking = true;
+            Debug.Log($"[BossEnemy] ExecuteAttackPattern: 開始 - {pattern}");
             
             switch (pattern)
             {
@@ -212,16 +249,22 @@ namespace MoreHit.Enemy
                     break;
             }
             
+            if (aiController != null)
+                aiController.OnAttackExecuted();
+            
+            Debug.Log($"[BossEnemy] ExecuteAttackPattern: 完了 - {pattern}");
             isAttacking = false;
         }
         
         private IEnumerator ExecuteRotatingAttack()
         {
+            Debug.Log("[BossEnemy] ExecuteRotatingAttack: 開始");
             Vector3 targetPosition = PlayerDataProvider.I.Position;
             Vector2 direction = (targetPosition - transform.position).normalized;
             
             if (AttackExecutor.I != null && enemyAttackData != null)
             {
+                Debug.Log($"[BossEnemy] ExecuteRotatingAttack: 攻撃実行 - direction={direction}");
                 AttackExecutor.I.Execute(
                     enemyAttackData,
                     transform.position,
@@ -229,17 +272,30 @@ namespace MoreHit.Enemy
                     gameObject
                 );
             }
+            else
+            {
+                Debug.LogWarning($"[BossEnemy] ExecuteRotatingAttack: 攻撃不可 - AttackExecutor={AttackExecutor.I != null}, enemyAttackData={enemyAttackData != null}");
+            }
             
             yield return new WaitForSeconds(ROTATION_ATTACK_COOLDOWN);
         }
         
         private IEnumerator ExecuteSpawnMinions()
         {
-            if (EnemyFactory.I == null) yield break;
+            Debug.Log("[BossEnemy] ExecuteSpawnMinions: 開始");
             
+            if (EnemyFactory.I == null)
+            {
+                Debug.LogWarning("[BossEnemy] ExecuteSpawnMinions: EnemyFactoryがnull");
+                yield break;
+            }
+            
+            int spawnCount = bossAttackData?.groundSlam.projectileCount ?? 2;
             Vector3 playerPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             
-            for (int i = 0; i < minionSpawnCount; i++)
+            Debug.Log($"[BossEnemy] ExecuteSpawnMinions: {spawnCount}体のミニオンを生成");
+            
+            for (int i = 0; i < spawnCount; i++)
             {
                 Vector2 directionToPlayer = (playerPosition - transform.position).normalized;
                 Vector3 spawnPosition = transform.position + (Vector3)(directionToPlayer * 2f);
@@ -268,28 +324,29 @@ namespace MoreHit.Enemy
         
         private IEnumerator ExecuteFireballBarrage()
         {
-            Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
-            Transform playerTransform = PlayerDataProvider.I?.Transform;
-            
-            if (fireballAttackData != null && AttackExecutor.I != null)
+            if (bossAttackData == null || bossAttackData.fireBall == null)
             {
-                for (int i = 0; i < fireballCount; i++)
-                {
-                    Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
-                    Vector2 fireballDirection = (targetPosition - spawnPos).normalized;
-                    
-                    AttackExecutor.I.Execute(fireballAttackData, spawnPos, fireballDirection, gameObject);
-                    yield return new WaitForSeconds(fireballInterval);
-                }
+                Debug.LogWarning("[BossEnemy] ExecuteFireballBarrage: bossAttackDataまたはfireBallがnull");
+                yield break;
             }
-            else if (fireballPrefab != null)
+            
+            Debug.Log("[BossEnemy] ExecuteFireballBarrage: 開始");
+            var fireBallData = bossAttackData.fireBall;
+            Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
+            
+            if (fireballPrefab != null && FireBallFactory.I != null)
             {
-                for (int i = 0; i < fireballCount; i++)
+                Debug.Log($"[BossEnemy] ExecuteFireballBarrage: {fireBallData.projectileCount}個の火球を発射");
+                for (int i = 0; i < fireBallData.projectileCount; i++)
                 {
                     Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
-                    GameObject fireball = Instantiate(fireballPrefab, spawnPos, Quaternion.identity);
-                    StartCoroutine(UpdateFireballDirection(fireball, playerTransform));
-                    yield return new WaitForSeconds(fireballInterval);
+                    Vector2 direction = (targetPosition - spawnPos).normalized;
+                    
+                    float spreadAngle = (i - fireBallData.projectileCount / 2f) * 15f;
+                    direction = Quaternion.Euler(0, 0, spreadAngle) * direction;
+                    
+                    FireBallFactory.I.CreateFireBall(spawnPos, direction, gameObject);
+                    yield return new WaitForSeconds(fireBallData.projectileInterval);
                 }
             }
         }
@@ -380,8 +437,13 @@ namespace MoreHit.Enemy
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
+            if (bossAttackData != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(transform.position, bossAttackData.meleeAttackRange);
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, bossAttackData.rangedAttackRange);
+            }
         }
 #endif
         
