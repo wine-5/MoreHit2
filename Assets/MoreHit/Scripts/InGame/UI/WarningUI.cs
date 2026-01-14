@@ -16,15 +16,9 @@ namespace MoreHit.UI
         [Header("アニメーション設定")]
         [SerializeField] private float scrollSpeed = 500f;
         [SerializeField] private float displayDuration = 2f;
-        [SerializeField] private float fadeOutDuration = 0.5f;
+        [SerializeField] private float blinkSpeed = 5f;
         
         private RectTransform canvasRect;
-        
-        private void Start()
-        {
-            gameObject.SetActive(false);
-            canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
-        }
         
         /// <summary>
         /// WARNING アニメーション実行
@@ -33,7 +27,10 @@ namespace MoreHit.UI
         {
             if (warningText == null) yield break;
             
-            gameObject.SetActive(true);
+            if (canvasRect == null)
+                canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+            
+            warningText.gameObject.SetActive(true);
             
             RectTransform textRect = warningText.rectTransform;
             float canvasWidth = canvasRect.rect.width;
@@ -43,8 +40,6 @@ namespace MoreHit.UI
             textRect.anchoredPosition = new Vector2(startX, originalY);
             
             Color originalColor = warningText.color;
-            warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
-            
             float elapsedTime = 0f;
             
             while (elapsedTime < displayDuration)
@@ -52,30 +47,15 @@ namespace MoreHit.UI
                 elapsedTime += Time.unscaledDeltaTime;
                 float newX = startX - (scrollSpeed * elapsedTime);
                 textRect.anchoredPosition = new Vector2(newX, originalY);
+                
+                float blinkAlpha = Mathf.Abs(Mathf.Sin(elapsedTime * blinkSpeed));
+                warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, blinkAlpha);
+                
                 yield return null;
             }
             
-            yield return FadeOut();
-            
-            gameObject.SetActive(false);
+            warningText.gameObject.SetActive(false);
             warningText.color = originalColor;
-        }
-        
-        /// <summary>
-        /// フェードアウト処理
-        /// </summary>
-        private IEnumerator FadeOut()
-        {
-            float elapsed = 0f;
-            Color originalColor = warningText.color;
-            
-            while (elapsed < fadeOutDuration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float alpha = 1f - (elapsed / fadeOutDuration);
-                warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-                yield return null;
-            }
         }
     }
 }
