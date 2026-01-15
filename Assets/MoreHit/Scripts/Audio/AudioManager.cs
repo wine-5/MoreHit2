@@ -172,6 +172,127 @@ namespace MoreHit.Audio
                 currentBgmSource = null;
             }
         }
+        
+        /// <summary>
+        /// BGMをフェードアウトしてから停止
+        /// </summary>
+        public void FadeOutBGM(float duration)
+        {
+            if (currentBgmSource != null && currentBgmSource.isPlaying)
+                StartCoroutine(FadeOutCoroutine(duration));
+        }
+        
+        /// <summary>
+        /// BGMをフェードインで再生
+        /// </summary>
+        public void FadeInBGM(BgmType bgmType, float duration)
+        {
+            if (bgmType == BgmType.None)
+                return;
+            
+            StartCoroutine(FadeInCoroutine(bgmType, duration));
+        }
+        
+        /// <summary>
+        /// BGMを切り替え（SOのフェード設定を使用）
+        /// </summary>
+        public void TransitionToBGM(BgmType newBgmType)
+        {
+            if (newBgmType == BgmType.None)
+                return;
+            
+            StartCoroutine(TransitionBGMCoroutine(newBgmType));
+        }
+        
+        private System.Collections.IEnumerator TransitionBGMCoroutine(BgmType newBgmType)
+        {
+            if (!bgmAudioDictionary.TryGetValue(newBgmType, out BgmAudioData newBgmData))
+            {
+                Debug.LogWarning($"AudioManager: BGM '{newBgmType}' が見つかりません");
+                yield break;
+            }
+            
+            // 現在のBGMをフェードアウト（設定が有効な場合）
+            if (currentBgmSource != null && currentBgmSource.isPlaying)
+            {
+                BgmAudioData currentBgmData = null;
+                foreach (var kvp in bgmAudioDictionary)
+                {
+                    if (kvp.Value.AudioClip == currentBgmSource.clip)
+                    {
+                        currentBgmData = kvp.Value;
+                        break;
+                    }
+                }
+                
+                if (currentBgmData != null && currentBgmData.UseFadeOut)
+                    yield return FadeOutCoroutine(currentBgmData.FadeOutDuration);
+                else
+                    StopBGM();
+            }
+            
+            // 新しいBGMをフェードイン（設定が有効な場合）
+            if (newBgmData.UseFadeIn)
+                yield return FadeInCoroutine(newBgmType, newBgmData.FadeInDuration);
+            else
+                PlayBGM(newBgmType);
+        }
+        
+        private System.Collections.IEnumerator FadeOutCoroutine(float duration)
+        {
+            if (currentBgmSource == null)
+                yield break;
+            
+            float startVolume = currentBgmSource.volume;
+            float elapsed = 0f;
+            
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                currentBgmSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / duration);
+                yield return null;
+            }
+            
+            StopBGM();
+        }
+        
+        private System.Collections.IEnumerator FadeInCoroutine(BgmType bgmType, float duration)
+        {
+            if (!bgmAudioDictionary.TryGetValue(bgmType, out BgmAudioData bgmData))
+            {
+                Debug.LogWarning($"AudioManager: BGM '{bgmType}' が見つかりません");
+                yield break;
+            }
+            
+            if (bgmData.AudioClip == null)
+                yield break;
+            
+            // 既存のBGMを停止
+            StopBGM();
+            
+            AudioSource audioSource = GetAvailableAudioSource();
+            if (audioSource == null)
+                yield break;
+            
+            audioSource.clip = bgmData.AudioClip;
+            audioSource.volume = 0f;
+            audioSource.loop = bgmData.Loop;
+            audioSource.Play();
+            
+            currentBgmSource = audioSource;
+            
+            float targetVolume = bgmData.VolumeMultiplier * bgmVolume * masterVolume;
+            float elapsed = 0f;
+            
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                audioSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / duration);
+                yield return null;
+            }
+            
+            audioSource.volume = targetVolume;
+        }
 
         private AudioSource GetAvailableAudioSource()
         {

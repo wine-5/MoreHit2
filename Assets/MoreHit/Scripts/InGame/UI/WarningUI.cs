@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using MoreHit.Audio;
 
 namespace MoreHit.UI
 {
@@ -26,6 +27,10 @@ namespace MoreHit.UI
         public IEnumerator PlayWarningAnimation()
         {
             if (warningText == null) yield break;
+            
+            // Warning音を再生
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.Warning);
             
             if (canvasRect == null)
                 canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();

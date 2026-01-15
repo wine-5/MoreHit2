@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using MoreHit.Events;
 using MoreHit.UI;
+using MoreHit.Audio;
 
 namespace MoreHit.Boss
 {
@@ -24,7 +25,7 @@ namespace MoreHit.Boss
         [SerializeField] private GameObject bossGameObject;
         
         [Header("タイミング設定")]
-        [SerializeField] private float delayBeforeZoomOut = 10f; // Bossズーム時の待機時間
+        [SerializeField] private float delayBeforeZoomOut = 10f;
 
         private bool isPlayingIntro = false;
         
@@ -72,6 +73,10 @@ namespace MoreHit.Boss
             
             if (bossCameraController != null)
                 yield return bossCameraController.ZoomOutToFieldView();
+            
+            // BossBGMに切り替え（SOのフェード設定を使用）
+            if (AudioManager.I != null)
+                AudioManager.I.TransitionToBGM(BgmType.Boss);
             
             if (bossBattleStartUI != null)
             {

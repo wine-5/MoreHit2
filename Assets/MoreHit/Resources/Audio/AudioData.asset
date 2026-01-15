@@ -43,20 +43,47 @@ MonoBehaviour:
   - seType: 10
     audioClip: {fileID: 8300000, guid: e2159571920fef6409f72c0d6873c8c2, type: 3}
     volumeMultiplier: 0.5
+  - seType: 11
+    audioClip: {fileID: 8300000, guid: 339dc7162ea60074bb462dcbdd98bb3a, type: 3}
+    volumeMultiplier: 0.2
   bgmAudioDataList:
   - bgmType: 1
     audioClip: {fileID: 8300000, guid: 4c59df2a4d5ff6a489ffd0444ad8b5b9, type: 3}
     volumeMultiplier: 0.09
     loop: 1
+    useFadeIn: 0
+    fadeInDuration: 2
+    useFadeOut: 0
+    fadeOutDuration: 2
   - bgmType: 2
     audioClip: {fileID: 8300000, guid: ec876c4019c6aeb48828b414f8804c63, type: 3}
     volumeMultiplier: 0.1
     loop: 1
+    useFadeIn: 0
+    fadeInDuration: 2
+    useFadeOut: 1
+    fadeOutDuration: 2
   - bgmType: 3
+    audioClip: {fileID: 8300000, guid: ce954bc926f569e4db8a3ece606f4a73, type: 3}
+    volumeMultiplier: 0.2
+    loop: 1
+    useFadeIn: 1
+    fadeInDuration: 2
+    useFadeOut: 0
+    fadeOutDuration: 2
+  - bgmType: 4
     audioClip: {fileID: 8300000, guid: 4b75619b34ebf184ea9a51c5e399e877, type: 3}
     volumeMultiplier: 0.2
     loop: 1
-  - bgmType: 4
+    useFadeIn: 0
+    fadeInDuration: 2
+    useFadeOut: 0
+    fadeOutDuration: 2
+  - bgmType: 5
     audioClip: {fileID: 8300000, guid: c120317d65ab0b54a9c5ba9a455deffe, type: 3}
     volumeMultiplier: 0.2
     loop: 1
+    useFadeIn: 0
+    fadeInDuration: 2
+    useFadeOut: 0
+    fadeOutDuration: 2

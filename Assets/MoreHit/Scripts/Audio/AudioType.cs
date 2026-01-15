@@ -16,6 +16,7 @@ namespace MoreHit.Audio
         TakeDamage,
         EnemyDefeat,
         FullStock,
+        Warning,
     }
 
     /// <summary>
@@ -26,6 +27,7 @@ namespace MoreHit.Audio
         None,
         Title,
         InGame,
+        Boss,
         GameClear,
         GameOver,
     }
