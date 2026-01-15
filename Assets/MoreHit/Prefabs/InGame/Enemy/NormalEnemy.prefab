@@ -118,7 +118,7 @@ MonoBehaviour:
   launchVector: {x: 1, y: 1}
   launchPower: 15
   stockMultiplier: 0.1
-  stockResetDuration: 5
+  stockResetDuration: 4
   baseLaunchDuration: 5
   stockBonusThreshold: 5
   collisionBounceMultiplier: 0.2
