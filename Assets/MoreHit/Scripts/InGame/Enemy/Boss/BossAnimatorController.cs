@@ -7,11 +7,7 @@ namespace MoreHit.Enemy
     /// Idle、Walk、Attackの状態を管理
     /// </summary>
     public class BossAnimatorController : MonoBehaviour
-    {
-        [Header("アニメーションパラメータ")]
-        [Tooltip("移動判定の速度閾値")]
-        [SerializeField] private float moveThreshold = 0.1f;
-        
+    {        
         private Animator animator;
         private Rigidbody2D rb;
         

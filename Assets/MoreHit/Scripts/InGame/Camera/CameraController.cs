@@ -26,6 +26,7 @@ namespace MoreHit.Camera
         private Vector3 originalPosition;
         private CameraShake cameraShake;
         private bool isShaking = false;
+        private bool isFollowEnabled = true; // 追従機能のON/OFF
         
         void Start()
         {
@@ -54,7 +55,7 @@ namespace MoreHit.Camera
         
         void LateUpdate()
         {
-            if (target == null) return;
+            if (!isFollowEnabled || target == null) return;
             
             // X軸の目標位置を計算
             float targetX = target.position.x + offset.x;
@@ -132,6 +133,15 @@ namespace MoreHit.Camera
         public void SetOffset(Vector3 newOffset)
         {
             offset = newOffset;
+        }
+        
+        /// <summary>
+        /// 追従機能のON/OFFを設定
+        /// </summary>
+        /// <param name="enabled">追従を有効にするか</param>
+        public void SetFollowEnabled(bool enabled)
+        {
+            isFollowEnabled = enabled;
         }
         
 #if UNITY_EDITOR

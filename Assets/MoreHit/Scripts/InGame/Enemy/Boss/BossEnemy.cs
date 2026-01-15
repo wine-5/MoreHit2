@@ -91,7 +91,8 @@ namespace MoreHit.Enemy
         
         private void Start()
         {
-            canMove = true;
+            // Bossは演出が終わるまで動かない
+            canMove = false;
             isDead = false;
             currentState = EnemyState.Move;
             canTakeDamage = true;
@@ -101,7 +102,6 @@ namespace MoreHit.Enemy
                 currentHP = enemyData.MaxHP;
                 // EnemyDataSOにはSizeScaleがないので、2倍固定
                 transform.localScale = Vector3.one * 2f;
-
             }
             else
             {
@@ -110,12 +110,7 @@ namespace MoreHit.Enemy
                 Debug.LogWarning("[BossEnemy] EnemyDataがnull、デフォルト値を使用");
             }
             
-            // Rigidbody2Dの状態確認
-            if (rb != null)
-            {
-
-            }
-            else
+            if (rb == null)
             {
                 Debug.LogError("[BossEnemy] Rigidbody2Dがnull！");
             }
@@ -467,8 +462,17 @@ namespace MoreHit.Enemy
             isInputLocked = isLocked;
         }
         
+        /// <summary>
+        /// 移動可能状態の設定
+        /// </summary>
+        public void SetCanMove(bool canMove)
+        {
+            this.canMove = canMove;
+        }
+        
         #endregion
         
+
         #region エディタ
         
 #if UNITY_EDITOR

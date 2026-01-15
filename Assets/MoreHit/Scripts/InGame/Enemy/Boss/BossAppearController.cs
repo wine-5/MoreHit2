@@ -17,13 +17,14 @@ namespace MoreHit.Boss
         
         [Header("カメラ参照")]
         [SerializeField] private BossCameraController bossCameraController;
+        [SerializeField] private MoreHit.Camera.CameraController mainCameraController;
         
         [Header("ボス参照")]
         [SerializeField] private Transform bossTransform;
         [SerializeField] private GameObject bossGameObject;
         
         [Header("タイミング設定")]
-        [SerializeField] private float delayBeforeZoomOut = 0.5f;
+        [SerializeField] private float delayBeforeZoomOut = 10f; // Bossズーム時の待機時間
 
         private bool isPlayingIntro = false;
         
@@ -54,6 +55,10 @@ namespace MoreHit.Boss
         {
             isPlayingIntro = true;
             
+            // メインカメラの追従を停止
+            if (mainCameraController != null)
+                mainCameraController.SetFollowEnabled(false);
+            
             LockPlayerInput(true);
             Time.timeScale = 0f;
             
@@ -76,6 +81,18 @@ namespace MoreHit.Boss
                 yield return bossBattleStartUI.ShowReady();
                 yield return bossBattleStartUI.ShowFight();
             }
+            
+            // Boss動作開始
+            if (bossGameObject != null)
+            {
+                var bossEnemy = bossGameObject.GetComponent<MoreHit.Enemy.BossEnemy>();
+                if (bossEnemy != null)
+                    bossEnemy.SetCanMove(true);
+            }
+            
+            // メインカメラの追従を再開
+            if (mainCameraController != null)
+                mainCameraController.SetFollowEnabled(true);
             
             LockPlayerInput(false);
             isPlayingIntro = false;
