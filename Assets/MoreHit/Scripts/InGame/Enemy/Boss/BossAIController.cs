@@ -24,16 +24,8 @@ namespace MoreHit.Enemy
             if (PlayerDataProvider.I != null)
                 playerTransform = PlayerDataProvider.I.transform;
             
-
-            
-            if (attackData != null)
-            {
-
-            }
-            else
-            {
+            if (attackData == null)
                 Debug.LogError("[BossAIController] attackDataがnull！");
-            }
         }
         
         /// <summary>
@@ -58,67 +50,39 @@ namespace MoreHit.Enemy
         public BossAttackPattern SelectAttackPattern()
         {
             if (attackData == null || playerTransform == null || bossEnemy == null)
-            {
-                Debug.LogWarning($"[BossAIController] SelectAttackPattern: 不正な状態 - attackData={attackData != null}, player={playerTransform != null}, bossEnemy={bossEnemy != null}");
                 return BossAttackPattern.RotatingAttack;
-            }
             
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
             float hpRatio = bossEnemy.GetHPRatio();
             
-            Debug.Log($"[BossAI] HP比率={hpRatio:F2}, 距離={distanceToPlayer:F2}, 閾値={attackData.groundSlamHPThreshold:F2}");
-            
             if (hpRatio <= attackData.groundSlamHPThreshold)
             {
-                float randomValue = Random.value;
-                Debug.Log($"[BossAI] HP低下モード: ランダム値={randomValue:F2}");
-                
-                if (randomValue < 0.3f)
-                {
-                    Debug.Log($"[BossAI] 選択: FireballBarrage (HP低下・30%確率)");
+                if (Random.value < 0.3f)
                     return BossAttackPattern.FireballBarrage;
-                }
-
-                Debug.Log($"[BossAI] 選択: SpawnMinions/GroundSlam (HP低下・70%確率)");
-                return BossAttackPattern.SpawnMinions; // GroundSlam攻撃
+                
+                return BossAttackPattern.SpawnMinions;
             }
             
-            BossAttackPattern pattern;
             if (distanceToPlayer <= attackData.meleeAttackRange)
-            {
-                pattern = BossAttackPattern.RotatingAttack;
-                Debug.Log($"[BossAI] 選択: RotatingAttack (近距離={distanceToPlayer:F2} <= {attackData.meleeAttackRange:F2})");
-            }
-            else if (distanceToPlayer <= attackData.rangedAttackRange)
-            {
-                pattern = BossAttackPattern.FireballBarrage;
-                Debug.Log($"[BossAI] 選択: FireballBarrage (中距離={distanceToPlayer:F2} <= {attackData.rangedAttackRange:F2})");
-            }
-            else
-            {
-                pattern = BossAttackPattern.RotatingAttack;
-                Debug.Log($"[BossAI] 選択: RotatingAttack (遠距離={distanceToPlayer:F2})");
-            }
+                return BossAttackPattern.RotatingAttack;
             
-            return pattern;
+            if (distanceToPlayer <= attackData.rangedAttackRange)
+                return BossAttackPattern.FireballBarrage;
+            
+            return BossAttackPattern.RotatingAttack;
         }
         
         /// <summary>
         /// 攻撃実行時に呼び出し
         /// </summary>
-        public void OnAttackExecuted()
-        {
-            lastAttackTime = Time.time;
-        }
+        public void OnAttackExecuted() => lastAttackTime = Time.time;
         
         /// <summary>
         /// プレイヤーへの方向を取得
         /// </summary>
         public Vector2 GetDirectionToPlayer()
         {
-            if (playerTransform == null)
-                return Vector2.right;
-            
+            if (playerTransform == null) return Vector2.right;
             return (playerTransform.position - transform.position).normalized;
         }
         
@@ -127,9 +91,7 @@ namespace MoreHit.Enemy
         /// </summary>
         public float GetDistanceToPlayer()
         {
-            if (playerTransform == null)
-                return float.MaxValue;
-            
+            if (playerTransform == null) return float.MaxValue;
             return Vector2.Distance(transform.position, playerTransform.position);
         }
     }

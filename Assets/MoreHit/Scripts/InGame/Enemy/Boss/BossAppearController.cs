@@ -53,7 +53,6 @@ namespace MoreHit.Boss
         {
             isPlayingIntro = true;
             
-            // メインカメラの追従を停止
             if (mainCameraController != null)
                 mainCameraController.SetFollowEnabled(false);
             
@@ -74,7 +73,6 @@ namespace MoreHit.Boss
             if (bossCameraController != null)
                 yield return bossCameraController.ZoomOutToFieldView();
             
-            // BossBGMに切り替え（SOのフェード設定を使用）
             if (AudioManager.I != null)
                 AudioManager.I.TransitionToBGM(BgmType.Boss);
             
@@ -84,7 +82,6 @@ namespace MoreHit.Boss
                 yield return bossBattleStartUI.ShowFight();
             }
             
-            // Boss動作開始
             if (bossGameObject != null)
             {
                 var bossEnemy = bossGameObject.GetComponent<MoreHit.Enemy.BossEnemy>();
@@ -92,7 +89,6 @@ namespace MoreHit.Boss
                     bossEnemy.SetCanMove(true);
             }
             
-            // メインカメラの追従を再開
             if (mainCameraController != null)
                 mainCameraController.SetFollowEnabled(true);
             

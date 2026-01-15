@@ -18,7 +18,6 @@ namespace MoreHit.InGame
         
         private void Start()
         {
-            // ゲーム開始イベントを発火（タイマーリセットなどに使用）
             GameEvents.TriggerGameStart();
         }
         
@@ -60,7 +59,6 @@ namespace MoreHit.InGame
         /// </summary>
         private System.Collections.IEnumerator OnBossDefeatedDelayed()
         {
-            // Boss点滅エフェクト表示のため待機
             yield return new WaitForSeconds(BOSS_DEFEAT_SCENE_TRANSITION_DELAY);
             
             if (SceneController.I != null)
@@ -74,7 +72,6 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnStockFull(GameObject enemy)
         {
-            // FullStockEffectを表示
             if (EffectFactory.I != null)
             {
                 var effect = EffectFactory.I.CreateEffect(MoreHit.Effect.EffectType.FullStockEffect, enemy.transform.position);

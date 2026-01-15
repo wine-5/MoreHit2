@@ -9,6 +9,8 @@ namespace MoreHit.Boss
     /// </summary>
     public class BossSpawnTrigger : MonoBehaviour
     {
+        private const float WALL_ACTIVATION_INTERVAL = 0.1f;
+        
         [Header("設定")]
         [SerializeField] private bool isOneTimeOnly = true;
         [SerializeField] private string playerTag = "Player";
@@ -52,7 +54,7 @@ namespace MoreHit.Boss
                 {
                     wallsToActivate[i].SetActive(true);
                     if (i < wallsToActivate.Length - 1)
-                        yield return new WaitForSeconds(0.1f);
+                        yield return new WaitForSeconds(WALL_ACTIVATION_INTERVAL);
                 }
             }
         }
