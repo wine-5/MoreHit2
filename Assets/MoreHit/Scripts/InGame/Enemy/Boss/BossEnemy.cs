@@ -160,6 +160,9 @@ namespace MoreHit.Enemy
         {
             if (isDead || !gameObject.activeInHierarchy) return;
             
+            // エフェクト生成（基底クラスの処理を実行）
+            base.OnStockReachedRequired();
+            
             currentHP = Mathf.Max(0, currentHP - AUTO_DAMAGE);
             GameEvents.TriggerBossDamaged(Mathf.FloorToInt(AUTO_DAMAGE));
             ClearStock();
@@ -214,13 +217,29 @@ namespace MoreHit.Enemy
             Vector3 currentPosition = transform.position;
             Vector3 direction = (targetPosition - currentPosition).normalized;
             
+            // HP比率に応じて速度を変更
             float speed = enemyData != null ? enemyData.MoveSpeed : 3f;
+            float hpRatio = GetHPRatio();
+            
+            if (bossAttackData != null)
+            {
+                if (hpRatio <= bossAttackData.hpThreshold25)
+                {
+                    speed = bossAttackData.moveSpeed25;
+                }
+                else if (hpRatio <= bossAttackData.hpThreshold50)
+                {
+                    speed = bossAttackData.moveSpeed50;
+                }
+            }
+            
+            float speedMultiplier = BOSS_SPEED_MULTIPLIER;
             
             if (Mathf.Abs(direction.x) > MIN_MOVE_THRESHOLD)
             {
                 Vector2 newVelocity = new Vector2(
-                    direction.x * speed * BOSS_SPEED_MULTIPLIER,
-                    direction.y * speed * BOSS_SPEED_MULTIPLIER * VERTICAL_MOVE_MULTIPLIER
+                    direction.x * speed * speedMultiplier,
+                    direction.y * speed * speedMultiplier * VERTICAL_MOVE_MULTIPLIER
                 );
                 
                 if (direction.y < 0)
@@ -235,7 +254,7 @@ namespace MoreHit.Enemy
             {
                 Vector2 newVelocity = new Vector2(
                     rb.linearVelocity.x * HORIZONTAL_DECAY_MULTIPLIER,
-                    direction.y * speed * BOSS_SPEED_MULTIPLIER * DOWNWARD_MOVE_MULTIPLIER
+                    direction.y * speed * speedMultiplier * DOWNWARD_MOVE_MULTIPLIER
                 );
                 rb.linearVelocity = newVelocity;
             }
@@ -247,17 +266,7 @@ namespace MoreHit.Enemy
         
         protected override void Attack()
         {
-            if (isAttacking)
-            {
-                return;
-            }
-            
-            if (aiController == null)
-            {
-                return;
-            }
-            
-            if (!aiController.CanAttack())
+            if (isAttacking || bossAttackData == null)
             {
                 return;
             }
@@ -267,118 +276,57 @@ namespace MoreHit.Enemy
                 return;
             }
             
-            BossAttackPattern selectedPattern = aiController.SelectAttackPattern();
-            StartCoroutine(ExecuteAttackPattern(selectedPattern));
-        }
-        
-        private IEnumerator ExecuteAttackPattern(BossAttackPattern pattern)
-        {
-            isAttacking = true;
-            
-            switch (pattern)
+            // クールダウンチェック
+            if (Time.time - lastAttackTime < bossAttackData.baseAttackCooldown)
             {
-                case BossAttackPattern.RotatingAttack:
-                    yield return StartCoroutine(ExecuteRotatingAttack());
-                    break;
-                    
-                case BossAttackPattern.SpawnMinions:
-                    yield return StartCoroutine(ExecuteSpawnMinions());
-                    break;
-                    
-                case BossAttackPattern.FireballBarrage:
-                    yield return StartCoroutine(ExecuteFireballBarrage());
-                    break;
+                return;
             }
             
-            if (aiController != null)
-                aiController.OnAttackExecuted();
-            
-            isAttacking = false;
+            StartCoroutine(ExecuteFireballBarrage());
         }
         
-        private IEnumerator ExecuteRotatingAttack()
-        {
 
-            Vector3 targetPosition = PlayerDataProvider.I.Position;
-            Vector2 direction = (targetPosition - transform.position).normalized;
-            
-            if (AttackExecutor.I != null && rotatingAttackData != null)
-            {
-
-                AttackExecutor.I.Execute(
-                    rotatingAttackData,
-                    transform.position,
-                    direction,
-                    gameObject
-                );
-            }
-            else
-            {
-                Debug.LogWarning($"[BossEnemy] ExecuteRotatingAttack: 攻撃不可 - AttackExecutor={AttackExecutor.I != null}, rotatingAttackData={rotatingAttackData != null}");
-            }
-            
-            yield return new WaitForSeconds(ROTATION_ATTACK_COOLDOWN);
-        }
-        
-        /// <summary>
-        /// 地面叩きつけ攻撃（16方向範囲攻撃）
-        /// </summary>
-        private IEnumerator ExecuteSpawnMinions()
-        {
-            if (bossAttackData == null || bossAttackData.groundSlam == null)
-            {
-                yield break;
-            }
-            
-            if (AttackExecutor.I == null || rotatingAttackData == null)
-            {
-                yield break;
-            }
-            
-            var slamData = bossAttackData.groundSlam;
-            
-            // 16方向に攻撃判定を生成
-            int directionCount = 16;
-            float angleStep = 360f / directionCount;
-            
-            for (int i = 0; i < directionCount; i++)
-            {
-                float angle = i * angleStep;
-                Vector2 direction = new Vector2(
-                    Mathf.Cos(angle * Mathf.Deg2Rad),
-                    Mathf.Sin(angle * Mathf.Deg2Rad)
-                );
-                
-                AttackExecutor.I.Execute(
-                    rotatingAttackData,
-                    transform.position,
-                    direction,
-                    gameObject
-                );
-            }
-            
-            yield return new WaitForSeconds(slamData.animationDuration);
-        }
         
         private IEnumerator ExecuteFireballBarrage()
         {
+            isAttacking = true;
+            
             if (bossAttackData == null || bossAttackData.fireBall == null)
             {
+                isAttacking = false;
                 yield break;
             }
             
             var fireBallData = bossAttackData.fireBall;
             Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             
+            // HP比率に応じて弾の数を変更
+            float hpRatio = GetHPRatio();
+            int projectileMultiplier = 1;
+            
+            if (hpRatio <= bossAttackData.hpThreshold25)
+            {
+                projectileMultiplier = Mathf.RoundToInt(bossAttackData.projectileMultiplier25);
+            }
+            else if (hpRatio <= bossAttackData.hpThreshold50)
+            {
+                projectileMultiplier = Mathf.RoundToInt(bossAttackData.projectileMultiplier50);
+            }
+            
+            int totalProjectiles = fireBallData.projectileCount * projectileMultiplier;
+            
             if (fireballPrefab != null && FireBallFactory.I != null)
             {
-                for (int i = 0; i < fireBallData.projectileCount; i++)
+                // 扇状の弾を発射
+                for (int i = 0; i < totalProjectiles; i++)
                 {
                     Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
-                    Vector2 direction = (targetPosition - spawnPos).normalized;
+                    // プレイヤーの方向を基準に計算
+                    Vector2 baseDirection = (targetPosition - spawnPos).normalized;
                     
-                    float spreadAngle = (i - fireBallData.projectileCount / 2f) * 15f;
-                    direction = Quaternion.Euler(0, 0, spreadAngle) * direction;
+                    // 扇状に広げる（FireDataのspreadAngleを使用）
+                    float angleOffset = (i - (totalProjectiles - 1) / 2f) * fireBallData.spreadAngle;
+                    Vector2 direction = Quaternion.Euler(0, 0, angleOffset) * baseDirection;
                     
                     // BossAttackDataSOで設定されたダメージ値を使用
                     int damage = Mathf.FloorToInt(fireBallData.damage);
@@ -386,7 +334,31 @@ namespace MoreHit.Enemy
                     
                     yield return new WaitForSeconds(fireBallData.projectileInterval);
                 }
+                
+                // HP50%以下の場合、プレイヤーに直接向かう弾を追加
+                if (hpRatio <= bossAttackData.hpThreshold50)
+                {
+                    int directShotCount = hpRatio <= bossAttackData.hpThreshold25 
+                        ? bossAttackData.directShotCount25 
+                        : bossAttackData.directShotCount50;
+                    
+                    for (int i = 0; i < directShotCount; i++)
+                    {
+                        // プレイヤーの最新位置を取得
+                        targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
+                        Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
+                        Vector2 direction = (targetPosition - spawnPos).normalized;
+                        
+                        int damage = Mathf.FloorToInt(fireBallData.damage);
+                        GameObject fireball = FireBallFactory.I.CreateFireBall(spawnPos, direction, gameObject, damage);
+                        
+                        yield return new WaitForSeconds(fireBallData.projectileInterval * bossAttackData.directShotIntervalMultiplier);
+                    }
+                }
             }
+            
+            lastAttackTime = Time.time;
+            isAttacking = false;
         }
         
         /// <summary>

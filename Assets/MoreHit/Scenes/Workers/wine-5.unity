@@ -1098,9 +1098,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 5be7f0010cf23fa4b93821d3d060e68c, type: 2}
     - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: enemyAttackData
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: rotatingAttackData
       value: 
-      objectReference: {fileID: 11400000, guid: 67b5e02c3a9d7d84cb202431ac067b84, type: 2}
+      objectReference: {fileID: 11400000, guid: cd7f441e3696a1c4f8a48d50055662fc, type: 2}
     - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: stockAlmostFullEffect
       value: 

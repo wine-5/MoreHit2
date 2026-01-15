@@ -28,6 +28,15 @@ namespace MoreHit.Attack
         /// </summary>
         public int Execute(AttackData data, Vector3 origin, Vector2 direction, GameObject attacker)
         {
+            return Execute(data, origin, direction, attacker, null);
+        }
+        
+        /// <summary>
+        /// 攻撃を実行し、ヒット数を返す（ダメージオーバーライド版）
+        /// </summary>
+        /// <param name="damageOverride">指定した場合、AttackDataのダメージを上書き</param>
+        public int Execute(AttackData data, Vector3 origin, Vector2 direction, GameObject attacker, int? damageOverride)
+        {
             if (data == null || attacker == null) return 0;
 
             Vector3 hitPosition = CalculateHitPosition(origin, direction, data.Range);
@@ -37,7 +46,8 @@ namespace MoreHit.Attack
             lastHitPosition = hitPosition;
             lastAttackTime = Time.time;
 
-            return ProcessHits(hits, data, attacker);
+            int actualDamage = damageOverride ?? data.Damage;
+            return ProcessHits(hits, data, attacker, actualDamage);
         }
 
         private Vector3 CalculateHitPosition(Vector3 origin, Vector2 direction, float range)
@@ -64,7 +74,7 @@ namespace MoreHit.Attack
             return results;
         }
 
-        private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker)
+        private int ProcessHits(Collider2D[] hits, AttackData data, GameObject attacker, int actualDamage)
         {
             int hitCount = 0;
 
@@ -79,7 +89,7 @@ namespace MoreHit.Attack
 
                 ApplyStock(hit, data.StockAmount);
 
-                if (ApplyDamage(hit, data.Damage))
+                if (ApplyDamage(hit, actualDamage))
                 {
                     hitCount++;
                 }

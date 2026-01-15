@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91472b01205600c4fbb8c2a9ef6c6ac6, type: 3}
   m_Name: BossAttackData
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossAttackDataSO
-  maxHP: 100
-  moveSpeed: 3
-  sizeScale: 2
   meleeCombo:
     damage: 15
     attackRange: 300
@@ -23,6 +20,7 @@ MonoBehaviour:
     projectileCount: 8
     projectileInterval: 0.1
     projectileSpeed: 0
+    spreadAngle: 15
   fireBall:
     damage: 10
     attackRange: 3000
@@ -31,6 +29,7 @@ MonoBehaviour:
     projectileCount: 5
     projectileInterval: 0.3
     projectileSpeed: 10
+    spreadAngle: 15
   groundSlam:
     damage: 20
     attackRange: 500
@@ -39,7 +38,17 @@ MonoBehaviour:
     projectileCount: 3
     projectileInterval: 0.5
     projectileSpeed: 0
+    spreadAngle: 15
   baseAttackCooldown: 2
   meleeAttackRange: 300
   rangedAttackRange: 3000
   groundSlamHPThreshold: 0.5
+  hpThreshold50: 0.5
+  hpThreshold25: 0.25
+  moveSpeed50: 10
+  moveSpeed25: 20
+  projectileMultiplier50: 1
+  projectileMultiplier25: 1
+  directShotCount50: 3
+  directShotCount25: 5
+  directShotIntervalMultiplier: 0.5

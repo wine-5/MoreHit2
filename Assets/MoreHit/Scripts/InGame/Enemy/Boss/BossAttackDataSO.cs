@@ -30,6 +30,38 @@ namespace MoreHit.Enemy
         [Tooltip("GroundSlamを解禁するHP割合（0-1）")]
         [Range(0f, 1f)]
         public float groundSlamHPThreshold = 0.5f;
+        
+        [Header("HP段階設定")]
+        [Tooltip("第1段階HP閾値（0-1）")]
+        [Range(0f, 1f)]
+        public float hpThreshold50 = 0.5f;
+        
+        [Tooltip("第2段階HP閾値（0-1）")]
+        [Range(0f, 1f)]
+        public float hpThreshold25 = 0.25f;
+        
+        [Header("移動速度設定")]
+        [Tooltip("HP50%以下の移動速度（直接値）")]
+        public float moveSpeed50 = 5f;
+        
+        [Tooltip("HP25%以下の移動速度（直接値）")]
+        public float moveSpeed25 = 8f;
+        
+        [Header("弾数設定")]
+        [Tooltip("HP50%以下の弾数倍率")]
+        public float projectileMultiplier50 = 2f;
+        
+        [Tooltip("HP25%以下の弾数倍率")]
+        public float projectileMultiplier25 = 3f;
+        
+        [Tooltip("HP50%以下の直接射撃弾数")]
+        public int directShotCount50 = 3;
+        
+        [Tooltip("HP25%以下の直接射撃弾数")]
+        public int directShotCount25 = 5;
+        
+        [Tooltip("直接射撃の発射間隔倍率")]
+        public float directShotIntervalMultiplier = 0.5f;
     }
     
     /// <summary>
@@ -60,5 +92,8 @@ namespace MoreHit.Enemy
         
         [Tooltip("弾速")]
         public float projectileSpeed = 10f;
+        
+        [Tooltip("扇状の弾の角度間隔（度）")]
+        public float spreadAngle = 15f;
     }
 }
