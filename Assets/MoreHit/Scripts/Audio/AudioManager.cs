@@ -36,7 +36,6 @@ namespace MoreHit.Audio
 
         protected override void Awake()
         {
-            // DontDestroyOnLoad移動前に参照を保持
             if (audioDataSO != null)
             {
                 cachedAudioDataSO = audioDataSO;
@@ -44,27 +43,15 @@ namespace MoreHit.Audio
             
             base.Awake();
             
-            // DontDestroyOnLoad移動後に参照を復元
             if (audioDataSO == null && cachedAudioDataSO != null)
             {
                 audioDataSO = cachedAudioDataSO;
             }
             
-            // 最終フォールバック：Resourcesから読み込み
             if (audioDataSO == null)
             {
                 audioDataSO = Resources.Load<AudioDataSO>("Audio/AudioData");
-                if (audioDataSO != null)
-                {
-                    Debug.Log("[AudioManager] AudioDataSOをResourcesから読み込みました");
-                }
             }
-            
-            // デバッグ情報
-            Debug.Log($"[AudioManager] Awake called - GameObject: {gameObject.name}, " +
-                      $"Parent: {(transform.parent != null ? transform.parent.name : "None")}, " +
-                      $"AudioDataSO: {(audioDataSO != null ? "Set" : "NULL")}, " +
-                      $"Scene: {gameObject.scene.name}");
             
             LoadVolumeSettings();
             InitializeAudioDictionaries();
