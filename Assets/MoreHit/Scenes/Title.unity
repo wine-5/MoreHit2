@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49458f0c6d843a48941bf520515c9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Audio.AudioManager
-  audioDataSO: {fileID: 11400000, guid: 3105d3841ffc9a943add6b6052c39fbe, type: 2}
+  audioDataSO: {fileID: 11400000, guid: 3c226ae4005aa8943aa8e66516aff94e, type: 2}
   maxAudioSources: 10
   masterVolume: 1
   bgmVolume: 1
@@ -336,12 +336,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_ReferenceResolution: {x: 2560, y: 600}
+  m_ScreenMatchMode: 2
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
