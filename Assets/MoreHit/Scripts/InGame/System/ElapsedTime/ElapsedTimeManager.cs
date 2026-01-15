@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Events;
 
 namespace MoreHit.ElapsedTime
 {
@@ -17,9 +18,19 @@ namespace MoreHit.ElapsedTime
         public float CurrentTime { get; private set; }
         private bool isTimerRunning = false;
 
-        private void Start()
+        private void OnEnable()
         {
-            StartTimer(); // タイマーの開始メソッドをここで呼ぶ
+            GameEvents.OnGameStart += OnGameStart;
+        }
+        
+        private void OnDisable()
+        {
+            GameEvents.OnGameStart -= OnGameStart;
+        }
+        
+        private void OnGameStart()
+        {
+            StartTimer();
         }
         private void Update()
         {

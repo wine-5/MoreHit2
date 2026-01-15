@@ -10,6 +10,11 @@ namespace MoreHit.Events
     public static class GameEvents
     {
         /// <summary>
+        /// ゲームが開始された時（シーン読み込み時）
+        /// </summary>
+        public static event Action OnGameStart;
+        
+        /// <summary>
         /// プレイヤーが死亡した時
         /// </summary>
         public static event Action OnPlayerDeath;
@@ -69,6 +74,11 @@ namespace MoreHit.Events
         /// </summary>
         public static event Action<GameObject> OnEnemyDefeated;
 
+        public static void TriggerGameStart()
+        {
+            OnGameStart?.Invoke();
+        }
+        
         public static void TriggerPlayerDeath()
         {
             OnPlayerDeath?.Invoke();
@@ -134,6 +144,7 @@ namespace MoreHit.Events
         /// </summary>
         public static void ClearAllEvents()
         {
+            OnGameStart = null;
             OnPlayerDeath = null;
             OnPlayerDamage = null;
             OnPlayerInvincibilityEnded = null;

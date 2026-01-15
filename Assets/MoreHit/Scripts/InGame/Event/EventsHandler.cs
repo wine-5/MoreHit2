@@ -16,6 +16,12 @@ namespace MoreHit.InGame
         
         #endregion
         
+        private void Start()
+        {
+            // ゲーム開始イベントを発火（タイマーリセットなどに使用）
+            GameEvents.TriggerGameStart();
+        }
+        
         private void OnEnable()
         {
             GameEvents.OnPlayerDeath += OnPlayerDeath;
