@@ -149,6 +149,9 @@ namespace MoreHit.Enemy
 
             if (EffectFactory.I != null)
                 currentFullStockEffect = EffectFactory.I.CreateEffect(EffectType.FullStockEffect, transform.position);
+            
+            if (Audio.AudioManager.I != null)
+                Audio.AudioManager.I.PlaySE(Audio.SeType.FullStock);
 
             OnStateChanged(currentState);
         }

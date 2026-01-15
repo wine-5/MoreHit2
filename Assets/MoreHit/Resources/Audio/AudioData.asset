@@ -15,42 +15,48 @@ MonoBehaviour:
   seAudioDataList:
   - seType: 1
     audioClip: {fileID: 8300000, guid: 1da9be9671c9fdc41bff18105fc70ce1, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.4
   - seType: 2
     audioClip: {fileID: 8300000, guid: 685df508f0a68814ab0ecdc2d2294741, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.6
   - seType: 3
     audioClip: {fileID: 8300000, guid: a6d722a11c2e2a0459292233f8ce0bbc, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.2
   - seType: 4
-    audioClip: {fileID: 8300000, guid: 61c7b5fdd8627cb41acad9c770091b0d, type: 3}
-    volumeMultiplier: 0
+    audioClip: {fileID: 8300000, guid: a1332bccfd1b47b4693fd6dbbc0182fc, type: 3}
+    volumeMultiplier: 0.6
   - seType: 5
-    audioClip: {fileID: 8300000, guid: 7c9c90417e3b96246b1698396b68d07c, type: 3}
-    volumeMultiplier: 0
+    audioClip: {fileID: 8300000, guid: 61c7b5fdd8627cb41acad9c770091b0d, type: 3}
+    volumeMultiplier: 0.3
   - seType: 6
-    audioClip: {fileID: 8300000, guid: 554800f0d9b60c8408b35af462672839, type: 3}
-    volumeMultiplier: 0
+    audioClip: {fileID: 8300000, guid: 7c9c90417e3b96246b1698396b68d07c, type: 3}
+    volumeMultiplier: 0.4
   - seType: 7
-    audioClip: {fileID: 8300000, guid: d5d3e74a96d0f5543979920c60e38291, type: 3}
-    volumeMultiplier: 0
+    audioClip: {fileID: 8300000, guid: 554800f0d9b60c8408b35af462672839, type: 3}
+    volumeMultiplier: 0.4
+  - seType: 3
+    audioClip: {fileID: 8300000, guid: a6d722a11c2e2a0459292233f8ce0bbc, type: 3}
+    volumeMultiplier: 0.4
   - seType: 8
-    audioClip: {fileID: 8300000, guid: 882c18df61b713349b497dc5fbb0f055, type: 3}
-    volumeMultiplier: 0
+    audioClip: {fileID: 8300000, guid: d5d3e74a96d0f5543979920c60e38291, type: 3}
+    volumeMultiplier: 0.2
+  - seType: 10
+    audioClip: {fileID: 8300000, guid: e2159571920fef6409f72c0d6873c8c2, type: 3}
+    volumeMultiplier: 0.5
   bgmAudioDataList:
   - bgmType: 1
     audioClip: {fileID: 8300000, guid: 4c59df2a4d5ff6a489ffd0444ad8b5b9, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.09
     loop: 1
   - bgmType: 2
     audioClip: {fileID: 8300000, guid: ec876c4019c6aeb48828b414f8804c63, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.1
     loop: 1
   - bgmType: 3
     audioClip: {fileID: 8300000, guid: 4b75619b34ebf184ea9a51c5e399e877, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.2
     loop: 1
   - bgmType: 4
     audioClip: {fileID: 8300000, guid: c120317d65ab0b54a9c5ba9a455deffe, type: 3}
-    volumeMultiplier: 0
+    volumeMultiplier: 0.2
     loop: 1

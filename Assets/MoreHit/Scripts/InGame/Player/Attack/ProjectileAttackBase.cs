@@ -90,9 +90,6 @@ namespace MoreHit.Attack
             );
             
             OnAfterProjectileSpawn(projectileObj);
-            
-            if (AudioManager.I != null)
-                AudioManager.I.PlaySE(SeType.Projectile);
         }
         
         /// <summary>

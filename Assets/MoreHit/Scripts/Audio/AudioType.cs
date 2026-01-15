@@ -9,11 +9,13 @@ namespace MoreHit.Audio
         Button,
         Charge,
         Projectile,
+        ChargedProjectile,
         NormalAttack,
         Jump,
         BossDefeat,
         TakeDamage,
         EnemyDefeat,
+        FullStock,
     }
 
     /// <summary>
