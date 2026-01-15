@@ -62,8 +62,25 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.LogWarning($"[Singleton] {typeof(T).Name}の複数のインスタンスが存在します。重複したオブジェクトを削除します。");
-            Destroy(gameObject);
+            // 既存のインスタンスが動的生成されたもの（親がない）で、
+            // 新しいインスタンスがシーンに配置されたもの（参照がある可能性）の場合、
+            // 新しい方を優先
+            bool existingIsDynamic = instance.transform.parent == null && instance.name.Contains("(Singleton)");
+            bool newIsFromScene = !gameObject.name.Contains("(Singleton)");
+            
+            if (existingIsDynamic && newIsFromScene)
+            {
+                Debug.LogWarning($"[Singleton] {typeof(T).Name}の複数のインスタンスが存在します。動的生成されたインスタンスを削除し、シーン配置のインスタンスを使用します。");
+                Destroy(instance.gameObject);
+                instance = this as T;
+                if (UseDontDestroyOnLoad)
+                    DontDestroyOnLoad(transform.root.gameObject);
+            }
+            else
+            {
+                Debug.LogWarning($"[Singleton] {typeof(T).Name}の複数のインスタンスが存在します。重複したオブジェクトを削除します。");
+                Destroy(gameObject);
+            }
         }
     }
 

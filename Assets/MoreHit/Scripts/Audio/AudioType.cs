@@ -9,11 +9,14 @@ namespace MoreHit.Audio
         Button,
         Charge,
         Projectile,
+        ChargedProjectile,
         NormalAttack,
         Jump,
         BossDefeat,
         TakeDamage,
         EnemyDefeat,
+        FullStock,
+        Warning,
     }
 
     /// <summary>
@@ -24,6 +27,7 @@ namespace MoreHit.Audio
         None,
         Title,
         InGame,
+        Boss,
         GameClear,
         GameOver,
     }

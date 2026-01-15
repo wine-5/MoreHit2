@@ -1,3 +1,6 @@
+using MoreHit.Audio;
+using UnityEngine;
+
 namespace MoreHit.Attack
 {
     /// <summary>
@@ -5,5 +8,12 @@ namespace MoreHit.Attack
     /// </summary>
     public class ChargedAttack : ProjectileAttackBase
     {
+        protected override void OnAfterProjectileSpawn(GameObject projectileObj)
+        {
+            base.OnAfterProjectileSpawn(projectileObj);
+            
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.ChargedProjectile);
+        }
     }
 }

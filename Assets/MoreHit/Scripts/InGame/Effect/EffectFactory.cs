@@ -25,12 +25,9 @@ namespace MoreHit
             // エフェクト用ObjectPoolを取得
             FindEffectObjectPool();
             
-            // ScriptableObjectからエフェクトデータを初期化
             InitializeEffectDataDictionary();
         }
-        
 
-        
         private void FindEffectObjectPool()
         {
             var allObjectPools = FindObjectsByType<ObjectPool>(FindObjectsSortMode.None);
@@ -58,22 +55,24 @@ namespace MoreHit
         {
             effectDataDictionary = new Dictionary<EffectType, EffectData>();
             
-            if (effectDataSO == null || effectDataSO.EffectDataList == null)
+            if (effectDataSO == null)
             {
-                Debug.LogWarning("EffectFactory: エフェクトデータが設定されていません");
+                Debug.LogError("[EffectFactory] EffectDataSOが設定されていません! Inspectorで設定してください。");
+                return;
+            }
+            
+            if (effectDataSO.EffectDataList == null)
+            {
+                Debug.LogError("[EffectFactory] EffectDataListがnullです!");
                 return;
             }
             
             foreach (var effectData in effectDataSO.EffectDataList)
             {
                 if (effectData != null && effectData.EffectPrefab != null)
-                {
                     effectDataDictionary[effectData.EffectType] = effectData;
-                }
                 else if (effectData != null)
-                {
                     Debug.LogWarning($"EffectFactory: {effectData.EffectType} のプレハブが設定されていません");
-                }
             }
         }
         
@@ -161,9 +160,7 @@ namespace MoreHit
             if (effectObject != null)
                 ReturnEffect(effectObject);
         }
-        
 
-        
         /// <summary>
         /// 利用可能なエフェクトタイプの一覧を取得
         /// </summary>

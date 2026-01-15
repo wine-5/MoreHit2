@@ -1,4 +1,5 @@
 using UnityEngine;
+using MoreHit.Events;
 
 namespace MoreHit.Player
 {
@@ -14,6 +15,11 @@ namespace MoreHit.Player
         private PlayerHealth health;
         private AttackManager attackManager;
         private PlayerAnimatorController animatorController;
+        
+        /// <summary>
+        /// 入力ロックフラグ（ボス演出中などに使用）
+        /// </summary>
+        private bool isInputLocked = false;
 
         private void Awake()
         {
@@ -26,6 +32,8 @@ namespace MoreHit.Player
 
         private void OnEnable()
         {
+            GameEvents.OnInputLockChanged += SetInputLock;
+            
             inputManager.onMove.AddListener(OnMoveInput);
             inputManager.onJumpPerformed.AddListener(OnJumpInput);
             inputManager.onJumpCanceled.AddListener(OnJumpCanceled);
@@ -36,6 +44,8 @@ namespace MoreHit.Player
 
         private void OnDisable()
         {
+            GameEvents.OnInputLockChanged -= SetInputLock;
+            
             inputManager.onMove.RemoveListener(OnMoveInput);
             inputManager.onJumpPerformed.RemoveListener(OnJumpInput);
             inputManager.onJumpCanceled.RemoveListener(OnJumpCanceled);
@@ -46,43 +56,62 @@ namespace MoreHit.Player
 
         private void OnMoveInput(Vector2 moveInput)
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             movement.SetMoveInput(moveInput);
         }
 
         private void OnJumpInput()
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             movement.Jump();
         }
 
         private void OnJumpCanceled()
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             movement.CancelJump();
         }
 
         private void OnNormalAttack()
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             attackManager?.ExecuteNormalAttack();
             animatorController?.PlayAttackAnimation();
         }
 
         private void OnRangedAttack()
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             attackManager?.ExecuteRangedAttack();
             animatorController?.PlayAttackAnimation();
         }
 
         private void OnChargeRangedAttack()
         {
-            if (!CanExecuteAction()) return;
+            // 入力ロック中は処理をスキップ
+            if (isInputLocked || !CanExecuteAction()) return;
             attackManager?.ExecuteChargedAttack();
             animatorController?.PlayAttackAnimation();
         }
 
         private bool CanExecuteAction() => health.IsAlive;
+        
+        /// <summary>
+        /// 入力ロックを設定する（外部から呼び出し可能）
+        /// </summary>
+        /// <param name="isLocked">true: 入力をロック, false: 入力を解除</param>
+        public void SetInputLock(bool isLocked)
+        {
+            isInputLocked = isLocked;
+            
+            // 入力ロック時に入力値をクリア
+            if (isLocked && movement != null)
+                movement.SetMoveInput(Vector2.zero);
+        }
     }
 }

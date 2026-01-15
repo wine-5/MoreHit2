@@ -10,6 +10,11 @@ namespace MoreHit.Events
     public static class GameEvents
     {
         /// <summary>
+        /// ゲームが開始された時（シーン読み込み時）
+        /// </summary>
+        public static event Action OnGameStart;
+        
+        /// <summary>
         /// プレイヤーが死亡した時
         /// </summary>
         public static event Action OnPlayerDeath;
@@ -33,6 +38,16 @@ namespace MoreHit.Events
         /// ストック数が変更された時
         /// </summary>
         public static event Action<int, int> OnStockChanged;
+        
+        /// <summary>
+        /// 入力ロック状態が変更された時（ボス演出、カットシーンなど）
+        /// </summary>
+        public static event Action<bool> OnInputLockChanged;
+        
+        /// <summary>
+        /// ボス出現エリアに侵入した時（演出開始）
+        /// </summary>
+        public static event Action OnBossAreaEntered;
         
         /// <summary>
         /// ボスが出現した時
@@ -59,6 +74,11 @@ namespace MoreHit.Events
         /// </summary>
         public static event Action<GameObject> OnEnemyDefeated;
 
+        public static void TriggerGameStart()
+        {
+            OnGameStart?.Invoke();
+        }
+        
         public static void TriggerPlayerDeath()
         {
             OnPlayerDeath?.Invoke();
@@ -82,6 +102,16 @@ namespace MoreHit.Events
         public static void TriggerStockChanged(int currentStock, int maxStock)
         {
             OnStockChanged?.Invoke(currentStock, maxStock);
+        }
+        
+        public static void TriggerInputLockChanged(bool isLocked)
+        {
+            OnInputLockChanged?.Invoke(isLocked);
+        }
+        
+        public static void TriggerBossAreaEntered()
+        {
+            OnBossAreaEntered?.Invoke();
         }
         
         public static void TriggerBossAppear()
@@ -114,11 +144,14 @@ namespace MoreHit.Events
         /// </summary>
         public static void ClearAllEvents()
         {
+            OnGameStart = null;
             OnPlayerDeath = null;
             OnPlayerDamage = null;
             OnPlayerInvincibilityEnded = null;
             OnStockFull = null;
             OnStockChanged = null;
+            OnInputLockChanged = null;
+            OnBossAreaEntered = null;
             OnBossAppear = null;
             OnBossDefeated = null;
             OnBossDamaged = null;

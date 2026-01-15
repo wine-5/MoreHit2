@@ -10,6 +10,17 @@ namespace MoreHit.InGame
     /// </summary>
     public class EventsHandler : MonoBehaviour
     {
+        #region 定数
+        
+        private const float BOSS_DEFEAT_SCENE_TRANSITION_DELAY = 3.5f;
+        
+        #endregion
+        
+        private void Start()
+        {
+            GameEvents.TriggerGameStart();
+        }
+        
         private void OnEnable()
         {
             GameEvents.OnPlayerDeath += OnPlayerDeath;
@@ -40,7 +51,15 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnBossDefeated()
         {
-            Debug.Log("[EventsHandler] ボス撃破イベント受信 - クリアシーンに遷移中...");
+            StartCoroutine(OnBossDefeatedDelayed());
+        }
+        
+        /// <summary>
+        /// ボス撃破後の遅延処理
+        /// </summary>
+        private System.Collections.IEnumerator OnBossDefeatedDelayed()
+        {
+            yield return new WaitForSeconds(BOSS_DEFEAT_SCENE_TRANSITION_DELAY);
             
             if (SceneController.I != null)
                 SceneController.I.LoadScene(SceneName.Clear);
@@ -53,7 +72,6 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnStockFull(GameObject enemy)
         {
-            // FullStockEffectを表示
             if (EffectFactory.I != null)
             {
                 var effect = EffectFactory.I.CreateEffect(MoreHit.Effect.EffectType.FullStockEffect, enemy.transform.position);

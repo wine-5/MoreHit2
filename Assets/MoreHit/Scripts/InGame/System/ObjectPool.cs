@@ -10,19 +10,16 @@ namespace MoreHit.Pool
     public class ObjectPool : MonoBehaviour
     {
         [Header("Object Pool Settings")]
-        [SerializeField] private List<ObjectPoolItem> poolItems = new List<ObjectPoolItem>(); // プールする項目のリスト
+        [SerializeField] private List<ObjectPoolItem> poolItems = new List<ObjectPoolItem>();
 #if UNITY_EDITOR
-        [SerializeField] private bool autoExpand = true; // プールが空の場合に自動的に拡張するかどうか
-        [SerializeField] private int expandSize = 5; // 自動拡張時のサイズ
+        [SerializeField] private bool autoExpand = true;
+        [SerializeField] private int expandSize = 5;
 #endif
 
-        // 各プレハブごとのオブジェクトプール
         private Dictionary<GameObject, Queue<GameObject>> objectPools = new Dictionary<GameObject, Queue<GameObject>>();
         
-        // プレハブ名からプレハブを検索するための辞書（InstanceIDの不一致対策）
         private Dictionary<string, GameObject> prefabNameToOriginalPrefab = new Dictionary<string, GameObject>();
 
-        // インスタンスと元のプレハブを紐づける辞書
         private Dictionary<GameObject, ObjectPoolItem> instanceToPoolItemMap = new Dictionary<GameObject, ObjectPoolItem>();
 
         private void Awake()
@@ -51,7 +48,6 @@ namespace MoreHit.Pool
 
                 if (poolItem.parent == null)
                 {
-                    // 親が指定されていない場合は、このオブジェクトを親として使用
                     poolItem.parent = this.gameObject;
                 }
 
@@ -76,7 +72,6 @@ namespace MoreHit.Pool
                 objectPools[poolItem.prefab] = new Queue<GameObject>();
             }
             
-            // 名前ベースの辞書にも登録（同じ名前の場合は上書き）
             string prefabName = poolItem.prefab.name.Replace("(Clone)", "").Trim();
             if (!prefabNameToOriginalPrefab.ContainsKey(prefabName))
                 prefabNameToOriginalPrefab[prefabName] = poolItem.prefab;

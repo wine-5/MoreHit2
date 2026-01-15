@@ -8,15 +8,15 @@ namespace MoreHit.UI
     public class BackgroundRepeater : MonoBehaviour
     {
         [Header("背景設定")]
-        [SerializeField] private GameObject backgroundPrefab; // 複製する背景プレハブ
-        [SerializeField] private Transform parentTransform; // 親オブジェクト（nullの場合は自動作成）
+        [SerializeField] private GameObject backgroundPrefab;
+        [SerializeField] private Transform parentTransform;
         
         [Header("配置設定")]
-        [SerializeField] private int verticalCount = 3; // 縦の数
-        [SerializeField] private int horizontalCount = 20; // 横の数
-        [SerializeField] private Vector2 spacing = Vector2.zero; // 追加の隙間（通常は0,0）
+        [SerializeField] private int verticalCount = 3;
+        [SerializeField] private int horizontalCount = 20;
+        [SerializeField] private Vector2 spacing = Vector2.zero;
         
-        private Vector2 bgSize; // 背景のサイズ
+        private Vector2 bgSize;
         
         void Start()
         {
@@ -148,7 +148,7 @@ namespace MoreHit.UI
                 }
             }
             
-            Debug.Log("すべての背景を削除しました");
+
         }
         
         /// <summary>

@@ -1,21 +1,20 @@
-using UnityEngine;
-using TMPro; // TextMeshPro‚ğg—p‚·‚é‚½‚ß‚É•K—v
+ï»¿using UnityEngine;
+using TMPro;
 using MoreHit.ElapsedTime;
 
 /// <summary>
-/// ƒvƒŒƒC’†‚ÌŒo‰ßŠÔ‚ğƒ}ƒl[ƒWƒƒ[‚©‚çæ“¾‚µAUIƒeƒLƒXƒg‚ÖƒŠƒAƒ‹ƒ^ƒCƒ€‚É”½‰f‚·‚é•\¦ê—pƒNƒ‰ƒX
+/// ãƒ—ãƒ¬ã‚¤ä¸­ã®çµŒéæ™‚é–“ã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‹ã‚‰å–å¾—ã—ã€UIãƒ†ã‚­ã‚¹ãƒˆã«ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ ã«åæ˜ ã™ã‚‹è¡¨ç¤ºç”¨ã‚¯ãƒ©ã‚¹
 /// </summary>
-namespace MoreHit.UI // UIŠÖ˜A‚Å‚ ‚é‚±‚Æ‚ğ–¾¦
+namespace MoreHit.UI
 {
     public class StageTimerDisplay : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI timerText; // ƒCƒ“ƒXƒyƒNƒ^[‚ÅUI‚ğƒhƒ‰ƒbƒO•ƒhƒƒbƒv
+        [SerializeField] private TextMeshProUGUI timerText;
 
         void Update()
         {
-            if (ElapsedTimeManager.I != null) // Instance‚ğ I ‚Æ’è‹`‚µ‚Ä‚¢‚éê‡
+            if (ElapsedTimeManager.I != null)
             {
-                // •¡G‚ÈŒvZ‚Íƒ}ƒl[ƒWƒƒ[‚É”C‚¹AUI‚Íu•\¦‚·‚é‚¾‚¯v‚Éê”O‚·‚é
                 timerText.text = ElapsedTimeManager.I.GetFormattedTime();
             }
         }

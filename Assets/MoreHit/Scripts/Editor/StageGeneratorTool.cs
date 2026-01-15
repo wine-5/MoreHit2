@@ -103,7 +103,7 @@ namespace MoreHit.Editor
                 }
             }
             
-            Debug.Log($"ステージを生成しました: {width}x{height}");
+
             Selection.activeGameObject = stageParent;
         }
         
@@ -124,7 +124,7 @@ namespace MoreHit.Editor
                 
                 cameraCenter = new Vector2(mainCamera.transform.position.x, mainCamera.transform.position.y);
                 
-                Debug.Log($"カメラ範囲を設定: {generationRange}");
+
             }
         }
     }

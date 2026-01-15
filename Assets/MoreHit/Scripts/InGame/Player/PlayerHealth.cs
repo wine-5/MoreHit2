@@ -1,6 +1,7 @@
 using UnityEngine;
 using MoreHit.Events;
 using MoreHit.Attack;
+using MoreHit.Audio;
 
 namespace MoreHit.Player
 {
@@ -51,6 +52,9 @@ namespace MoreHit.Player
             currentHealth = Mathf.Max(0, currentHealth - damage);
             
             GameEvents.TriggerPlayerDamage(damage, currentHealth);
+            
+            if (AudioManager.I != null)
+                AudioManager.I.PlaySE(SeType.TakeDamage);
 
             StartInvincible();
 

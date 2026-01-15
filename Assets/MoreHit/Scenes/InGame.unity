@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &436273946
+--- !u!1001 &368887739
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -171,13 +171,60 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGame
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4428564849603989951, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 54683503658739507, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5695622534946152028, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7578545039187866438, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1067354040321440488, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 120649876640054983, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 524276070403562482, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7232798807276042041, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2496103871571060636, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 660597234767366221, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6452351365374380278, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3722474471413962508, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7001531740904964029, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 280694886135910865, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7145438092979897065, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4064745038355485353, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 990734654417662471, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
---- !u!1 &931445608
+--- !u!1 &423995339
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,34 +232,34 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 931445610}
-  - component: {fileID: 931445609}
+  - component: {fileID: 423995343}
+  - component: {fileID: 423995342}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: TimeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &931445609
+--- !u!114 &423995342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931445608}
+  m_GameObject: {fileID: 423995339}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c4127346afcd1744a231bf3676aed48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.ElapsedTime.ElapsedTimeManager
---- !u!4 &931445610
+--- !u!4 &423995343
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931445608}
+  m_GameObject: {fileID: 423995339}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2757.5, y: -2.3, z: 0}
@@ -225,5 +272,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 436273946}
-  - {fileID: 931445610}
+  - {fileID: 368887739}
+  - {fileID: 423995343}

@@ -170,7 +170,7 @@ namespace MoreHit.Editor
             // 既に同じシーンの場合は何もしない
             if (SceneManager.GetActiveScene().path == scenePath)
             {
-                Debug.Log($"Already in scene: {Path.GetFileNameWithoutExtension(scenePath)}");
+
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace MoreHit.Editor
                         OpenScene(scenePath);
                         break;
                     case 2: // Cancel
-                        Debug.Log("Scene change cancelled.");
+
                         break;
                 }
             }
@@ -239,7 +239,7 @@ namespace MoreHit.Editor
             scenes.Add(new EditorBuildSettingsScene(scenePath, true));
             EditorBuildSettings.scenes = scenes.ToArray();
             
-            Debug.Log($"Added to Build Settings: {Path.GetFileNameWithoutExtension(scenePath)}");
+
             EditorUtility.DisplayDialog("Success", "Scene added to Build Settings.", "OK");
         }
     }
