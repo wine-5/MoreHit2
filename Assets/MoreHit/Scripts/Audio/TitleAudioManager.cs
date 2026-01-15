@@ -5,19 +5,10 @@ namespace MoreHit
 {
     public class TitleAudioManager : MonoBehaviour
     {
-        [SerializeField] private bool waitForUserInput = true;
-        
         void Start()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-            if (waitForUserInput)
-            {
-                StartCoroutine(WaitForUserInputThenPlayBGM());
-            }
-            else
-            {
-                PlayTitleBGM();
-            }
+            StartCoroutine(WaitForUserInputThenPlayBGM());
 #else
             PlayTitleBGM();
 #endif
