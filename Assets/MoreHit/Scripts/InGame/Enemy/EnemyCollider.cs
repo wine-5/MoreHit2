@@ -18,7 +18,18 @@ namespace MoreHit
             if (collision.gameObject.CompareTag("Player"))
             {
                 if (enemyBase != null && !enemyBase.IsDead && !enemyBase.IsInLaunchState())
-                    enemyBase.AttackPlayer();
+                {
+                    // BossEnemyの場合は、collisionから直接Playerを渡す
+                    var bossEnemy = enemyBase as BossEnemy;
+                    if (bossEnemy != null)
+                    {
+                        bossEnemy.AttackPlayer(collision.gameObject);
+                    }
+                    else
+                    {
+                        enemyBase.AttackPlayer();
+                    }
+                }
             }
         }
     }

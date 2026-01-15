@@ -51,6 +51,23 @@ namespace MoreHit.Attack
         }
         
         /// <summary>
+        /// FireBallの初期化（ダメージ値を指定）
+        /// </summary>
+        public GameObject CreateFireBall(Vector3 position, Vector2 direction, GameObject shooter, int damage)
+        {
+            GameObject fireBall = CreateFireBall(position, direction, shooter);
+            if (fireBall != null)
+            {
+                var fireBallDamage = fireBall.GetComponent<MoreHit.Enemy.FireBallDamage>();
+                if (fireBallDamage != null)
+                {
+                    fireBallDamage.SetDamage(damage);
+                }
+            }
+            return fireBall;
+        }
+        
+        /// <summary>
         /// FireBallの初期化
         /// </summary>
         private void InitializeFireBall(GameObject fireBall, Vector3 position, Vector2 direction, GameObject shooter)
@@ -60,10 +77,18 @@ namespace MoreHit.Attack
             fireBall.transform.position = position;
             fireBall.transform.rotation = Quaternion.identity;
             
+            // FireBallDamageに発射者を設定
+            var fireBallDamage = fireBall.GetComponent<MoreHit.Enemy.FireBallDamage>();
+            if (fireBallDamage != null)
+            {
+                fireBallDamage.SetShooter(shooter);
+            }
+            
             Rigidbody2D rb = fireBall.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.linearVelocity = direction.normalized * fireBallSpeed;
+                Vector2 velocity = direction.normalized * fireBallSpeed;
+                rb.linearVelocity = velocity;
                 rb.angularVelocity = 0f;
             }
             

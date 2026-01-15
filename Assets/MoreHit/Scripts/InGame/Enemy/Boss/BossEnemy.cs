@@ -41,13 +41,17 @@ namespace MoreHit.Enemy
         #region シリアライズフィールド
         
         [Header("ボス専用設定")]
+        [Tooltip("Boss専用の全データ（HP、速度、攻撃パターンなど）")]
         [SerializeField] private BossAttackDataSO bossAttackData;
         [SerializeField] private BossAIController aiController;
         
         [Header("攻撃パターン設定")]
+        [Tooltip("近接回転攻撃用のAttackData")]
         [SerializeField] private AttackData rotatingAttackData;
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private Transform fireballSpawnPoint;
+        
+        // Note: EnemyDataSOとenemyAttackDataはEnemyBaseから継承されますが、Bossでは使用しません（BossAttackDataSOを使用）
         
         #endregion
         
@@ -64,18 +68,19 @@ namespace MoreHit.Enemy
         protected override void Awake()
         {
             enemyType = EnemyType.Boss;
+            // Boss専用の攻撃データを使用するため、enemyAttackDataは基本nullだが
+            // EnemyColliderからの接触ダメージのため、完全にnullにはしない
             base.Awake();
             
             if (aiController == null)
                 aiController = GetComponent<BossAIController>();
             
-            Debug.Log($"[BossEnemy] Awake: aiController={aiController != null}, bossAttackData={bossAttackData != null}, enemyAttackData={enemyAttackData != null}");
+
             
             if (bossAttackData == null)
+            {
                 Debug.LogError("[BossEnemy] BossAttackDataSOがアタッチされていません！Inspectorで設定してください。");
-            
-            if (enemyAttackData == null)
-                Debug.LogError("[BossEnemy] enemyAttackDataがアタッチされていません！Inspectorで設定してください。");
+            }
         }
         
         private void Start()
@@ -86,24 +91,36 @@ namespace MoreHit.Enemy
             canTakeDamage = true;
             
             if (enemyData != null)
+            {
                 currentHP = enemyData.MaxHP;
+                // EnemyDataSOにはSizeScaleがないので、2倍固定
+                transform.localScale = Vector3.one * 2f;
+
+            }
             else
-                currentHP = 300;
+            {
+                currentHP = 100;
+                transform.localScale = Vector3.one * 2f;
+                Debug.LogWarning("[BossEnemy] EnemyDataがnull、デフォルト値を使用");
+            }
             
-            Debug.Log($"[BossEnemy] Start: HP={currentHP}, canMove={canMove}, state={currentState}");
+            // Rigidbody2Dの状態確認
+            if (rb != null)
+            {
+
+            }
+            else
+            {
+                Debug.LogError("[BossEnemy] Rigidbody2Dがnull！");
+            }
         }
         
         protected override void Update()
         {
             if (isDead || !canMove)
             {
-                if (Time.frameCount % 300 == 0)
-                    Debug.Log($"[BossEnemy] Update: 停止中 - isDead={isDead}, canMove={canMove}");
                 return;
             }
-            
-            if (Time.frameCount % 300 == 0)
-                Debug.Log($"[BossEnemy] Update: 動作中 - HP={currentHP}, state={currentState}");
             
             UpdateStockTimer();
             Move();
@@ -156,22 +173,54 @@ namespace MoreHit.Enemy
         }
         
         #endregion
+                #region 攻撃処理（オーバーライド）
         
-        #region 移動
+        /// <summary>
+        /// プレイヤーに攻撃を実行（Boss専用実装）
+        /// BossはBossAttackDataSOを使用するため、enemyAttackDataは使わず直接ダメージ
+        /// </summary>
+        public override void AttackPlayer()
+        {
+            // 基底クラスとの互換性のため残す（EnemyColliderからはAttackPlayer(GameObject)が呼ばれる）
+        }
+        
+        /// <summary>
+        /// プレイヤーに攻撃を実行（Collision経由、疎結合）
+        /// </summary>
+        public void AttackPlayer(GameObject playerObject)
+        {
+            if (IsInLaunchState()) return;
+            if (playerObject == null) return;
+            
+            // IDamageableインターフェースを使って疎結合にダメージを与える
+            var damageable = playerObject.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(20);
+            }
+        }
+        
+        #endregion
+                #region 移動
         
         protected override void Move()
         {
-            if (PlayerDataProvider.I == null || enemyData == null || rb == null) return;
+            if (PlayerDataProvider.I == null || rb == null)
+            {
+                return;
+            }
             
             Vector3 targetPosition = PlayerDataProvider.I.Position;
             Vector3 currentPosition = transform.position;
             Vector3 direction = (targetPosition - currentPosition).normalized;
             
+            float speed = enemyData != null ? enemyData.MoveSpeed : 3f;
+            
             if (Mathf.Abs(direction.x) > MIN_MOVE_THRESHOLD)
             {
                 Vector2 newVelocity = new Vector2(
-                    direction.x * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER,
-                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * VERTICAL_MOVE_MULTIPLIER
+                    direction.x * speed * BOSS_SPEED_MULTIPLIER,
+                    direction.y * speed * BOSS_SPEED_MULTIPLIER * VERTICAL_MOVE_MULTIPLIER
                 );
                 
                 if (direction.y < 0)
@@ -186,7 +235,7 @@ namespace MoreHit.Enemy
             {
                 Vector2 newVelocity = new Vector2(
                     rb.linearVelocity.x * HORIZONTAL_DECAY_MULTIPLIER,
-                    direction.y * enemyData.MoveSpeed * BOSS_SPEED_MULTIPLIER * DOWNWARD_MOVE_MULTIPLIER
+                    direction.y * speed * BOSS_SPEED_MULTIPLIER * DOWNWARD_MOVE_MULTIPLIER
                 );
                 rb.linearVelocity = newVelocity;
             }
@@ -200,39 +249,31 @@ namespace MoreHit.Enemy
         {
             if (isAttacking)
             {
-                if (Time.frameCount % 100 == 0)
-                    Debug.Log("[BossEnemy] Attack: 攻撃中のためスキップ");
                 return;
             }
             
             if (aiController == null)
             {
-                Debug.LogWarning("[BossEnemy] Attack: aiControllerがnull");
                 return;
             }
             
             if (!aiController.CanAttack())
             {
-                if (Time.frameCount % 100 == 0)
-                    Debug.Log("[BossEnemy] Attack: クールダウン中");
                 return;
             }
             
             if (PlayerDataProvider.I == null)
             {
-                Debug.LogWarning("[BossEnemy] Attack: PlayerDataProviderがnull");
                 return;
             }
             
             BossAttackPattern selectedPattern = aiController.SelectAttackPattern();
-            Debug.Log($"[BossEnemy] Attack: 攻撃開始 - pattern={selectedPattern}");
             StartCoroutine(ExecuteAttackPattern(selectedPattern));
         }
         
         private IEnumerator ExecuteAttackPattern(BossAttackPattern pattern)
         {
             isAttacking = true;
-            Debug.Log($"[BossEnemy] ExecuteAttackPattern: 開始 - {pattern}");
             
             switch (pattern)
             {
@@ -252,21 +293,20 @@ namespace MoreHit.Enemy
             if (aiController != null)
                 aiController.OnAttackExecuted();
             
-            Debug.Log($"[BossEnemy] ExecuteAttackPattern: 完了 - {pattern}");
             isAttacking = false;
         }
         
         private IEnumerator ExecuteRotatingAttack()
         {
-            Debug.Log("[BossEnemy] ExecuteRotatingAttack: 開始");
+
             Vector3 targetPosition = PlayerDataProvider.I.Position;
             Vector2 direction = (targetPosition - transform.position).normalized;
             
-            if (AttackExecutor.I != null && enemyAttackData != null)
+            if (AttackExecutor.I != null && rotatingAttackData != null)
             {
-                Debug.Log($"[BossEnemy] ExecuteRotatingAttack: 攻撃実行 - direction={direction}");
+
                 AttackExecutor.I.Execute(
-                    enemyAttackData,
+                    rotatingAttackData,
                     transform.position,
                     direction,
                     gameObject
@@ -274,69 +314,64 @@ namespace MoreHit.Enemy
             }
             else
             {
-                Debug.LogWarning($"[BossEnemy] ExecuteRotatingAttack: 攻撃不可 - AttackExecutor={AttackExecutor.I != null}, enemyAttackData={enemyAttackData != null}");
+                Debug.LogWarning($"[BossEnemy] ExecuteRotatingAttack: 攻撃不可 - AttackExecutor={AttackExecutor.I != null}, rotatingAttackData={rotatingAttackData != null}");
             }
             
             yield return new WaitForSeconds(ROTATION_ATTACK_COOLDOWN);
         }
         
+        /// <summary>
+        /// 地面叩きつけ攻撃（16方向範囲攻撃）
+        /// </summary>
         private IEnumerator ExecuteSpawnMinions()
         {
-            Debug.Log("[BossEnemy] ExecuteSpawnMinions: 開始");
-            
-            if (EnemyFactory.I == null)
+            if (bossAttackData == null || bossAttackData.groundSlam == null)
             {
-                Debug.LogWarning("[BossEnemy] ExecuteSpawnMinions: EnemyFactoryがnull");
                 yield break;
             }
             
-            int spawnCount = bossAttackData?.groundSlam.projectileCount ?? 2;
-            Vector3 playerPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
-            
-            Debug.Log($"[BossEnemy] ExecuteSpawnMinions: {spawnCount}体のミニオンを生成");
-            
-            for (int i = 0; i < spawnCount; i++)
+            if (AttackExecutor.I == null || rotatingAttackData == null)
             {
-                Vector2 directionToPlayer = (playerPosition - transform.position).normalized;
-                Vector3 spawnPosition = transform.position + (Vector3)(directionToPlayer * 2f);
-                
-                if (i > 0)
-                {
-                    Vector3 offset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f);
-                    spawnPosition += offset;
-                }
-                
-                EnemyBase minion = EnemyFactory.I.CreateEnemyByType(EnemyType.Normal, spawnPosition);
-                
-                if (minion != null)
-                {
-                    Rigidbody2D minionRb = minion.GetComponent<Rigidbody2D>();
-                    if (minionRb != null)
-                    {
-                        minionRb.gravityScale = 1f;
-                        minionRb.linearVelocity = Vector2.zero;
-                    }
-                }
-                
-                yield return new WaitForSeconds(MINION_SPAWN_INTERVAL);
+                yield break;
             }
+            
+            var slamData = bossAttackData.groundSlam;
+            
+            // 16方向に攻撃判定を生成
+            int directionCount = 16;
+            float angleStep = 360f / directionCount;
+            
+            for (int i = 0; i < directionCount; i++)
+            {
+                float angle = i * angleStep;
+                Vector2 direction = new Vector2(
+                    Mathf.Cos(angle * Mathf.Deg2Rad),
+                    Mathf.Sin(angle * Mathf.Deg2Rad)
+                );
+                
+                AttackExecutor.I.Execute(
+                    rotatingAttackData,
+                    transform.position,
+                    direction,
+                    gameObject
+                );
+            }
+            
+            yield return new WaitForSeconds(slamData.animationDuration);
         }
         
         private IEnumerator ExecuteFireballBarrage()
         {
             if (bossAttackData == null || bossAttackData.fireBall == null)
             {
-                Debug.LogWarning("[BossEnemy] ExecuteFireballBarrage: bossAttackDataまたはfireBallがnull");
                 yield break;
             }
             
-            Debug.Log("[BossEnemy] ExecuteFireballBarrage: 開始");
             var fireBallData = bossAttackData.fireBall;
             Vector3 targetPosition = PlayerDataProvider.I?.Position ?? Vector3.zero;
             
             if (fireballPrefab != null && FireBallFactory.I != null)
             {
-                Debug.Log($"[BossEnemy] ExecuteFireballBarrage: {fireBallData.projectileCount}個の火球を発射");
                 for (int i = 0; i < fireBallData.projectileCount; i++)
                 {
                     Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position;
@@ -345,7 +380,10 @@ namespace MoreHit.Enemy
                     float spreadAngle = (i - fireBallData.projectileCount / 2f) * 15f;
                     direction = Quaternion.Euler(0, 0, spreadAngle) * direction;
                     
-                    FireBallFactory.I.CreateFireBall(spawnPos, direction, gameObject);
+                    // BossAttackDataSOで設定されたダメージ値を使用
+                    int damage = Mathf.FloorToInt(fireBallData.damage);
+                    GameObject fireball = FireBallFactory.I.CreateFireBall(spawnPos, direction, gameObject, damage);
+                    
                     yield return new WaitForSeconds(fireBallData.projectileInterval);
                 }
             }
@@ -392,13 +430,6 @@ namespace MoreHit.Enemy
                 return;
             }
         }
-        
-        public override void AttackPlayer()
-        {
-            if (enemyAttackData == null) return;
-            
-            base.AttackPlayer();
-        }
 
         public override void Die()
         {
@@ -422,7 +453,7 @@ namespace MoreHit.Enemy
         
         public int GetMaxHP()
         {
-            return Mathf.FloorToInt(enemyData?.MaxHP ?? 300f);
+            return Mathf.FloorToInt(enemyData?.MaxHP ?? 100f);
         }
         
         public int GetCurrentHP()

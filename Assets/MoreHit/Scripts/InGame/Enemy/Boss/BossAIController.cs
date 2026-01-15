@@ -24,11 +24,11 @@ namespace MoreHit.Enemy
             if (PlayerDataProvider.I != null)
                 playerTransform = PlayerDataProvider.I.transform;
             
-            Debug.Log($"[BossAIController] Start: bossEnemy={bossEnemy != null}, attackData={attackData != null}, player={playerTransform != null}");
+
             
             if (attackData != null)
             {
-                Debug.Log($"[BossAIController] attackData値: meleeRange={attackData.meleeAttackRange}, rangedRange={attackData.rangedAttackRange}, cooldown={attackData.baseAttackCooldown}");
+
             }
             else
             {
@@ -49,9 +49,6 @@ namespace MoreHit.Enemy
             }
             
             bool canAttack = Time.time - lastAttackTime >= attackData.baseAttackCooldown;
-            if (Time.frameCount % 300 == 0)
-                Debug.Log($"[BossAIController] CanAttack: {canAttack} (cooldown={Time.time - lastAttackTime}/{attackData.baseAttackCooldown})");
-            
             return canAttack;
         }
         
@@ -69,33 +66,35 @@ namespace MoreHit.Enemy
             float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
             float hpRatio = bossEnemy.GetHPRatio();
             
-            Debug.Log($"[BossAIController] SelectAttackPattern: distance={distanceToPlayer:F2}, HP割合={hpRatio:F2}");
+
             
             if (hpRatio <= attackData.groundSlamHPThreshold)
             {
-                Debug.Log($"[BossAIController] HPが低い ({hpRatio:F2} <= {attackData.groundSlamHPThreshold})");
+
                 if (Random.value < 0.3f)
                 {
-                    Debug.Log("[BossAIController] 選択: FireballBarrage");
+
                     return BossAttackPattern.FireballBarrage;
                 }
+
+                return BossAttackPattern.SpawnMinions; // GroundSlam攻撃
             }
             
             BossAttackPattern pattern;
             if (distanceToPlayer <= attackData.meleeAttackRange)
             {
                 pattern = BossAttackPattern.RotatingAttack;
-                Debug.Log($"[BossAIController] 近距離 ({distanceToPlayer:F2} <= {attackData.meleeAttackRange}) - 選択: {pattern}");
+
             }
             else if (distanceToPlayer <= attackData.rangedAttackRange)
             {
                 pattern = BossAttackPattern.FireballBarrage;
-                Debug.Log($"[BossAIController] 中距離 ({distanceToPlayer:F2} <= {attackData.rangedAttackRange}) - 選択: {pattern}");
+
             }
             else
             {
                 pattern = BossAttackPattern.RotatingAttack;
-                Debug.Log($"[BossAIController] 遠距離 ({distanceToPlayer:F2} > {attackData.rangedAttackRange}) - デフォルト: {pattern}");
+
             }
             
             return pattern;

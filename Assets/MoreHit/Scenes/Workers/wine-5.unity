@@ -1096,7 +1096,7 @@ PrefabInstance:
     - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: bossAttackData
       value: 
-      objectReference: {fileID: 11400000, guid: 6c5e70d6ec0ed624f9615649946136c3, type: 2}
+      objectReference: {fileID: 11400000, guid: 5be7f0010cf23fa4b93821d3d060e68c, type: 2}
     - target: {fileID: 5453277096822665712, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: rotatingAttackData
       value: 
@@ -1156,6 +1156,10 @@ PrefabInstance:
     - target: {fileID: 8748781379863872311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9041173745137355527, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4358735776312738706, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
@@ -1709,7 +1713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.BossAIController
   bossEnemy: {fileID: 96550446}
-  attackData: {fileID: 11400000, guid: 6c5e70d6ec0ed624f9615649946136c3, type: 2}
+  attackData: {fileID: 11400000, guid: 5be7f0010cf23fa4b93821d3d060e68c, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

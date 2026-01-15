@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Enemy.EnemyDataSO
   enemyType: 3
   maxHP: 100
-  moveSpeed: 5
+  moveSpeed: 10
   stockCount: 0
-  needStock: 6
+  needStock: 20
