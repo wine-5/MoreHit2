@@ -10,6 +10,9 @@ namespace MoreHit.Audio
         [Header("Audio Data")]
         [SerializeField] private AudioDataSO audioDataSO;
         [SerializeField] private int maxAudioSources = 10;
+        
+        // DontDestroyOnLoad移動前に参照を保持
+        private static AudioDataSO cachedAudioDataSO;
 
         [Header("Volume Settings")]
         [SerializeField, Range(0f, 1f)] private float masterVolume = 1f;
@@ -33,7 +36,36 @@ namespace MoreHit.Audio
 
         protected override void Awake()
         {
+            // DontDestroyOnLoad移動前に参照を保持
+            if (audioDataSO != null)
+            {
+                cachedAudioDataSO = audioDataSO;
+            }
+            
             base.Awake();
+            
+            // DontDestroyOnLoad移動後に参照を復元
+            if (audioDataSO == null && cachedAudioDataSO != null)
+            {
+                audioDataSO = cachedAudioDataSO;
+            }
+            
+            // 最終フォールバック：Resourcesから読み込み
+            if (audioDataSO == null)
+            {
+                audioDataSO = Resources.Load<AudioDataSO>("Audio/AudioData");
+                if (audioDataSO != null)
+                {
+                    Debug.Log("[AudioManager] AudioDataSOをResourcesから読み込みました");
+                }
+            }
+            
+            // デバッグ情報
+            Debug.Log($"[AudioManager] Awake called - GameObject: {gameObject.name}, " +
+                      $"Parent: {(transform.parent != null ? transform.parent.name : "None")}, " +
+                      $"AudioDataSO: {(audioDataSO != null ? "Set" : "NULL")}, " +
+                      $"Scene: {gameObject.scene.name}");
+            
             LoadVolumeSettings();
             InitializeAudioDictionaries();
             SetupAudioSourcePool();
@@ -56,7 +88,9 @@ namespace MoreHit.Audio
             
             if (audioDataSO == null)
             {
-                Debug.LogWarning("AudioManager: AudioDataSOが設定されていません");
+                Debug.LogError("[AudioManager] AudioDataSOが設定されていません! " +
+                    "AudioManagerのInspectorで 'Audio Data' フィールドにAudioDataSOをアタッチしてください。" +
+                    "音声は再生されません。");
                 return;
             }
             
