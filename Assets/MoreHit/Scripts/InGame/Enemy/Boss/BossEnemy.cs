@@ -44,6 +44,7 @@ namespace MoreHit.Enemy
         [Tooltip("Boss専用の全データ（HP、速度、攻撃パターンなど）")]
         [SerializeField] private BossAttackDataSO bossAttackData;
         [SerializeField] private BossAIController aiController;
+        [SerializeField] private BossAnimatorController bossAnimatorController;
         
         [Header("攻撃パターン設定")]
         [Tooltip("近接回転攻撃用のAttackData")]
@@ -60,6 +61,7 @@ namespace MoreHit.Enemy
         private float lastAttackTime = 0f;
         private bool canTakeDamage = false;
         private bool isAttacking = false;
+        private bool isInputLocked = false;
         
         #endregion
         
@@ -75,7 +77,11 @@ namespace MoreHit.Enemy
             if (aiController == null)
                 aiController = GetComponent<BossAIController>();
             
-
+            if (bossAnimatorController == null)
+                bossAnimatorController = GetComponent<BossAnimatorController>();
+            
+            // InputLockイベント購読
+            GameEvents.OnInputLockChanged += SetInputLock;
             
             if (bossAttackData == null)
             {
@@ -117,7 +123,7 @@ namespace MoreHit.Enemy
         
         protected override void Update()
         {
-            if (isDead || !canMove)
+            if (isDead || !canMove || isInputLocked)
             {
                 return;
             }
@@ -125,6 +131,11 @@ namespace MoreHit.Enemy
             UpdateStockTimer();
             Move();
             Attack();
+        }
+        
+        private void OnDestroy()
+        {
+            GameEvents.OnInputLockChanged -= SetInputLock;
         }
         
         #endregion
@@ -291,9 +302,15 @@ namespace MoreHit.Enemy
         {
             isAttacking = true;
             
+            // 攻撃アニメーション開始
+            if (bossAnimatorController != null)
+                bossAnimatorController.PlayAttack();
+            
             if (bossAttackData == null || bossAttackData.fireBall == null)
             {
                 isAttacking = false;
+                if (bossAnimatorController != null)
+                    bossAnimatorController.StopAttack();
                 yield break;
             }
             
@@ -358,6 +375,11 @@ namespace MoreHit.Enemy
             }
             
             lastAttackTime = Time.time;
+            
+            // 攻撃アニメーション終了
+            if (bossAnimatorController != null)
+                bossAnimatorController.StopAttack();
+            
             isAttacking = false;
         }
         
@@ -431,6 +453,18 @@ namespace MoreHit.Enemy
         public int GetCurrentHP()
         {
             return Mathf.FloorToInt(currentHP);
+        }
+        
+        #endregion
+        
+        #region 入力制御
+        
+        /// <summary>
+        /// 入力ロックの設定
+        /// </summary>
+        private void SetInputLock(bool isLocked)
+        {
+            isInputLocked = isLocked;
         }
         
         #endregion

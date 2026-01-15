@@ -40,7 +40,16 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnBossDefeated()
         {
-
+            StartCoroutine(OnBossDefeatedDelayed());
+        }
+        
+        /// <summary>
+        /// ボス撃破後の遅延処理
+        /// </summary>
+        private System.Collections.IEnumerator OnBossDefeatedDelayed()
+        {
+            // 1秒間待機（エフェクト表示のため）
+            yield return new WaitForSeconds(1f);
             
             if (SceneController.I != null)
                 SceneController.I.LoadScene(SceneName.Clear);
