@@ -119,87 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &398728166
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 398728170}
-  - component: {fileID: 398728169}
-  - component: {fileID: 398728168}
-  - component: {fileID: 398728167}
-  m_Layer: 0
-  m_Name: Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &398728167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398728166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
-  bossGameObject: {fileID: 0}
-  bossHPBarUI: {fileID: 0}
-  bossHPBarScript: {fileID: 0}
---- !u!114 &398728168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398728166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c50553ed8cf5a14fb881e1e53204d61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossAppearController
-  warningUI: {fileID: 0}
-  bossBattleStartUI: {fileID: 0}
-  bossCameraController: {fileID: 0}
-  mainCameraController: {fileID: 0}
-  bossTransform: {fileID: 0}
-  bossGameObject: {fileID: 0}
-  delayBeforeZoomOut: 1
---- !u!114 &398728169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398728166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c4127346afcd1744a231bf3676aed48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.ElapsedTime.ElapsedTimeManager
---- !u!4 &398728170
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398728166}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2757.5, y: -2.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &436273946
+--- !u!1001 &368887739
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -207,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3572186304188018835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4321082223152016835, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -259,8 +171,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGame
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4428564849603989951, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -313,9 +224,159 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+--- !u!4 &368887740 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5321597760455263419, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &368887741 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6217278153456069311, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &368887742 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4290474548554007167, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &368887743 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1244871062477738469, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af6ae734963d6124b86d4862fcef761e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.BossBattleStartUI
+--- !u!114 &368887744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5447118075704118821, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6203d3c0283d92c4fb1418d6ad6e45d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.WarningUI
+--- !u!114 &368887745 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6205266337556461287, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d716f11db1db4e14f82923554bc06b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.UI.BossHPBar
+--- !u!114 &368887746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4643531824733207890, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a42192494fe7746b86e701d50f7707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossCameraController
+--- !u!114 &368887747 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3671716279320861578, guid: e4ea05ebeca947549a4598bd6b9f428c, type: 3}
+  m_PrefabInstance: {fileID: 368887739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97934a64894983488483d0de650a905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.CameraController
+--- !u!1 &423995339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 423995343}
+  - component: {fileID: 423995342}
+  - component: {fileID: 423995341}
+  - component: {fileID: 423995340}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &423995340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423995339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac35f091a3f9c5c468329d546d4f62f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossManager
+  bossGameObject: {fileID: 368887741}
+  bossHPBarUI: {fileID: 368887742}
+  bossHPBarScript: {fileID: 368887745}
+--- !u!114 &423995341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423995339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c50553ed8cf5a14fb881e1e53204d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.Boss.BossAppearController
+  warningUI: {fileID: 368887744}
+  bossBattleStartUI: {fileID: 368887743}
+  bossCameraController: {fileID: 368887746}
+  mainCameraController: {fileID: 368887747}
+  bossTransform: {fileID: 368887740}
+  bossGameObject: {fileID: 368887741}
+  delayBeforeZoomOut: 1
+--- !u!114 &423995342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423995339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4127346afcd1744a231bf3676aed48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreHit.ElapsedTime.ElapsedTimeManager
+--- !u!4 &423995343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423995339}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2757.5, y: -2.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 436273946}
-  - {fileID: 398728170}
+  - {fileID: 368887739}
+  - {fileID: 423995343}
