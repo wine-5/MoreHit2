@@ -276,6 +276,8 @@ namespace MoreHit.Enemy
                 float finalLaunchSpeed = launchPower * attackerStockMultiplier;
 
                 otherEnemy.ForceLaunch(impactDir * finalLaunchSpeed);
+                
+                GameEvents.TriggerStockFull(otherEnemy.gameObject);
             }
         }
         

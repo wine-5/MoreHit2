@@ -64,7 +64,6 @@ namespace MoreHit.Enemy
         #region プライベートフィールド
         
         private float lastAttackTime = 0f;
-        private bool canTakeDamage = false;
         private bool isAttacking = false;
         private bool isInputLocked = false;
         
@@ -101,7 +100,6 @@ namespace MoreHit.Enemy
             canMove = false;
             isDead = false;
             currentState = EnemyState.Move;
-            canTakeDamage = true;
             
             if (enemyData == null)
             {
@@ -178,7 +176,6 @@ namespace MoreHit.Enemy
             
             currentState = EnemyState.Move;
             canMove = true;
-            canTakeDamage = true;
             
             if (currentHP <= 0)
                 Die();

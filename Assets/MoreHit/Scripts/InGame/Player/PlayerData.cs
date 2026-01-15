@@ -8,10 +8,6 @@ namespace MoreHit.Player
     [CreateAssetMenu(fileName = "PlayerData", menuName = "MoreHit/Player/PlayerData")]
     public class PlayerData : ScriptableObject
     {
-        [Header("基本情報")]
-        [Tooltip("プレイヤーの名前")]
-        [SerializeField] private string playerName = "Player";
-
         [Header("移動設定")]
         [Tooltip("最大移動速度")]
         [SerializeField] private float moveSpeed = 8f;
