@@ -169,14 +169,14 @@ namespace MoreHit.Editor
             if (parentTransform != null)
             {
                 targetParent = parentTransform;
-                Debug.Log($"Generating stage in: {targetParent.name}");
+
             }
             else
             {
                 // 親が指定されていない場合は新しく作成
                 GameObject stageParent = new GameObject("Generated Stage");
                 targetParent = stageParent.transform;
-                Debug.Log("Generated Stage parent object created");
+
             }
             
             int generatedCount = 0;
@@ -209,7 +209,7 @@ namespace MoreHit.Editor
                 }
             }
             
-            Debug.Log($"Stage generated! Total blocks: {generatedCount} in {targetParent.name}");
+
         }
         
         void ClearStage()
@@ -221,7 +221,7 @@ namespace MoreHit.Editor
                 {
                     DestroyImmediate(parentTransform.GetChild(0).gameObject);
                 }
-                Debug.Log($"Cleared all children from: {parentTransform.name}");
+
             }
             else
             {
@@ -230,7 +230,7 @@ namespace MoreHit.Editor
                 if (stageParent != null)
                 {
                     DestroyImmediate(stageParent);
-                    Debug.Log("Generated Stage cleared!");
+
                 }
                 else
                 {
@@ -270,7 +270,7 @@ namespace MoreHit.Editor
             {
                 textureImporter.isReadable = true;
                 AssetDatabase.ImportAsset(path);
-                Debug.Log($"Made texture readable: {texture.name}");
+
             }
             
             return true;
@@ -338,7 +338,7 @@ namespace MoreHit.Editor
             generateWidth = Mathf.Min(pixelWidth, stageTexture.width - startX);
             generateHeight = Mathf.Min(pixelHeight, stageTexture.height - startY);
             
-            Debug.Log($"Camera bounds set: ({startX}, {startY}) size ({generateWidth}, {generateHeight})");
+
         }
     }
 }

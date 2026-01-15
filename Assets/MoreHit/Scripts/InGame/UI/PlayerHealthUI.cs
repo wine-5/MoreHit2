@@ -97,7 +97,7 @@ namespace MoreHit.UI
             int maxRetries = 30;
             int retries = 0;
             
-            Debug.Log("PlayerHealthUI: PlayerDataProvider の初期化を開始します...");
+
             
             while (retries < maxRetries)
             {
@@ -111,7 +111,7 @@ namespace MoreHit.UI
                 var playerDataProvider = PlayerDataProvider.I;
                 if (playerDataProvider != null)
                 {
-                    Debug.Log($"PlayerHealthUI: PlayerDataProviderが見つかりました（試行回数: {retries + 1}）");
+
                     InitializeHealth();
                     yield break;
                 }

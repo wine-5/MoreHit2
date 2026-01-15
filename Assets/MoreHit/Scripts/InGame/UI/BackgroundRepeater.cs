@@ -148,7 +148,7 @@ namespace MoreHit.UI
                 }
             }
             
-            Debug.Log("すべての背景を削除しました");
+
         }
         
         /// <summary>

@@ -40,7 +40,7 @@ namespace MoreHit.InGame
         /// </summary>
         private void OnBossDefeated()
         {
-            Debug.Log("[EventsHandler] ボス撃破イベント受信 - クリアシーンに遷移中...");
+
             
             if (SceneController.I != null)
                 SceneController.I.LoadScene(SceneName.Clear);

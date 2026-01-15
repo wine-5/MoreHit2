@@ -38,7 +38,7 @@ namespace MoreHit
 #if UNITY_WEBGL && !UNITY_EDITOR
         private IEnumerator WaitForUserInputThenPlayBGM()
         {
-            Debug.Log("[TitleAudioManager] WebGL: ユーザー入力を待機中...");
+
             
             // ユーザーの入力（クリック、キー押下、タッチ）を待つ
             yield return new WaitUntil(() => 
@@ -47,7 +47,7 @@ namespace MoreHit
                 (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             );
             
-            Debug.Log("[TitleAudioManager] ユーザー入力を検出、BGMを再生します");
+
             PlayTitleBGM();
         }
 #endif
