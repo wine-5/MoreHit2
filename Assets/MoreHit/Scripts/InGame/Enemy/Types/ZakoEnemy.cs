@@ -6,9 +6,6 @@ namespace MoreHit.Enemy
     /// </summary>
     public class ZakoEnemy : EnemyBase
     {
-        /// <summary>
-        /// 雑魚敵の移動処理
-        /// </summary>
         [Header("ジャンプ設定")]
         [SerializeField] private float jumpForce = 8f;
         [SerializeField] private float jumpInterval = 3f;
@@ -55,23 +52,19 @@ namespace MoreHit.Enemy
         {
             float currentX = transform.position.x;
 
-            if (direction > 0 && currentX >= rightLimit) direction = -1;
-            else if (direction < 0 && currentX <= leftLimit) direction = 1;
+            if (direction > 0 && currentX >= rightLimit)
+                direction = -1;
+            else if (direction < 0 && currentX <= leftLimit)
+                direction = 1;
 
             rb.linearVelocity = new Vector2(direction * enemyData.MoveSpeed, rb.linearVelocity.y);
             spriteRenderer.flipX = direction > 0;
         }
 
-        /// <summary>
-        /// 雑魚敵の攻撃処理
-        /// </summary>
         protected override void Attack()
         {
         }
 
-        /// <summary>
-        /// 雑魚敵固有の初期化処理
-        /// </summary>
         protected override void InitializeEnemy()
         {
             base.InitializeEnemy();
@@ -81,14 +74,6 @@ namespace MoreHit.Enemy
             spawnX = transform.position.x;
             leftLimit = spawnX - leftRange;
             rightLimit = spawnX + rightRange;
-        }
-
-        /// <summary>
-        /// ダメージを受けた時の雑魚敵固有の処理
-        /// </summary>
-        protected override void OnDamageReceived(int damage)
-        {
-            base.OnDamageReceived(damage);
         }
     }
 }

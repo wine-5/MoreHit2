@@ -16,31 +16,22 @@ namespace MoreHit.Enemy
         [Header("Pool連携")]
         [SerializeField] private ObjectPool objectPool; // Pool参照
 
-        /// <summary>
-        /// ランダムな敵を生成（Pool使用）
-        /// </summary>
         public EnemyBase CreateRandomEnemy(Vector3 position)
         {
-            if (enemyPrefabs == null || enemyPrefabs.Length == 0) return null;
+            if (enemyPrefabs == null || enemyPrefabs.Length == 0)
+                return null;
 
             GameObject randomPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
             return CreateEnemyFromPool(randomPrefab, position);
         }
 
-        /// <summary>
-        /// 指定Prefabから敵を生成（Pool使用）
-        /// </summary>
-        public EnemyBase CreateEnemy(GameObject enemyPrefab, Vector3 position)
-        {
-            return CreateEnemyFromPool(enemyPrefab, position);
-        }
+        public EnemyBase CreateEnemy(GameObject enemyPrefab, Vector3 position) => 
+            CreateEnemyFromPool(enemyPrefab, position);
 
-        /// <summary>
-        /// インデックスで敵を生成（Pool使用）
-        /// </summary>
         public EnemyBase CreateEnemyByIndex(int index, Vector3 position)
         {
-            if (enemyPrefabs == null || index < 0 || index >= enemyPrefabs.Length) return null;
+            if (enemyPrefabs == null || index < 0 || index >= enemyPrefabs.Length)
+                return null;
 
             return CreateEnemyFromPool(enemyPrefabs[index], position);
         }
@@ -54,12 +45,10 @@ namespace MoreHit.Enemy
             return CreateEnemyByIndex(index, position);
         }
 
-        /// <summary>
-        /// Poolから敵オブジェクトを取得して配置
-        /// </summary>
         private EnemyBase CreateEnemyFromPool(GameObject enemyPrefab, Vector3 position)
         {
-            if (enemyPrefab == null) return null;
+            if (enemyPrefab == null)
+                return null;
 
             GameObject enemyObject = null;
 
@@ -88,7 +77,6 @@ namespace MoreHit.Enemy
 
                 return null;
             }
-
             return enemy;
         }
     }

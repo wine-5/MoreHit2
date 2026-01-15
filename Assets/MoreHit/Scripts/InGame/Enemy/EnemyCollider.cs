@@ -4,6 +4,9 @@ using MoreHit.Attack;
 
 namespace MoreHit
 {
+    /// <summary>
+    /// 敵の衝突判定処理
+    /// </summary>
     public class EnemyCollider : MonoBehaviour
     {
         private EnemyBase enemyBase;

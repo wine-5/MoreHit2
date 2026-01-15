@@ -67,9 +67,6 @@ namespace MoreHit.Attack
             return fireBall;
         }
         
-        /// <summary>
-        /// FireBallの初期化
-        /// </summary>
         private void InitializeFireBall(GameObject fireBall, Vector3 position, Vector2 direction, GameObject shooter)
         {
             if (fireBall == null) return;

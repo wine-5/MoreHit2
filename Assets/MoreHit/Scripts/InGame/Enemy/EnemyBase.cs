@@ -75,7 +75,8 @@ namespace MoreHit.Enemy
 
         public void StopMovement(float duration)
         {
-            if (!gameObject.activeInHierarchy || isDead) return;
+            if (!gameObject.activeInHierarchy || isDead)
+                return;
             
             StartCoroutine(StopRoutine(duration));
         }
@@ -83,7 +84,8 @@ namespace MoreHit.Enemy
         private IEnumerator StopRoutine(float duration)
         {
             canMove = false;
-            if (rb != null) rb.linearVelocity = Vector2.zero;
+            if (rb != null)
+                rb.linearVelocity = Vector2.zero;
 
             yield return new WaitForSeconds(duration);
 
@@ -96,7 +98,8 @@ namespace MoreHit.Enemy
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-            if (rb != null) rb.gravityScale = 1;
+            if (rb != null)
+                rb.gravityScale = 1;
 
             LoadEnemyData();
             InitializeEnemy();
@@ -112,7 +115,8 @@ namespace MoreHit.Enemy
 
         public void AddStock(int amount)
         {
-            if (isDead || !gameObject.activeInHierarchy) return;
+            if (isDead || !gameObject.activeInHierarchy)
+                return;
             
             currentStockCount += amount;
 
@@ -128,9 +132,6 @@ namespace MoreHit.Enemy
                 OnStockReachedRequired();
         }
 
-        /// <summary>
-        /// ストックをクリア（IStockableインターフェース実装）
-        /// </summary>
         public void ClearStock()
         {
             currentStockCount = 0;
@@ -152,12 +153,10 @@ namespace MoreHit.Enemy
             OnStateChanged(currentState);
         }
 
-        /// <summary>
-        /// ReadyToLaunch状態で攻撃を受けた時の処理
-        /// </summary>
         public void TriggerBounceEffect()
         {
-            if (currentState != EnemyState.ReadyToLaunch) return;
+            if (currentState != EnemyState.ReadyToLaunch)
+                return;
 
             int extraStocks = currentStockCount - enemyData.NeedStock;
             currentLaunchTimer = bounceEffectDuration + Mathf.Floor(extraStocks / stockBonusThreshold);
@@ -182,18 +181,14 @@ namespace MoreHit.Enemy
             OnStateChanged(currentState);
         }
 
-        /// <summary>
-        /// 吹っ飛び状態かどうかを確認
-        /// </summary>
         public bool IsInLaunchState() => currentState == EnemyState.ReadyToLaunch || currentState == EnemyState.Launch;
 
-        /// <summary>
-        /// プレイヤーに攻撃を実行（AttackExecutor経由）
-        /// </summary>
         public virtual void AttackPlayer()
         {
-            if (IsInLaunchState()) return;
-            if (AttackExecutor.I == null || enemyAttackData == null) return;
+            if (IsInLaunchState())
+                return;
+            if (AttackExecutor.I == null || enemyAttackData == null)
+                return;
 
             Vector2 direction = GetDirectionToPlayer();
 
@@ -205,15 +200,12 @@ namespace MoreHit.Enemy
             );
         }
 
-        /// <summary>
-        /// プレイヤーへの方向を取得
-        /// </summary>
         protected virtual Vector2 GetDirectionToPlayer()
         {
-            if (PlayerDataProvider.I == null) return Vector2.right;
+            if (PlayerDataProvider.I == null)
+                return Vector2.right;
 
-            Vector2 direction = (PlayerDataProvider.I.Position - transform.position).normalized;
-            return direction;
+            return (PlayerDataProvider.I.Position - transform.position).normalized;
         }
         
         #endregion
@@ -222,7 +214,8 @@ namespace MoreHit.Enemy
 
         public void TryLaunch()
         {
-            if (currentStockCount < enemyData.NeedStock) return;
+            if (currentStockCount < enemyData.NeedStock)
+                return;
             
             if (stockAlmostFullEffect != null)
                 stockAlmostFullEffect.SetActive(false);
@@ -246,7 +239,8 @@ namespace MoreHit.Enemy
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (currentState != EnemyState.Launch) return;
+            if (currentState != EnemyState.Launch)
+                return;
 
             EnemyBase otherEnemy = collision.gameObject.GetComponent<EnemyBase>();
 
@@ -284,7 +278,8 @@ namespace MoreHit.Enemy
         
         public void ForceLaunch(Vector2 initialVelocity)
         {
-            if (isDead) return;
+            if (isDead)
+                return;
 
 
             currentLaunchTimer = baseLaunchDuration;
@@ -303,9 +298,11 @@ namespace MoreHit.Enemy
 
         public virtual void TakeDamage(int damage)
         {
-            if (isDead) return;
+            if (isDead)
+                return;
 
-            if (currentState == EnemyState.ReadyToLaunch) return;
+            if (currentState == EnemyState.ReadyToLaunch)
+                return;
 
             currentHP -= damage;
 
@@ -327,7 +324,8 @@ namespace MoreHit.Enemy
 
         public virtual void Die()
         {
-            if (isDead) return;
+            if (isDead)
+                return;
             isDead = true;
 
             OnEnemyDeath?.Invoke(this);
@@ -356,7 +354,8 @@ namespace MoreHit.Enemy
 
         protected virtual void Update()
         {
-            if (IsDead) return;
+            if (IsDead)
+                return;
 
             switch (currentState)
             {
@@ -417,11 +416,14 @@ namespace MoreHit.Enemy
         {
             enemyData = enemyDataSO;
             
-            if (enemyData != null)
+            if (enemyData == null)
             {
-                currentHP = enemyData.MaxHP;
-                currentStockCount = enemyData.StockCount;
+                Debug.LogError($"[{GetType().Name}] EnemyDataSOが設定されていません！");
+                return;
             }
+            
+            currentHP = enemyData.MaxHP;
+            currentStockCount = enemyData.StockCount;
         }
         
         protected virtual void InitializeEnemy()
@@ -430,13 +432,16 @@ namespace MoreHit.Enemy
 
         protected void UpdateStockText()
         {
-            if (stockText != null)
-                stockText.text = currentStockCount.ToString();
+            if (stockText == null)
+                return;
+            
+            stockText.text = currentStockCount.ToString();
         }
 
         private void UpdateStockAlmostFullEffect()
         {
-            if (stockAlmostFullEffect == null || enemyData == null) return;
+            if (stockAlmostFullEffect == null || enemyData == null)
+                return;
 
             bool shouldShow = currentStockCount == enemyData.NeedStock - 1;
             stockAlmostFullEffect.SetActive(shouldShow);

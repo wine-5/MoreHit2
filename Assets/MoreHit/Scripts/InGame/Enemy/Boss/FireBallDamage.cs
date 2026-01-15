@@ -14,32 +14,19 @@ namespace MoreHit.Enemy
         private bool hasHit = false;
         private GameObject shooter;
         
-        /// <summary>
-        /// ダメージ値を設定する（外部から初期化用）
-        /// </summary>
-        public void SetDamage(int damageValue)
-        {
-            damage = damageValue;
-        }
+        public void SetDamage(int damageValue) => damage = damageValue;
         
-        /// <summary>
-        /// 発射者を設定する
-        /// </summary>
-        public void SetShooter(GameObject shooterObject)
-        {
-            shooter = shooterObject;
-        }
+        public void SetShooter(GameObject shooterObject) => shooter = shooterObject;
         
         private void OnTriggerEnter2D(Collider2D collision)
         {
             // 既にヒット済みなら無視
-            if (hasHit) return;
+            if (hasHit)
+                return;
             
             // 発射者自身には当たらない
             if (collision.gameObject == shooter)
-            {
                 return;
-            }
             
             // Playerタグのオブジェクトに当たった場合
             if (collision.CompareTag("Player"))

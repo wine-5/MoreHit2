@@ -26,7 +26,8 @@ namespace MoreHit.Boss
         
         private void Awake()
         {
-            if (mainCamera == null) mainCamera = UnityEngine.Camera.main;
+            if (mainCamera == null)
+                mainCamera = UnityEngine.Camera.main;
             
             if (playerTransform == null)
             {
@@ -72,7 +73,8 @@ namespace MoreHit.Boss
         /// </summary>
         public IEnumerator ZoomOutToFieldView()
         {
-            if (mainCamera == null) yield break;
+            if (mainCamera == null)
+                yield break;
             
             float startSize = mainCamera.orthographicSize;
             float elapsed = 0f;

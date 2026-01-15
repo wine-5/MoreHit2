@@ -6,6 +6,8 @@ using MoreHit.Player;
 
 namespace MoreHit.Enemy
 {
+    #region 列挙型
+    
     /// <summary>
     /// ボスの攻撃パターン
     /// </summary>
@@ -15,6 +17,8 @@ namespace MoreHit.Enemy
         SpawnMinions,
         FireballBarrage
     }
+    
+    #endregion
 
     /// <summary>
     /// ボス敵の実装クラス
@@ -84,9 +88,7 @@ namespace MoreHit.Enemy
             GameEvents.OnInputLockChanged += SetInputLock;
             
             if (bossAttackData == null)
-            {
                 Debug.LogError("[BossEnemy] BossAttackDataSOがアタッチされていません！Inspectorで設定してください。");
-            }
         }
         
         private void Start()
@@ -97,31 +99,27 @@ namespace MoreHit.Enemy
             currentState = EnemyState.Move;
             canTakeDamage = true;
             
-            if (enemyData != null)
+            if (enemyData == null)
+            {
+                Debug.LogError("[BossEnemy] EnemyDataがnull！BossAttackDataSOとは別にEnemyDataSOが必要です。");
+                currentHP = 100;
+                transform.localScale = Vector3.one * 2f;
+            }
+            else
             {
                 currentHP = enemyData.MaxHP;
                 // EnemyDataSOにはSizeScaleがないので、2倍固定
                 transform.localScale = Vector3.one * 2f;
             }
-            else
-            {
-                currentHP = 100;
-                transform.localScale = Vector3.one * 2f;
-                Debug.LogWarning("[BossEnemy] EnemyDataがnull、デフォルト値を使用");
-            }
             
             if (rb == null)
-            {
                 Debug.LogError("[BossEnemy] Rigidbody2Dがnull！");
-            }
         }
         
         protected override void Update()
         {
             if (isDead || !canMove || isInputLocked)
-            {
                 return;
-            }
             
             UpdateStockTimer();
             Move();
@@ -164,7 +162,8 @@ namespace MoreHit.Enemy
         
         protected override void OnStockReachedRequired()
         {
-            if (isDead || !gameObject.activeInHierarchy) return;
+            if (isDead || !gameObject.activeInHierarchy)
+                return;
             
             // エフェクト生成（基底クラスの処理を実行）
             base.OnStockReachedRequired();
@@ -182,31 +181,24 @@ namespace MoreHit.Enemy
         }
         
         #endregion
-                #region 攻撃処理（オーバーライド）
+        #region 攻撃処理（オーバーライド）
         
-        /// <summary>
-        /// プレイヤーに攻撃を実行（Boss専用実装）
-        /// BossはBossAttackDataSOを使用するため、enemyAttackDataは使わず直接ダメージ
-        /// </summary>
         public override void AttackPlayer()
         {
             // 基底クラスとの互換性のため残す（EnemyColliderからはAttackPlayer(GameObject)が呼ばれる）
         }
         
-        /// <summary>
-        /// プレイヤーに攻撃を実行（Collision経由、疎結合）
-        /// </summary>
         public void AttackPlayer(GameObject playerObject)
         {
-            if (IsInLaunchState()) return;
-            if (playerObject == null) return;
+            if (IsInLaunchState())
+                return;
+            if (playerObject == null)
+                return;
             
             // IDamageableインターフェースを使って疎結合にダメージを与える
             var damageable = playerObject.GetComponent<IDamageable>();
             if (damageable != null)
-            {
                 damageable.TakeDamage(20);
-            }
         }
         
         #endregion
@@ -215,9 +207,7 @@ namespace MoreHit.Enemy
         protected override void Move()
         {
             if (PlayerDataProvider.I == null || rb == null)
-            {
                 return;
-            }
             
             Vector3 targetPosition = PlayerDataProvider.I.Position;
             Vector3 currentPosition = transform.position;
@@ -230,13 +220,9 @@ namespace MoreHit.Enemy
             if (bossAttackData != null)
             {
                 if (hpRatio <= bossAttackData.hpThreshold25)
-                {
                     speed = bossAttackData.moveSpeed25;
-                }
                 else if (hpRatio <= bossAttackData.hpThreshold50)
-                {
                     speed = bossAttackData.moveSpeed50;
-                }
             }
             
             float speedMultiplier = BOSS_SPEED_MULTIPLIER;
@@ -273,20 +259,14 @@ namespace MoreHit.Enemy
         protected override void Attack()
         {
             if (isAttacking || bossAttackData == null)
-            {
                 return;
-            }
             
             if (PlayerDataProvider.I == null)
-            {
                 return;
-            }
             
             // クールダウンチェック
             if (Time.time - lastAttackTime < bossAttackData.baseAttackCooldown)
-            {
                 return;
-            }
             
             StartCoroutine(ExecuteFireballBarrage());
         }
@@ -317,13 +297,9 @@ namespace MoreHit.Enemy
             int projectileMultiplier = 1;
             
             if (hpRatio <= bossAttackData.hpThreshold25)
-            {
                 projectileMultiplier = Mathf.RoundToInt(bossAttackData.projectileMultiplier25);
-            }
             else if (hpRatio <= bossAttackData.hpThreshold50)
-            {
                 projectileMultiplier = Mathf.RoundToInt(bossAttackData.projectileMultiplier50);
-            }
             
             int totalProjectiles = fireBallData.projectileCount * projectileMultiplier;
             
@@ -383,10 +359,12 @@ namespace MoreHit.Enemy
         /// </summary>
         private IEnumerator UpdateFireballDirection(GameObject fireball, Transform playerTransform)
         {
-            if (fireball == null || playerTransform == null) yield break;
+            if (fireball == null || playerTransform == null)
+                yield break;
             
             Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
-            if (rb == null) yield break;
+            if (rb == null)
+                yield break;
             
             float elapsedTime = 0f;
             
@@ -409,7 +387,8 @@ namespace MoreHit.Enemy
         
         public override void TakeDamage(int damage)
         {
-            if (isDead) return;
+            if (isDead)
+                return;
             
             currentHP = Mathf.Max(0, currentHP - damage);
             
@@ -422,7 +401,8 @@ namespace MoreHit.Enemy
 
         public override void Die()
         {
-            if (isDead) return;
+            if (isDead)
+                return;
             isDead = true;
             canMove = false;
             GameEvents.TriggerBossDefeated();
@@ -440,35 +420,17 @@ namespace MoreHit.Enemy
             return maxHP > 0 ? (float)currentHP / maxHP : 0f;
         }
         
-        public int GetMaxHP()
-        {
-            return Mathf.FloorToInt(enemyData?.MaxHP ?? 100f);
-        }
+        public int GetMaxHP() => Mathf.FloorToInt(enemyData?.MaxHP ?? 100f);
         
-        public int GetCurrentHP()
-        {
-            return Mathf.FloorToInt(currentHP);
-        }
+        public int GetCurrentHP() => Mathf.FloorToInt(currentHP);
         
         #endregion
         
         #region 入力制御
         
-        /// <summary>
-        /// 入力ロックの設定
-        /// </summary>
-        private void SetInputLock(bool isLocked)
-        {
-            isInputLocked = isLocked;
-        }
+        private void SetInputLock(bool isLocked) => isInputLocked = isLocked;
         
-        /// <summary>
-        /// 移動可能状態の設定
-        /// </summary>
-        public void SetCanMove(bool canMove)
-        {
-            this.canMove = canMove;
-        }
+        public void SetCanMove(bool canMove) => this.canMove = canMove;
         
         #endregion
         

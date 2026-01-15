@@ -38,9 +38,6 @@ namespace MoreHit.Boss
             GameEvents.OnBossAreaEntered -= StartBossIntroduction;
         }
         
-        /// <summary>
-        /// ボス出現演出の開始
-        /// </summary>
         private void StartBossIntroduction()
         {
             if (isPlayingIntro) return;
@@ -98,12 +95,6 @@ namespace MoreHit.Boss
             isPlayingIntro = false;
         }
         
-        /// <summary>
-        /// プレイヤー入力のロック/アンロック
-        /// </summary>
-        private void LockPlayerInput(bool isLocked)
-        {
-            GameEvents.TriggerInputLockChanged(isLocked);
-        }
+        private void LockPlayerInput(bool isLocked) => GameEvents.TriggerInputLockChanged(isLocked);
     }
 }
