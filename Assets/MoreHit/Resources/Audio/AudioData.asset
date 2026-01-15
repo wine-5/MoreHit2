@@ -39,7 +39,7 @@ MonoBehaviour:
     volumeMultiplier: 0.4
   - seType: 8
     audioClip: {fileID: 8300000, guid: d5d3e74a96d0f5543979920c60e38291, type: 3}
-    volumeMultiplier: 0.2
+    volumeMultiplier: 1
   - seType: 10
     audioClip: {fileID: 8300000, guid: e2159571920fef6409f72c0d6873c8c2, type: 3}
     volumeMultiplier: 0.5

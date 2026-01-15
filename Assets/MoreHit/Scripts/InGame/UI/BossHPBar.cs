@@ -37,7 +37,6 @@ namespace MoreHit.UI
             GameEvents.OnBossDefeated += OnBossDefeated;
             GameEvents.OnBossDamaged += OnBossDamaged;
             GameEvents.OnStockFull += OnStockFull;
-            GameEvents.OnPlayerDamage += OnPlayerDamage;
             GameEvents.OnEnemyDefeated += OnEnemyDefeated;
         }
         
@@ -47,7 +46,6 @@ namespace MoreHit.UI
             GameEvents.OnBossDefeated -= OnBossDefeated;
             GameEvents.OnBossDamaged -= OnBossDamaged;
             GameEvents.OnStockFull -= OnStockFull;
-            GameEvents.OnPlayerDamage -= OnPlayerDamage;
             GameEvents.OnEnemyDefeated -= OnEnemyDefeated;
         }
         
@@ -115,13 +113,6 @@ namespace MoreHit.UI
             if (currentBoss != null)
                 UpdateHPBar();
         }
-
-        private void OnPlayerDamage(int damage, int currentHealth)
-        {
-            if (AudioManager.I != null)
-                AudioManager.I.PlaySE(SeType.TakeDamage);
-        }
-
         private void OnEnemyDefeated(GameObject enemy)
         {
             if (AudioManager.I != null)
