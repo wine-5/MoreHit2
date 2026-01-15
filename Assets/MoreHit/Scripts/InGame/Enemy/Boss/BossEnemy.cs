@@ -49,6 +49,7 @@ namespace MoreHit.Enemy
         [SerializeField] private BossAttackDataSO bossAttackData;
         [SerializeField] private BossAIController aiController;
         [SerializeField] private BossAnimatorController bossAnimatorController;
+        [SerializeField] private BossDeathEffect bossDeathEffect;
         
         [Header("攻撃パターン設定")]
         [Tooltip("近接回転攻撃用のAttackData")]
@@ -83,6 +84,9 @@ namespace MoreHit.Enemy
             
             if (bossAnimatorController == null)
                 bossAnimatorController = GetComponent<BossAnimatorController>();
+            
+            if (bossDeathEffect == null)
+                bossDeathEffect = GetComponent<BossDeathEffect>();
             
             // InputLockイベント購読
             GameEvents.OnInputLockChanged += SetInputLock;
@@ -405,8 +409,22 @@ namespace MoreHit.Enemy
                 return;
             isDead = true;
             canMove = false;
+            
+            // 点滅エフェクトを再生
+            if (bossDeathEffect != null)
+                bossDeathEffect.PlayDeathEffect();
+            
             GameEvents.TriggerBossDefeated();
             GameEvents.TriggerEnemyDefeated(gameObject);
+            
+            // エフェクト終了後に非アクティブ化
+            StartCoroutine(DeactivateAfterEffect());
+        }
+        
+        private IEnumerator DeactivateAfterEffect()
+        {
+            // エフェクトの再生時間分待機
+            yield return new WaitForSeconds(3.2f);
             gameObject.SetActive(false);
         }
         

@@ -10,6 +10,12 @@ namespace MoreHit.InGame
     /// </summary>
     public class EventsHandler : MonoBehaviour
     {
+        #region 定数
+        
+        private const float BOSS_DEFEAT_SCENE_TRANSITION_DELAY = 3.5f;
+        
+        #endregion
+        
         private void OnEnable()
         {
             GameEvents.OnPlayerDeath += OnPlayerDeath;
@@ -48,8 +54,8 @@ namespace MoreHit.InGame
         /// </summary>
         private System.Collections.IEnumerator OnBossDefeatedDelayed()
         {
-            // 1秒間待機（エフェクト表示のため）
-            yield return new WaitForSeconds(1f);
+            // Boss点滅エフェクト表示のため待機
+            yield return new WaitForSeconds(BOSS_DEFEAT_SCENE_TRANSITION_DELAY);
             
             if (SceneController.I != null)
                 SceneController.I.LoadScene(SceneName.Clear);
