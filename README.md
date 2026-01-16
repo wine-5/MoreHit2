@@ -22,6 +22,7 @@
 - **近距離攻撃**：左クリック
 - **射撃攻撃**：右クリック
 - **溜め射撃**：Wで溜めて右クリック
+- **球の位置指定**：マウスで打つ場所を指定
 
 ---
 
@@ -93,7 +94,7 @@
       <sub>通常の敵の実装<br />UIのアニメーションのクラスを作成<br />BGMのインポート</sub>
     </td>
     <td align="center">
-      <img src="https://via.placeholder.com/100/cccccc/666666?text=?" width="100px;" alt="Designer"/><br />
+      <img src="web-page/image/Designer.png" width="100px;" alt="Designer"/><br />
       <sub><b>デザイナー</b></sub><br />
       <sub>プレイヤー全般の絵</sub>
     </td>
