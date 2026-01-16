@@ -8,6 +8,13 @@
 
 敵に「ストック」を与えよう！　ストックが溜まったら...
 
+### ゲーム紹介動画
+
+<video width="960" height="540" controls>
+  <source src="web-page/video/more-movie.mp4" type="video/mp4">
+  動画プレイヤー非対応のブラウザです。<a href="web-page/video/more-movie.mp4">ここをクリック</a>して動画をダウンロードしてください。
+</video>
+
 ### 操作方法
 
 - **移動**：A, D
@@ -81,7 +88,7 @@
     <td align="center">
       <img src="https://via.placeholder.com/100/cccccc/666666?text=?" width="100px;" alt="Designer"/><br />
       <sub><b>デザイナー</b></sub>
-    </td>
+im    </td>
   </tr>
 </table>
 
