@@ -7,9 +7,10 @@
 
 .credits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 40px;
-    justify-items: center;
+    width: 100%;
+    align-items: start;
 }
 
 .credit-card {
@@ -18,7 +19,8 @@
     padding: 30px;
     border: 3px solid var(--pixel-accent2);
     transition: all 0.2s ease;
-    max-width: 250px;
+    width: 100%;
+    min-width: 0;
 }
 
 .credit-card:hover {
@@ -109,15 +111,34 @@
 }
 
 /* ===== レスポンシブ 制作者一覧 ===== */
+@media (max-width: 1440px) {
+    .credits-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .credits-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .credit-card {
+        padding: 25px;
+    }
+}
+
 @media (max-width: 768px) {
     .credits-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: 1fr;
         gap: 20px;
     }
 
     .credit-card {
         padding: 20px;
-        max-width: 200px;
+        width: 100%;
+        max-width: none;
     }
 
     .credit-avatar img {

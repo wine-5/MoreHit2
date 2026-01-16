@@ -10,7 +10,7 @@
 
 ### ゲーム紹介動画
 
-<video width="960" height="540" controls>
+<video width="720" height="405" controls>
   <source src="web-page/video/more-movie.mp4" type="video/mp4">
   動画プレイヤー非対応のブラウザです。<a href="web-page/video/more-movie.mp4">ここをクリック</a>して動画をダウンロードしてください。
 </video>
