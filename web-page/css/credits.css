@@ -27,6 +27,17 @@
     transform: translate(0, -4px);
 }
 
+.credit-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
+.credit-link:hover {
+    text-decoration: none;
+}
+
 .credit-avatar {
     margin-bottom: 20px;
 }
@@ -56,8 +67,45 @@
 .credit-card .role {
     font-size: 1rem;
     color: var(--pixel-accent2);
-    font-style: italic;
     font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.credit-card .description {
+    font-size: 0.85rem;
+    color: var(--pixel-light);
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.credit-social-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: var(--pixel-dark);
+    border: 2px solid var(--pixel-accent2);
+    color: var(--pixel-accent2);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+}
+
+.social-icon:hover {
+    background: var(--pixel-accent2);
+    color: var(--pixel-dark);
+    box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+    transform: scale(1.1);
 }
 
 /* ===== レスポンシブ 制作者一覧 ===== */
@@ -69,6 +117,7 @@
 
     .credit-card {
         padding: 20px;
+        max-width: 200px;
     }
 
     .credit-avatar img {
@@ -81,6 +130,10 @@
     }
 
     .credit-card .role {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+    }
+
+    .credit-card .description {
+        font-size: 0.75rem;
     }
 }
