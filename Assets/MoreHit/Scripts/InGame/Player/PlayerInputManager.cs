@@ -32,6 +32,7 @@ namespace MoreHit.Player
         private const float CHARGE_COOLDOWN = 0.01f;
         private bool wasChargingLastFrame = false;
         private float chargeCooldownRemaining = 0f;
+        private bool needsButtonRelease = false;
 
         private void Awake()
         {
@@ -83,33 +84,39 @@ namespace MoreHit.Player
         {
             bool isChargeButtonPressed = chargeButtonAction.IsPressed();
             
-            if (isChargeButtonPressed && !wasChargingLastFrame)
+            if (!isChargeButtonPressed && needsButtonRelease)
+            {
+                needsButtonRelease = false;
+            }
+
+            if (isChargeButtonPressed && !wasChargingLastFrame && !needsButtonRelease)
             {
                 chargeHoldTime = 0f;
                 isChargeReady = false;
                 onChargeStarted?.Invoke();
             }
-            
-            if (isChargeButtonPressed)
-            {
-                chargeHoldTime += Time.deltaTime;
-                
-                if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
+
+            if (isChargeButtonPressed && !needsButtonRelease)
+                if (isChargeButtonPressed)
                 {
-                    isChargeReady = true;
-                    onChargeStateChanged?.Invoke(true);
+                    chargeHoldTime += Time.deltaTime;
+
+                    if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
+                    {
+                        isChargeReady = true;
+                        onChargeStateChanged?.Invoke(true);
+                    }
                 }
-            }
-            else
-            {
-                if (chargeHoldTime > 0f || isChargeReady)
+                else
                 {
-                    chargeHoldTime = 0f;
-                    isChargeReady = false;
-                    onChargeStateChanged?.Invoke(false);
+                    if (chargeHoldTime > 0f || isChargeReady)
+                    {
+                        chargeHoldTime = 0f;
+                        isChargeReady = false;
+                        onChargeStateChanged?.Invoke(false);
+                    }
                 }
-            }
-            
+
             wasChargingLastFrame = isChargeButtonPressed;
         }
 
@@ -146,8 +153,13 @@ namespace MoreHit.Player
         {
             if (chargeButtonAction.IsPressed() && isChargeReady && chargeCooldownRemaining <= 0f)
             {
+                needsButtonRelease = true;
+
                 onChargeRangedAttack?.Invoke();
                 chargeCooldownRemaining = CHARGE_COOLDOWN;
+                chargeHoldTime = 0f;
+                isChargeReady = false;
+                onChargeStateChanged?.Invoke(false);
             }
             else
                 onRangedAttack?.Invoke();
