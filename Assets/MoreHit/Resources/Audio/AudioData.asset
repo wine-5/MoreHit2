@@ -21,7 +21,7 @@ MonoBehaviour:
     volumeMultiplier: 0.6
   - seType: 3
     audioClip: {fileID: 8300000, guid: a6d722a11c2e2a0459292233f8ce0bbc, type: 3}
-    volumeMultiplier: 0.15
+    volumeMultiplier: 0.225
   - seType: 4
     audioClip: {fileID: 8300000, guid: a1332bccfd1b47b4693fd6dbbc0182fc, type: 3}
     volumeMultiplier: 0.6
@@ -33,7 +33,7 @@ MonoBehaviour:
     volumeMultiplier: 0.3
   - seType: 7
     audioClip: {fileID: 8300000, guid: 554800f0d9b60c8408b35af462672839, type: 3}
-    volumeMultiplier: 0.3
+    volumeMultiplier: 0.4
   - seType: 8
     audioClip: {fileID: 8300000, guid: d5d3e74a96d0f5543979920c60e38291, type: 3}
     volumeMultiplier: 1
@@ -45,10 +45,10 @@ MonoBehaviour:
     volumeMultiplier: 0.5
   - seType: 11
     audioClip: {fileID: 8300000, guid: 339dc7162ea60074bb462dcbdd98bb3a, type: 3}
-    volumeMultiplier: 0.15
+    volumeMultiplier: 0.225
   - seType: 12
     audioClip: {fileID: 8300000, guid: 870cf38803b6dc44a885ac96a110cd12, type: 3}
-    volumeMultiplier: 0.2
+    volumeMultiplier: 0.25
   bgmAudioDataList:
   - bgmType: 1
     audioClip: {fileID: 8300000, guid: 4c59df2a4d5ff6a489ffd0444ad8b5b9, type: 3}
