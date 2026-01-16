@@ -43,10 +43,13 @@
                     <a href="#about" class="nav-link">ゲームについて</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#features" class="nav-link">特徴</a>
+                    <a href="#features" class="nav-link">攻撃システム</a>
                 </li>
                 <li class="nav-item">
                     <a href="#download" class="nav-link">ダウンロード</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#credits" class="nav-link">制作者</a>
                 </li>
             </ul>
             <div class="hamburger" id="hamburger">
@@ -67,11 +70,10 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <h1 class="hero-title">
-                        <span class="title-main">ゲームタイトル</span>
-                        <span class="title-sub">サブタイトル</span>
+                        <span class="title-main">MoreHit 2</span>
                     </h1>
                     <p class="hero-description">
-                        ゲームの説明文をここに記載
+                        敵を吹っ飛ばしてさらにヒットを狙おう！
                     </p>
                     <div class="hero-buttons">
                         <a href="#download" class="btn btn-primary">
@@ -147,11 +149,12 @@
                         <li><strong>近距離攻撃</strong>：左クリック</li>
                         <li><strong>射撃攻撃</strong>：右クリック</li>
                         <li><strong>溜め射撃</strong>：Wで溜めて右クリック</li>
+                        <li><strong>弾の位置指定</strong>：マウスで打つ場所を指定</li>
                     </ul>
                 </div>
                 <div class="about-video">
                     <div class="video-container">
-                        <video width="100%" height="100%" controls style="border-radius: 8px; min-height: 400px;">
+                        <video controls>
                             <source src="web-page/video/more-movie.mp4" type="video/mp4">
                             お使いのブラウザは動画タグに対応していません。
                         </video>
@@ -165,35 +168,107 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">攻撃システム</h2>
-                <p class="section-subtitle">ストック制による戦闘スタイル</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-fist-raised"></i>
                     </div>
-                    <h3>近距離こうげき</h3>
-                    <p>発生が早く使いやすい三段攻撃。メイン攻撃として敵にストックをためる。</p>
+                    <h3>近距離攻撃</h3>
+                    <p>3段階攻撃。連続で攻撃をすることで効率よくストックをためる。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-arrow-right"></i>
                     </div>
-                    <h3>射撃こうげき</h3>
-                    <p>距離を取られたときなどにストックをキープするための射撃攻撃。</p>
+                    <h3>射撃攻撃</h3>
+                    <p>遠距離からでもストックをためることができる。</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-star"></i>
                     </div>
-                    <h3>溜め攻撃</h3>
-                    <p>ストックを消費して強力な攻撃を繰り出す。戦闘の鍵となる必殺技。</p>
+                    <h3>チャージ攻撃</h3>
+                    <p>チャージをした後に強力な弾を放ちストックも大きく増やせる。</p>
                 </div>
             </div>
         </div>
     </section>
 
-   
+    <!-- 制作者一覧セクション -->
+    <section id="credits" class="credits">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">制作者一覧</h2>
+                <p class="section-subtitle">このゲームを作った仲間たち</p>
+            </div>
+            <div class="credits-grid">
+                <div class="credit-card">
+                    <div class="credit-avatar">
+                        <img src="https://github.com/wine-5.png" alt="wine-5">
+                    </div>
+                    <h3>wine-5</h3>
+                    <p class="role">リードプログラマー</p>
+                    <p class="description">プレイヤーの攻撃、パラメータ定義<br/>敵の基底クラス、ボス実装<br/>シーン管理、音の基底クラス<br/>Webページ作成</p>
+                    <div class="credit-social-links">
+                        <a href="https://github.com/wine-5" target="_blank" class="social-icon" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://x.com/wine_program" target="_blank" class="social-icon" title="X (Twitter)">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="credit-card">
+                    <div class="credit-avatar">
+                        <img src="https://github.com/kyoooosan.png" alt="kyoooosan">
+                    </div>
+                    <h3>kyoooosan</h3>
+                    <p class="role">プログラマー</p>
+                    <p class="description">プレイヤーのアニメーション<br/>敵の配置、パラメータ調整<br/>SEのインポート</p>
+                    <div class="credit-social-links">
+                        <a href="https://github.com/kyoooosan" target="_blank" class="social-icon" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="credit-card">
+                    <div class="credit-avatar">
+                        <img src="https://github.com/nekotiwawa.png" alt="nekotiwawa">
+                    </div>
+                    <h3>nekotiwawa</h3>
+                    <p class="role">プランナー</p>
+                    <p class="description">ゲーム概要、仕様定義<br/>ステージ設計<br/>背景画像のインポート</p>
+                    <div class="credit-social-links">
+                        <a href="https://github.com/nekotiwawa" target="_blank" class="social-icon" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="credit-card">
+                    <div class="credit-avatar">
+                        <img src="https://github.com/Poro256.png" alt="Poro256">
+                    </div>
+                    <h3>Poro256</h3>
+                    <p class="role">プログラマー</p>
+                    <p class="description">通常の敵の実装<br/>UIアニメーションクラス作成<br/>BGMのインポート</p>
+                    <div class="credit-social-links">
+                        <a href="https://github.com/Poro256" target="_blank" class="social-icon" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="credit-card">
+                    <div class="credit-avatar">
+                        <img src="web-page/image/Designer.png" alt="デザイナー">
+                    </div>
+                    <h3>デザイナー</h3>
+                    <p class="role">デザイナー</p>
+                    <p class="description">プレイヤー全般の絵</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- フッター -->
     <footer class="footer">
@@ -214,12 +289,12 @@
                         <li><a href="#about">ゲームについて</a></li>
                         <li><a href="#features">攻撃システム</a></li>
                         <li><a href="#download">UnityRoom で遊ぶ</a></li>
+                        <li><a href="#credits">制作者一覧</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 More Hit 2. All rights reserved.</p>
-                <p>Made with <i class="fas fa-heart"></i> using Unity</p>
             </div>
         </div>
     </footer>

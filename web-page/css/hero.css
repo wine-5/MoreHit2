@@ -47,7 +47,7 @@
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 900;
     color: var(--pixel-light);
     margin-bottom: 20px;
@@ -65,12 +65,12 @@
 .title-sub {
     display: block;
     color: var(--pixel-accent2);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-top: 10px;
 }
 
 .hero-description {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: var(--pixel-light);
     margin-bottom: 30px;
     line-height: 1.8;

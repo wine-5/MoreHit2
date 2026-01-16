@@ -10,7 +10,7 @@
 
 ### ゲーム紹介動画
 
-<video width="960" height="540" controls>
+<video width="720" height="405" controls>
   <source src="web-page/video/more-movie.mp4" type="video/mp4">
   動画プレイヤー非対応のブラウザです。<a href="web-page/video/more-movie.mp4">ここをクリック</a>して動画をダウンロードしてください。
 </video>
@@ -22,6 +22,7 @@
 - **近距離攻撃**：左クリック
 - **射撃攻撃**：右クリック
 - **溜め射撃**：Wで溜めて右クリック
+- **弾の位置指定**：マウスで打つ場所を指定
 
 ---
 
@@ -65,30 +66,38 @@
         <img src="https://github.com/wine-5.png" width="100px;" alt="wine-5"/><br />
         <sub><b>wine-5</b></sub>
       </a><br />
-      <sub>Scene遷移</sub>
+      <sub><b>リードプログラマー</b></sub><br />
+      <sub>プレイヤーの攻撃、パラメータ定義など<br />敵の基底クラスの作成、ボスの実装<br />シーン管理、音の基底クラスの作成<br />Webページ作成</sub>
     </td>
     <td align="center">
       <a href="https://github.com/kyoooosan">
         <img src="https://github.com/kyoooosan.png" width="100px;" alt="kyoooosan"/><br />
         <sub><b>kyoooosan</b></sub>
-      </a>
+      </a><br />
+      <sub><b>プログラマー</b></sub><br />
+      <sub>プレイヤーのアニメーション<br />敵の配置、敵のパラメータの調整<br />SEのインポート</sub>
     </td>
     <td align="center">
       <a href="https://github.com/nekotiwawa">
-        <img src="https://github.com/nekotiwawa.png" width="100px;" alt="Nekotiwawa"/><br />
-        <sub><b>Nekotiwawa</b></sub>
-      </a>
+        <img src="https://github.com/nekotiwawa.png" width="100px;" alt="nekotiwawa"/><br />
+        <sub><b>nekotiwawa</b></sub>
+      </a><br />
+      <sub><b>プランナー</b></sub><br />
+      <sub>ゲーム概要、仕様の定義<br />ステージの設計<br />各シーンの背景画像のインポート</sub>
     </td>
     <td align="center">
       <a href="https://github.com/Poro256">
         <img src="https://github.com/Poro256.png" width="100px;" alt="Poro256"/><br />
         <sub><b>Poro256</b></sub>
-      </a>
+      </a><br />
+      <sub><b>プログラマー</b></sub><br />
+      <sub>通常の敵の実装<br />UIのアニメーションのクラスを作成<br />BGMのインポート</sub>
     </td>
     <td align="center">
-      <img src="https://via.placeholder.com/100/cccccc/666666?text=?" width="100px;" alt="Designer"/><br />
-      <sub><b>デザイナー</b></sub>
-im    </td>
+      <img src="web-page/image/Designer.png" width="100px;" alt="Designer"/><br />
+      <sub><b>デザイナー</b></sub><br />
+      <sub>プレイヤー全般の絵</sub>
+    </td>
   </tr>
 </table>
 

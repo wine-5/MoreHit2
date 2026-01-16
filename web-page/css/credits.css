@@ -1,0 +1,160 @@
+/* ===== 制作者一覧セクション ===== */
+.credits {
+    padding: 80px 0;
+    background: var(--pixel-dark);
+    border-bottom: 4px solid var(--pixel-accent2);
+}
+
+.credits-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+    width: 100%;
+    align-items: start;
+}
+
+.credit-card {
+    text-align: center;
+    background: var(--pixel-darker);
+    padding: 30px;
+    border: 3px solid var(--pixel-accent2);
+    transition: all 0.2s ease;
+    width: 100%;
+    min-width: 0;
+}
+
+.credit-card:hover {
+    border-color: var(--pixel-accent3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transform: translate(0, -4px);
+}
+
+.credit-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
+.credit-link:hover {
+    text-decoration: none;
+}
+
+.credit-avatar {
+    margin-bottom: 20px;
+}
+
+.credit-avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--pixel-accent2);
+    object-fit: cover;
+    transition: all 0.2s ease;
+}
+
+.credit-card:hover .credit-avatar img {
+    border-color: var(--pixel-accent3);
+    box-shadow: 0 0 15px rgba(100, 200, 255, 0.3);
+}
+
+.credit-card h3 {
+    font-size: 1.4rem;
+    color: var(--pixel-light);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.credit-card .role {
+    font-size: 1rem;
+    color: var(--pixel-accent2);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.credit-card .description {
+    font-size: 0.85rem;
+    color: var(--pixel-light);
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.credit-social-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: var(--pixel-dark);
+    border: 2px solid var(--pixel-accent2);
+    color: var(--pixel-accent2);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+}
+
+.social-icon:hover {
+    background: var(--pixel-accent2);
+    color: var(--pixel-dark);
+    box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+    transform: scale(1.1);
+}
+
+/* ===== レスポンシブ 制作者一覧 ===== */
+@media (max-width: 1440px) {
+    .credits-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .credits-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .credit-card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .credits-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .credit-card {
+        padding: 20px;
+        width: 100%;
+        max-width: none;
+    }
+
+    .credit-avatar img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .credit-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .credit-card .role {
+        font-size: 0.9rem;
+    }
+
+    .credit-card .description {
+        font-size: 0.75rem;
+    }
+}

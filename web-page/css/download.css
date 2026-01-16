@@ -16,7 +16,7 @@
 }
 
 .download-text h2 {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     color: var(--pixel-accent3);
     margin-bottom: 20px;
     text-transform: uppercase;
@@ -24,7 +24,7 @@
 }
 
 .download-text p {
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--pixel-light);
     margin-bottom: 30px;
     line-height: 1.8;
