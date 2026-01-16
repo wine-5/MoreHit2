@@ -21655,7 +21655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 176521708161786785, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
       propertyPath: spawnNearBoss
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 176521708161786785, guid: f71da6d6858e405468290a2666dcfc0d, type: 3}
       propertyPath: nearBossSpawnPoint
