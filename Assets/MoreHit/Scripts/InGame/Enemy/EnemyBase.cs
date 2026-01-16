@@ -4,6 +4,7 @@ using MoreHit.Attack;
 using MoreHit.Player;
 using MoreHit.Events;
 using MoreHit.Effect;
+using MoreHit.Audio;
 using TMPro;
 
 namespace MoreHit.Enemy
@@ -308,6 +309,11 @@ namespace MoreHit.Enemy
 
             if (currentState == EnemyState.ReadyToLaunch)
                 return;
+
+            if (AudioManager.I != null)
+            {
+                AudioManager.I.PlaySE(SeType.EnemyHit);
+            }
 
             currentHP -= damage;
 

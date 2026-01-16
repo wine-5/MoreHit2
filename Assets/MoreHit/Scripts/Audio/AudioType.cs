@@ -17,6 +17,7 @@ namespace MoreHit.Audio
         EnemyDefeat,
         FullStock,
         Warning,
+        EnemyHit,
     }
 
     /// <summary>
