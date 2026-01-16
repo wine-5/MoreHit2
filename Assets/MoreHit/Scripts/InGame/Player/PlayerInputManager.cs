@@ -97,25 +97,24 @@ namespace MoreHit.Player
             }
 
             if (isChargeButtonPressed && !needsButtonRelease)
-                if (isChargeButtonPressed)
-                {
-                    chargeHoldTime += Time.deltaTime;
+            {
+                chargeHoldTime += Time.deltaTime;
 
-                    if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
-                    {
-                        isChargeReady = true;
-                        onChargeStateChanged?.Invoke(true);
-                    }
-                }
-                else
+                if (chargeHoldTime >= CHARGE_READY_THRESHOLD && !isChargeReady)
                 {
-                    if (chargeHoldTime > 0f || isChargeReady)
-                    {
-                        chargeHoldTime = 0f;
-                        isChargeReady = false;
-                        onChargeStateChanged?.Invoke(false);
-                    }
+                    isChargeReady = true;
+                    onChargeStateChanged?.Invoke(true);
                 }
+            }
+            else
+            {
+                if (chargeHoldTime > 0f || isChargeReady)
+                {
+                    chargeHoldTime = 0f;
+                    isChargeReady = false;
+                    onChargeStateChanged?.Invoke(false);
+                }
+            }
 
             wasChargingLastFrame = isChargeButtonPressed;
         }

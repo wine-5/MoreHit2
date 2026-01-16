@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
+using MoreHit.Audio;
 
-public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    // 1.5�{�̎w��
+    // 1.5倍の指定
     [SerializeField] private float scaleFactor = 1.5f;
     [SerializeField] private float animationDuration = 0.1f;
 
@@ -18,13 +19,21 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //�k�����Ƃ����A�j���[�V�����̂��߂̃R���[�`��
+        //拡大するときのアニメーションのためのコルーチン
         StartScaleAnimation(initialScale * scaleFactor);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         StartScaleAnimation(initialScale);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (AudioManager.I != null)
+        {
+            AudioManager.I.PlaySE(SeType.Button);
+        }
     }
 
     private void StartScaleAnimation(Vector3 targetScale)
@@ -44,8 +53,8 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         while (elapsedTime < animationDuration)
         {
             elapsedTime += Time.deltaTime;
-            // �A�j���[�V�����̐i���� (0.0 �` 1.0)
-            // t���R���[�`���ɂ���Ė��t���[�������邱�ƂŃT�C�Y���ς��
+            // アニメーションの進行度 (0.0 ～ 1.0)
+            // 毎フレームコルーチンによって毎フレーム更新されることでサイズが変わる
             float t = elapsedTime / animationDuration;
             transform.localScale = Vector3.Lerp(startScale, targetScale, t);
             yield return null;

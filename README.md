@@ -1,13 +1,20 @@
-# UnityRoom GameJam
+# 2025年 12月開催 UnityRoom GameJam
 
 ## お題
 「もうひとつ」
 
 ## ゲーム概要
-未定
+敵を吹っ飛ばしてさらにヒットを狙おう！
 
-## チーム名
-- 未定
+敵に「ストック」を与えよう！　ストックが溜まったら...
+
+### 操作方法
+
+- **移動**：A, D
+- **ジャンプ**：スペースキー
+- **近距離攻撃**：左クリック
+- **射撃攻撃**：右クリック
+- **溜め射撃**：Wで溜めて右クリック
 
 ---
 
@@ -16,7 +23,7 @@
 ### UnityRoom での公開
 ゲームは UnityRoom で無料でプレイできます：
 
-**[More Hit 2 - UnityRoom で遊ぶ](https://unityroom.com/games/kochiratomukou)**
+**[More Hit 2 - UnityRoom で遊ぶ](https://unityroom.com/games/morehit2)**
 
 > **ブラウザ対応**  
 > Chrome、Firefox、Safari などのモダンブラウザで動作します。  
@@ -70,6 +77,10 @@
         <img src="https://github.com/Poro256.png" width="100px;" alt="Poro256"/><br />
         <sub><b>Poro256</b></sub>
       </a>
+    </td>
+    <td align="center">
+      <img src="https://via.placeholder.com/100/cccccc/666666?text=?" width="100px;" alt="Designer"/><br />
+      <sub><b>デザイナー</b></sub>
     </td>
   </tr>
 </table>
