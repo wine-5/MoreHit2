@@ -507,6 +507,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 705954736}
+    - target: {fileID: 7020839896170823791, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
+      propertyPath: m_text
+      value: "\u6575\u306B\u300C\u30B9\u30C8\u30C3\u30AF\u300D\u3092\u4E0E\u3048\u3088\u3046\uFF01\u3000\u30B9\u30C8\u30C3\u30AF\u304C\u6E9C\u307E\u3063\u305F\u3089...\r\n\r\n\u64CD\u4F5C\u65B9\u6CD5\r\n\r\n\u79FB\u52D5\uFF1AA,D\r\n\u30B8\u30E3\u30F3\u30D7\uFF1A\u30B9\u30DA\u30FC\u30B9\u30AD\u30FC\r\n\u8FD1\u8DDD\u96E2\u653B\u6483\uFF1A\u5DE6\u30AF\u30EA\u30C3\u30AF\r\n\u5C04\u6483\u653B\u6483\uFF1A\u53F3\u30AF\u30EA\u30C3\u30AF\r\n\u6E9C\u3081\u5C04\u6483\uFF1AW\u3067\u6E9C\u3081\u3066\u53F3\u30AF\u30EA\u30C3\u30AF\r\n\r\n\u2192\u6575\u3092\u5439\u3063\u98DB\u3070\u3057\u3066\u5468\u308A\u306E\u6575\u3054\u3068\u5012\u305D\u3046\uFF01"
+      objectReference: {fileID: 0}
     - target: {fileID: 7102319909932803098, guid: 141848088342f1144a62af9c6bf4600d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
