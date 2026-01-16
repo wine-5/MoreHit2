@@ -15,6 +15,9 @@ namespace MoreHit.Player
         private PlayerHealth health;
         private AttackManager attackManager;
         private PlayerAnimatorController animatorController;
+        [Header("Bossの前に出現するための設定")]
+        [SerializeField] private GameObject nearBossSpawnPoint;
+        [SerializeField] private bool spawnNearBoss;
         
         /// <summary>
         /// 入力ロックフラグ（ボス演出中などに使用）
@@ -28,6 +31,13 @@ namespace MoreHit.Player
             health = GetComponent<PlayerHealth>();
             attackManager = GetComponent<AttackManager>();
             animatorController = GetComponent<PlayerAnimatorController>();
+        }
+
+        private void Start()
+        {
+            if(spawnNearBoss)
+                transform.position = nearBossSpawnPoint.transform
+                .position;
         }
 
         private void OnEnable()
